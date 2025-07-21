@@ -1,10 +1,9 @@
 Package: brfinance
-Title: What the Package Does (One Line, Title Case)
+Title: Easy Access to Brazilian Financial Data
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-    person("João Paulo", "dos Santos P. Barbosa", , "joao.31582129@gmail.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("João Paulo", "dos Santos P. Barbosa", email = "joao.31582129@gmail.com", role = c("aut", "cre"))
+Description: Provides user-friendly functions to retrieve and visualize Brazilian financial data from public sources, such as the Central Bank of Brazil. Includes tools for accessing interest rate data, like the SELIC rate, and transforming it into tidy formats ready for analysis or plotting.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

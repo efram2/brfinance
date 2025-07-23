@@ -7,19 +7,19 @@
 plot_selic(ano_inicio, ano_fim)
 }
 \arguments{
-\item{ano_inicio}{Data inicial no formato "yyyy-mm-dd"}
+\item{ano_inicio}{Ano inicial (ex: 2020)}
 
-\item{ano_fim}{Data final no formato "yyyy-mm-dd"}
+\item{ano_fim}{Ano final (ex: 2024)}
 }
 \value{
 Um gráfico (\code{ggplot}) da taxa Selic no período escolhido
 }
 \description{
-Esta função baixa dados da taxa Selic (código 1178 no SGS do Banco Central)
+Esta função baixa dados da taxa Selic (código 432 no SGS do Banco Central)
 e retorna um gráfico de linha usando \code{ggplot2}.
 }
 \examples{
 \dontrun{
-plot_selic("2023-01-01", "2024-01-01")
+plot_selic(2020, 2024)
 }
 }

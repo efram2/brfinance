@@ -7,9 +7,9 @@
 plot_desemprego(ano_inicio, ano_fim)
 }
 \arguments{
-\item{ano_inicio}{Ano inicial (numérico). Ex: 2015}
+\item{ano_inicio}{Ano inicial (numurico). Ex: 2015}
 
-\item{ano_fim}{Ano final (numérico). Ex: 2024}
+\item{ano_fim}{Ano final (numerico). Ex: 2024}
 }
 \value{
 Um gráfico (\code{ggplot}) com a evolução da taxa de desemprego no Brasil

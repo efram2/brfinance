@@ -1,24 +1,29 @@
 #' Visualiza a taxa Selic diária em um gráfico de linha
 #'
-#' Esta função baixa dados da taxa Selic (código 1178 no SGS do Banco Central)
+#' Esta função baixa dados da taxa Selic (código 432 no SGS do Banco Central)
 #' e retorna um gráfico de linha usando `ggplot2`.
 #'
-#' @param ano_inicio Data inicial no formato "yyyy-mm-dd"
-#' @param ano_fim Data final no formato "yyyy-mm-dd"
+#' @param ano_inicio Ano inicial (ex: 2020)
+#' @param ano_fim Ano final (ex: 2024)
 #'
 #' @return Um gráfico (`ggplot`) da taxa Selic no período escolhido
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' plot_selic("2023-01-01", "2024-01-01")
+#' plot_selic(2020, 2024)
 #' }
 
 plot_selic <- function(ano_inicio, ano_fim) {
+  # Monta datas completas no formato yyyy-mm-dd
+  data_inicio <- as.Date(paste0(ano_inicio, "-01-01"))
+  data_fim <- as.Date(paste0(ano_fim, "-12-31"))
+
+  # Converte para o formato exigido pela API (dd/mm/yyyy)
   url <- paste0(
     "https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?",
-    "formato=json&dataInicial=", format(as.Date(ano_inicio), "%d/%m/%Y"),
-    "&dataFinal=", format(as.Date(ano_fim), "%d/%m/%Y")
+    "formato=json&dataInicial=", format(data_inicio, "%d/%m/%Y"),
+    "&dataFinal=", format(data_fim, "%d/%m/%Y")
   )
 
   dados <- httr2::request(url) |>
@@ -33,7 +38,7 @@ plot_selic <- function(ano_inicio, ano_fim) {
 
   ggplot2::ggplot(df, ggplot2::aes(x = data, y = valor)) +
     ggplot2::geom_step(color = "#1f78b4", linewidth = 1) +
-    ggplot2::geom_point(color = "#e31a1c", size = 2) +  # pontos nos degraus
+    ggplot2::geom_point(color = "#e31a1c", size = 2) +
     ggplot2::scale_x_date(
       date_breaks = "6 months",
       date_labels = "%b/%Y"
@@ -55,4 +60,3 @@ plot_selic <- function(ano_inicio, ano_fim) {
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
     )
 }
-

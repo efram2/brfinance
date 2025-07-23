@@ -3,8 +3,8 @@
 #' Esta função acessa dados da taxa de desocupação no Brasil (código 6381 da SIDRA/IBGE)
 #' e retorna um gráfico de linha com os dados filtrados entre os anos escolhidos.
 #'
-#' @param ano_inicio Ano inicial (numérico). Ex: 2015
-#' @param ano_fim Ano final (numérico). Ex: 2024
+#' @param ano_inicio Ano inicial (numurico). Ex: 2015
+#' @param ano_fim Ano final (numerico). Ex: 2024
 #'
 #' @return Um gráfico (`ggplot`) com a evolução da taxa de desemprego no Brasil
 #' @export

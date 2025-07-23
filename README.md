@@ -1,6 +1,6 @@
 # brfinance
 
-`brfinance` is a simple R package to visualize the Brazilian SELIC interest rate using official data from the Central Bank of Brazil.
+**brfinance** é um pacote R simples que permite acessar e visualizar dados financeiros do Brasil, incluindo a taxa básica de juros (SELIC) e a taxa de desemprego, utilizando fontes oficiais como o Banco Central do Brasil (BCB) e o IBGE (via SIDRA).
 
 ## Installation
 
@@ -13,19 +13,29 @@ devtools::install_github("efram2/brfinance")
 
 Usage
 
-The main function is plot_selic(), which plots the Selic rate between two dates.
+The main functions are plot_selic() and plot_desemprego), which plots the Selic and Desemprego rate between two dates.
 
 ```
 library(brfinance)
 
-# Plot SELIC from January 1, 2022 to January 1, 2024
-plot_selic("2022-01-01", "2024-01-01")
+# Gráfico da taxa Selic de 2020 a 2024
+plot_selic(2020, 2024)
+
+# Gráfico da taxa de desemprego de 2018 a 2024
+plot_desemprego(2018, 2024)
+
 ```
 
 Functionality
 
-```
-plot_selic(inicio, fim): Downloads the official SELIC data series (Meta Selic) from the Brazilian 
-Central Bank API and creates a line chart showing the interest rate evolution between the specified 
-dates.
-```
+**plot_selic(ano_inicio, ano_fim)**
+
+* Download the official historical series of the SELIC Target (SGS/BCB code 432).
+* Displays a line graph between the specified years.
+* Source: Central Bank of Brazil (SGS).
+
+**plot_desemprego(ano_inicio, ano_fim)**
+
+* Consult the unemployment rate data in Brazil (SIDRA/IBGE code 6381).
+* Shows the evolution of the rate quarterly in the period reported.
+* Source: IBGE (SIDRA/Continuous PNAD).

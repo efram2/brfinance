@@ -1,12 +1,12 @@
-#' Visualiza a taxa de desemprego no Brasil em um gráfico de linha
+#' Visualiza a taxa de desemprego no Brasil em um grafico de linha
 #'
-#' Esta função acessa dados da taxa de desocupação no Brasil (código 6381 da SIDRA/IBGE)
-#' e retorna um gráfico de linha com os dados filtrados entre os anos escolhidos.
+#' Esta funcao acessa dados da taxa de desocupacao no Brasil (codigo 6381 da SIDRA/IBGE)
+#' e retorna um grafico de linha com os dados filtrados entre os anos escolhidos.
 #'
 #' @param ano_inicio Ano inicial (numurico). Ex: 2015
 #' @param ano_fim Ano final (numerico). Ex: 2024
 #'
-#' @return Um gráfico (`ggplot`) com a evolução da taxa de desemprego no Brasil
+#' @return Um grafico (`ggplot`) com a evolucao da taxa de desemprego no Brasil
 #' @export
 #'
 #' @examples
@@ -16,19 +16,19 @@
 
 plot_desemprego <- function(ano_inicio, ano_fim) {
   if (!requireNamespace("sidrar", quietly = TRUE)) {
-    stop("O pacote 'sidrar' é necessário. Instale com install.packages('sidrar')", call. = FALSE)
+    stop("O pacote 'sidrar' e necessario. Instale com install.packages('sidrar')", call. = FALSE)
   }
 
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("O pacote 'ggplot2' é necessário. Instale com install.packages('ggplot2')", call. = FALSE)
+    stop("O pacote 'ggplot2' e necessario. Instale com install.packages('ggplot2')", call. = FALSE)
   }
 
-  # Baixa os dados da taxa de desocupação total no Brasil
+  # Baixa os dados da taxa de desocupacao total no Brasil
   dados <- sidrar::get_sidra(api = "/t/6381/n1/all/v/4099/p/all/d/v4099%201")
 
   df <- dados |>
-    dplyr::select("Trimestre Móvel", Valor) |>
-    dplyr::rename(trimestre = "Trimestre Móvel", taxa = Valor) |>
+    dplyr::select("Trimestre Movel", Valor) |>
+    dplyr::rename(trimestre = "Trimestre Movel", taxa = Valor) |>
     dplyr::mutate(
       ultimo_mes = stringr::str_extract(trimestre, "(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)(?=\\s)"),
       ano = as.numeric(stringr::str_extract(trimestre, "\\d{4}$")),
@@ -43,7 +43,7 @@ plot_desemprego <- function(ano_inicio, ano_fim) {
     ggplot2::scale_x_date(date_breaks = "6 months", date_labels = "%b/%Y") +
     ggplot2::scale_y_continuous(labels = scales::label_number(suffix = "%")) +
     ggplot2::labs(
-      title = "Brasil | Taxa de Desemprego (PNAD Contínua)",
+      title = "Brasil | Taxa de Desemprego (PNAD Continua)",
       subtitle = paste("Entre", ano_inicio, "e", ano_fim),
       x = NULL,
       y = "Taxa de Desemprego",

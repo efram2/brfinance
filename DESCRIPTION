@@ -1,6 +1,6 @@
 Package: brfinance
 Title: Easy Access to Brazilian Financial Data
-Version: 0.0.1.9000
+Version: 0.0.2.9000
 Authors@R: 
     person("João Paulo", "dos Santos P. Barbosa", email = "joao.31582129@gmail.com", role = c("aut", "cre"))
 Description: Provides user-friendly functions to retrieve and visualize Brazilian financial data from public sources, such as the Central Bank of Brazil. Includes tools for accessing interest rate data, like the SELIC rate, and transforming it into tidy formats ready for analysis or plotting.
@@ -12,5 +12,9 @@ Depends: R (>= 4.1.0)
 Imports: 
     dplyr,
     ggplot2,
+    scales,
     httr2,
-    lubridate
+    lubridate,
+    sidrar,
+    stringr
+    

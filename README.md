@@ -1,6 +1,6 @@
 # brfinance
 
-**brfinance** é um pacote R simples que permite acessar e visualizar dados financeiros do Brasil, incluindo a taxa básica de juros (SELIC) e a taxa de desemprego, utilizando fontes oficiais como o Banco Central do Brasil (BCB) e o IBGE (via SIDRA).
+brfinance is a simple R package that allows you to access and visualize financial data from Brazil, including the basic interest rate (SELIC) and the unemployment rate, using official sources such as the Central Bank of Brazil (BCB) and IBGE (via SIDRA).
 
 ## Installation
 
@@ -11,7 +11,7 @@ install.packages("devtools")  # if not installed
 devtools::install_github("efram2/brfinance")
 ```
 
-Usage
+## Usage
 
 The main functions are plot_selic() and plot_desemprego), which plots the Selic and Desemprego rate between two dates.
 
@@ -26,7 +26,7 @@ plot_desemprego(2018, 2024)
 
 ```
 
-Functionality
+## Functionality
 
 **plot_selic(ano_inicio, ano_fim)**
 

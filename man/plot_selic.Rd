@@ -4,12 +4,12 @@
 \alias{plot_selic}
 \title{Visualiza a taxa Selic diária em um gráfico de linha}
 \usage{
-plot_selic(inicio, fim)
+plot_selic(ano_inicio, ano_fim)
 }
 \arguments{
-\item{inicio}{Data inicial no formato "yyyy-mm-dd"}
+\item{ano_inicio}{Data inicial no formato "yyyy-mm-dd"}
 
-\item{fim}{Data final no formato "yyyy-mm-dd"}
+\item{ano_fim}{Data final no formato "yyyy-mm-dd"}
 }
 \value{
 Um gráfico (\code{ggplot}) da taxa Selic no período escolhido

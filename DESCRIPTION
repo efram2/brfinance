@@ -1,14 +1,23 @@
 Package: brfinance
-Title: Easy Access to Brazilian Financial Data
-Version: 0.0.2.9000
+Title: Simplified Access to Brazilian Financial Data
+Version: 0.0.3
 Authors@R: 
-    person("João Paulo", "dos Santos P. Barbosa", email = "joao.31582129@gmail.com", role = c("aut", "cre"))
-Description: Provides user-friendly functions to retrieve and visualize Brazilian financial data from public sources, such as the Central Bank of Brazil. Includes tools for accessing interest rate data, like the SELIC rate, and transforming it into tidy formats ready for analysis or plotting.
+    person("João Paulo", "Barbosa", 
+           email = "joao.31582129@gmail.com",
+           role = c("aut", "cre"))
+Description: Provides programmatic access to Brazilian economic and financial data, 
+             including interest rates (such as the SELIC base rate), unemployment, and other indicators
+             from official sources such as the Central Bank and IBGE. The data is returned in tidy formats ready for analysis.
+             tidy prontos para análise.
 License: MIT + file LICENSE
+URL: https://github.com/efram2/brfinance
+BugReports: https://github.com/efram2/brfinance/issues
 Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Depends: R (>= 4.1.0)
+Depends: 
+    R (>= 4.1.0)
 Imports: 
     dplyr,
     ggplot2,
@@ -16,5 +25,7 @@ Imports:
     httr2,
     lubridate,
     sidrar,
-    stringr
-    
+    stringr,
+Suggests: 
+    testthat (>= 3.0.0),
+    rmarkdown

@@ -1,3 +1,6 @@
+^.*\.qmd$
+^_quarto\.yml
+^.*\.check$
 ^brfinance\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$

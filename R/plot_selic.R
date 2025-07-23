@@ -1,12 +1,12 @@
-#' Visualiza a taxa Selic diária em um gráfico de linha
+#' Plot daily Selic rate as a line chart
 #'
-#' Esta função baixa dados da taxa Selic (código 432 no SGS do Banco Central)
-#' e retorna um gráfico de linha usando `ggplot2`.
+#' This function downloads the daily Selic rate data (series code 432 from the Brazilian Central Bank SGS)
+#' and returns a line chart using `ggplot2`.
 #'
-#' @param ano_inicio Ano inicial (ex: 2020)
-#' @param ano_fim Ano final (ex: 2024)
+#' @param ano_inicio Starting year (e.g., 2020)
+#' @param ano_fim Ending year (e.g., 2024)
 #'
-#' @return Um gráfico (`ggplot`) da taxa Selic no período escolhido
+#' @return A line plot (`ggplot`) of the Selic rate for the selected period
 #' @export
 #'
 #' @examples

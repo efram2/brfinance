@@ -2,21 +2,21 @@
 % Please edit documentation in R/plot_desemprego.R
 \name{plot_desemprego}
 \alias{plot_desemprego}
-\title{Visualiza a taxa de desemprego no Brasil em um grafico de linha}
+\title{Plot Brazil's unemployment rate as a line chart}
 \usage{
 plot_desemprego(ano_inicio, ano_fim)
 }
 \arguments{
-\item{ano_inicio}{Ano inicial (numurico). Ex: 2015}
+\item{ano_inicio}{Starting year (numeric). E.g., 2015}
 
-\item{ano_fim}{Ano final (numerico). Ex: 2024}
+\item{ano_fim}{Ending year (numeric). E.g., 2024}
 }
 \value{
-Um grafico (\code{ggplot}) com a evolucao da taxa de desemprego no Brasil
+A line plot (\code{ggplot}) showing the evolution of Brazil's unemployment rate
 }
 \description{
-Esta funcao acessa dados da taxa de desocupacao no Brasil (codigo 6381 da SIDRA/IBGE)
-e retorna um grafico de linha com os dados filtrados entre os anos escolhidos.
+This function fetches data on Brazil's unemployment rate (series code 6381 from SIDRA/IBGE)
+and returns a line chart filtered between the selected years.
 }
 \examples{
 \dontrun{

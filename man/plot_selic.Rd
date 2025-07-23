@@ -2,21 +2,21 @@
 % Please edit documentation in R/plot_selic.R
 \name{plot_selic}
 \alias{plot_selic}
-\title{Visualiza a taxa Selic diária em um gráfico de linha}
+\title{Plot daily Selic rate as a line chart}
 \usage{
 plot_selic(ano_inicio, ano_fim)
 }
 \arguments{
-\item{ano_inicio}{Ano inicial (ex: 2020)}
+\item{ano_inicio}{Starting year (e.g., 2020)}
 
-\item{ano_fim}{Ano final (ex: 2024)}
+\item{ano_fim}{Ending year (e.g., 2024)}
 }
 \value{
-Um gráfico (\code{ggplot}) da taxa Selic no período escolhido
+A line plot (\code{ggplot}) of the Selic rate for the selected period
 }
 \description{
-Esta função baixa dados da taxa Selic (código 432 no SGS do Banco Central)
-e retorna um gráfico de linha usando \code{ggplot2}.
+This function downloads the daily Selic rate data (series code 432 from the Brazilian Central Bank SGS)
+and returns a line chart using \code{ggplot2}.
 }
 \examples{
 \dontrun{

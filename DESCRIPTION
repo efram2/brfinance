@@ -1,9 +1,9 @@
 Package: brfinance
-Title: Simplified access to Brazilian financial and macroeconomic data
+Title: Simplified Access to Brazilian Financial and Macroeconomic Data
 Version: 0.1.0
 Authors@R: 
     person(given = "João Paulo", family = "dos Santos Pereira Barbosa", email = "joao.31582129@gmail.com",role = c("aut", "cre"))
-Description: Tools to easily access and visualize key macroeconomic indicators from Brazil, such as the basic interest rate (SELIC) and the unemployment rate, using official sources like the Central Bank of Brazil (BCB) and IBGE (via SIDRA).
+Description: It offers simplified access to Brazilian macroeconomic and financial indicators selected from official sources, such as the IBGE (Brazilian Institute of Geography and Statistics) via the SIDRA API and the Central Bank of Brazil (via the SGS API). It allows users to quickly retrieve and visualize data series such as the unemployment rate and the Selic interest rate. This package was developed for data access and visualization purposes, without generating forecasts or statistical results.
 License: MIT + file LICENSE
 URL: https://github.com/efram2/brfinance
 BugReports: https://github.com/efram2/brfinance/issues

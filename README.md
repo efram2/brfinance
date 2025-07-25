@@ -2,8 +2,7 @@
 
 brfinance is a simple R package that provides easy access to macroeconomic data from Brazil, such as the basic interest rate (SELIC) and the unemployment rate, using official sources like the Central Bank of Brazil (BCB) and the Brazilian Institute of Geography and Statistics (IBGE) via SIDRA.
 
-This package is part of an effort to simplify the retrieval and visualization of Brazilian macroeconomic indicators directly within R.
-
+This package is part of an effort to simplify the retrieval and visualization of Brazilian macroeconomic indicators directly in R, and soon visualizations of financial market trends.
 ## Installation
 
 You can install the development version from GitHub with:

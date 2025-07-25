@@ -30,8 +30,8 @@ plot_desemprego <- function(start_year,
 
   df <- dados |>
     janitor::clean_names() |>
-    dplyr::select("trimestre_movel", Valor) |>
-    dplyr::rename(trimestre = "trimestre_movel", taxa = Valor) |>
+    dplyr::select("trimestre_movel", "valor") |>
+    dplyr::rename(trimestre = "trimestre_movel", taxa = valor) |>
     dplyr::mutate(
       ultimo_mes = stringr::str_extract(trimestre, "(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)(?=\\s)"),
       ano = as.numeric(stringr::str_extract(trimestre, "\\d{4}$")),

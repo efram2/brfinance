@@ -1,12 +1,16 @@
 #' Plot daily Selic rate as a line chart
 #'
-#' This function downloads the daily Selic rate data (series code 432 from the Brazilian Central Bank SGS)
-#' and returns a line chart using `ggplot2`.
+#' Generates a time series plot of Brazil's basic interest rate (SELIC), using daily data from the Central Bank of Brazil (SGS series code 432).
+#' The graph provides a historical overview of the SELIC rate, enabling quick visualization and analysis of monetary policy trends.
 #'
-#' @param ano_inicio Starting year (e.g., 2020)
-#' @param ano_fim Ending year (e.g., 2024)
+#' @param start_year Starting year (e.g., 2020)
+#' @param end_year Ending year (e.g., 2024)
 #'
-#' @return A line plot (`ggplot`) of the Selic rate for the selected period
+#' @details The maximum supported interval is 9 years. For performance reasons,
+#' longer time spans are not allowed and will return an error.
+#'
+#'
+#' @return A `ggplot2` object showing the SELIC rate over time.
 #' @export
 #'
 #' @examples
@@ -14,10 +18,12 @@
 #' plot_selic(2020, 2024)
 #' }
 
-plot_selic <- function(ano_inicio, ano_fim) {
+plot_selic <- function(start_year,
+                       end_year) {
+
   # Converte anos para datas completas
-  data_inicio <- as.Date(paste0(ano_inicio, "-01-01"))
-  data_fim <- as.Date(paste0(ano_fim, "-12-31"))
+  data_inicio <- as.Date(paste0(start_year, "-01-01"))
+  data_fim <- as.Date(paste0(end_year, "-12-31"))
 
   # Monta URL com função auxiliar
   url <- get_selic_url(data_inicio, data_fim)

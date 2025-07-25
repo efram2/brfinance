@@ -1,12 +1,12 @@
 #' Plot Brazil's unemployment rate as a line chart
 #'
-#' This function fetches data on Brazil's unemployment rate (series code 6381 from SIDRA/IBGE)
-#' and returns a line chart filtered between the selected years.
+#' Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicílios Contínua) provided by IBGE.
+#' The graph offers a visual overview of the labor market trends in Brazil over the selected period.
 #'
-#' @param ano_inicio Starting year (numeric). E.g., 2015
-#' @param ano_fim Ending year (numeric). E.g., 2024
+#' @param start_year Starting year (e.g., 2015)
+#' @param end_year Ending year (e.g., 2024)
 #'
-#' @return A line plot (`ggplot`) showing the evolution of Brazil's unemployment rate
+#' @return A `ggplot2` object showing the unemployment rate over time.
 #' @export
 #'
 #' @examples
@@ -14,7 +14,9 @@
 #' plot_desemprego(2018, 2024)
 #' }
 
-plot_desemprego <- function(ano_inicio, ano_fim) {
+plot_desemprego <- function(start_year,
+                            end_year) {
+
   if (!requireNamespace("sidrar", quietly = TRUE)) {
     stop("O pacote 'sidrar' e necessario. Instale com install.packages('sidrar')", call. = FALSE)
   }
@@ -27,14 +29,14 @@ plot_desemprego <- function(ano_inicio, ano_fim) {
   dados <- sidrar::get_sidra(api = "/t/6381/n1/all/v/4099/p/all/d/v4099%201")
 
   df <- dados |>
-    dplyr::select("Trimestre Movel", Valor) |>
-    dplyr::rename(trimestre = "Trimestre Movel", taxa = Valor) |>
+    dplyr::select("Trimestre Móvel", Valor) |>
+    dplyr::rename(trimestre = "Trimestre Móvel", taxa = Valor) |>
     dplyr::mutate(
       ultimo_mes = stringr::str_extract(trimestre, "(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)(?=\\s)"),
       ano = as.numeric(stringr::str_extract(trimestre, "\\d{4}$")),
       data = lubridate::dmy(paste("01", ultimo_mes, ano))
     ) |>
-    dplyr::filter(ano >= ano_inicio & ano <= ano_fim)
+    dplyr::filter(ano >= start_year & ano <= end_year)
 
   ggplot2::ggplot(df, ggplot2::aes(x = data, y = taxa)) +
     ggplot2::geom_line(color = "#2c3e50", linewidth = 1) +
@@ -44,7 +46,7 @@ plot_desemprego <- function(ano_inicio, ano_fim) {
     ggplot2::scale_y_continuous(labels = scales::label_number(suffix = "%")) +
     ggplot2::labs(
       title = "Brasil | Taxa de Desemprego (PNAD Continua)",
-      subtitle = paste("Entre", ano_inicio, "e", ano_fim),
+      subtitle = paste("Entre", start_year, "e", end_year),
       x = NULL,
       y = "Taxa de Desemprego",
       caption = "Fonte: IBGE - SIDRA (Tabela 6381)"

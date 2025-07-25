@@ -4,19 +4,19 @@
 \alias{plot_desemprego}
 \title{Plot Brazil's unemployment rate as a line chart}
 \usage{
-plot_desemprego(ano_inicio, ano_fim)
+plot_desemprego(start_year, end_year)
 }
 \arguments{
-\item{ano_inicio}{Starting year (numeric). E.g., 2015}
+\item{start_year}{Starting year (e.g., 2015)}
 
-\item{ano_fim}{Ending year (numeric). E.g., 2024}
+\item{end_year}{Ending year (e.g., 2024)}
 }
 \value{
-A line plot (\code{ggplot}) showing the evolution of Brazil's unemployment rate
+A \code{ggplot2} object showing the unemployment rate over time.
 }
 \description{
-This function fetches data on Brazil's unemployment rate (series code 6381 from SIDRA/IBGE)
-and returns a line chart filtered between the selected years.
+Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicílios Contínua) provided by IBGE.
+The graph offers a visual overview of the labor market trends in Brazil over the selected period.
 }
 \examples{
 \dontrun{

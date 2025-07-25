@@ -4,19 +4,23 @@
 \alias{plot_selic}
 \title{Plot daily Selic rate as a line chart}
 \usage{
-plot_selic(ano_inicio, ano_fim)
+plot_selic(start_year, end_year)
 }
 \arguments{
-\item{ano_inicio}{Starting year (e.g., 2020)}
+\item{start_year}{Starting year (e.g., 2020)}
 
-\item{ano_fim}{Ending year (e.g., 2024)}
+\item{end_year}{Ending year (e.g., 2024)}
 }
 \value{
-A line plot (\code{ggplot}) of the Selic rate for the selected period
+A \code{ggplot2} object showing the SELIC rate over time.
 }
 \description{
-This function downloads the daily Selic rate data (series code 432 from the Brazilian Central Bank SGS)
-and returns a line chart using \code{ggplot2}.
+Generates a time series plot of Brazil's basic interest rate (SELIC), using daily data from the Central Bank of Brazil (SGS series code 432).
+The graph provides a historical overview of the SELIC rate, enabling quick visualization and analysis of monetary policy trends.
+}
+\details{
+The maximum supported interval is 9 years. For performance reasons,
+longer time spans are not allowed and will return an error.
 }
 \examples{
 \dontrun{

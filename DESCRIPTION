@@ -21,6 +21,7 @@ Imports:
     lubridate,
     sidrar,
     stringr,
+    janitor
 Suggests: 
     testthat (>= 3.0.0),
     rmarkdown

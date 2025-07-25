@@ -15,7 +15,7 @@ plot_desemprego(start_year, end_year)
 A \code{ggplot2} object showing the unemployment rate over time.
 }
 \description{
-Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicílios Contínua) provided by IBGE.
+Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicilios Continua) provided by IBGE.
 The graph offers a visual overview of the labor market trends in Brazil over the selected period.
 }
 \examples{

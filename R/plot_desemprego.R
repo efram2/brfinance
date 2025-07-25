@@ -1,6 +1,6 @@
 #' Plot Brazil's unemployment rate as a line chart
 #'
-#' Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicílios Contínua) provided by IBGE.
+#' Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicilios Continua) provided by IBGE.
 #' The graph offers a visual overview of the labor market trends in Brazil over the selected period.
 #'
 #' @param start_year Starting year (e.g., 2015)
@@ -29,8 +29,9 @@ plot_desemprego <- function(start_year,
   dados <- sidrar::get_sidra(api = "/t/6381/n1/all/v/4099/p/all/d/v4099%201")
 
   df <- dados |>
-    dplyr::select("Trimestre Móvel", Valor) |>
-    dplyr::rename(trimestre = "Trimestre Móvel", taxa = Valor) |>
+    janitor::clean_names() |>
+    dplyr::select("trimestre_movel", Valor) |>
+    dplyr::rename(trimestre = "trimestre_movel", taxa = Valor) |>
     dplyr::mutate(
       ultimo_mes = stringr::str_extract(trimestre, "(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)(?=\\s)"),
       ano = as.numeric(stringr::str_extract(trimestre, "\\d{4}$")),

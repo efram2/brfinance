@@ -1,6 +1,7 @@
 #' Plot daily Selic rate as a line chart
 #'
-#' Generates a time series plot of Brazil's basic interest rate (SELIC), using daily data from the Central Bank of Brazil (SGS series code 432).
+#' Generates a time series plot of Brazil's basic interest rate (SELIC),
+#' using daily data from the 'Central Bank of Brazil' via the 'SGS' API (<https://dadosabertos.bcb.gov.br/dataset/sgs>).
 #' The graph provides a historical overview of the SELIC rate, enabling quick visualization and analysis of monetary policy trends.
 #'
 #' @param start_year Starting year (e.g., 2020)

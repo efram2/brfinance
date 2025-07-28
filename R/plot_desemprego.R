@@ -1,6 +1,8 @@
 #' Plot Brazil's unemployment rate as a line chart
 #'
-#' Generates a time series plot of Brazil's quarterly unemployment rate, using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicilios Continua) provided by IBGE.
+#' Generates a time series plot of Brazil's quarterly unemployment rate,
+#' using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicílios Continua)
+#' provided by the 'IBGE' via the 'SIDRA' API (<https://sidra.ibge.gov.br/>).
 #' The graph offers a visual overview of the labor market trends in Brazil over the selected period.
 #'
 #' @param start_year Starting year (e.g., 2015)

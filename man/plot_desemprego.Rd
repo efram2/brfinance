@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_desemprego.R
 \name{plot_desemprego}
 \alias{plot_desemprego}
-\title{Plot Brazil's unemployment rate as a line chart}
+\title{Plot Brazil’s quarterly unemployment rate as a line chart}
 \usage{
 plot_desemprego(start_year, end_year)
 }
@@ -12,13 +12,23 @@ plot_desemprego(start_year, end_year)
 \item{end_year}{Ending year (e.g., 2024)}
 }
 \value{
-A \code{ggplot2} object showing the unemployment rate over time.
+A \code{ggplot2} object showing Brazil’s quarterly unemployment rate over time.
 }
 \description{
-Generates a time series plot of Brazil's quarterly unemployment rate,
-using data from the Continuous PNAD (Pesquisa Nacional por Amostra de Domicílios Continua)
-provided by the 'IBGE' via the 'SIDRA' API (\url{https://sidra.ibge.gov.br/}).
-The graph offers a visual overview of the labor market trends in Brazil over the selected period.
+Generates a time series plot of the quarterly unemployment rate in Brazil,
+based on data from the Continuous PNAD (Continuous National Household Sample Survey).
+The data is retrieved from the Brazilian Institute of Geography and Statistics (IBGE),
+accessed via the SIDRA API (Sistema IBGE de Recuperação Automática),
+which is the official system for automatic data retrieval from IBGE.
+}
+\details{
+The Continuous PNAD is a household survey conducted quarterly to monitor labor market indicators,
+including unemployment, across Brazil.
+
+API documentation available at:
+\url{https://apisidra.ibge.gov.br/}
+and table metadata at:
+\url{https://sidra.ibge.gov.br/pesquisa/pnadca/tabelas} (unemployment tables).
 }
 \examples{
 \dontrun{

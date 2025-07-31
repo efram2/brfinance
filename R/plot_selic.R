@@ -1,17 +1,30 @@
-#' Plot daily Selic rate as a line chart
+#' Plot daily Brazilian interest rate (annualized, base 252) as a line chart
 #'
-#' Generates a time series plot of Brazil's basic interest rate (SELIC),
-#' using daily data from the 'Central Bank of Brazil' via the 'SGS' API (<https://dadosabertos.bcb.gov.br/dataset/sgs>).
-#' The graph provides a historical overview of the SELIC rate, enabling quick visualization and analysis of monetary policy trends.
+#' Generates a time series plot of the basic interest rate of the Brazilian economy,
+#' commonly referred to as the SELIC rate ("Sistema Especial de Liquidação e de Custódia").
+#' This rate reflects the effective overnight interest rate for interbank loans
+#' and is a key instrument of Brazil's monetary policy.
+#'
+#' The data used in this plot corresponds to the **effective SELIC Over rate**, annualized
+#' on a **252-business-day basis**, and is retrieved from series 1178 of the SGS
+#' ("Sistema Gerenciador de Séries Temporais" – Time Series Management System),
+#' the Central Bank of Brazil’s official repository for economic time series.
+#'
+#' API documentation available at:
+#' <https://dadosabertos.bcb.gov.br/dataset/1178-taxa-de-juros---selic-anualizada-base-252>
+#'
+#' Important notice: Starting March 26, 2025, the 'Central Bank of Brazil' will limit
+#' the amount of data returned for daily historical series in JSON and CSV formats.
+#' Queries using date ranges will be restricted to a maximum span of 10 years.
+#' Requests exceeding this range will return an error.
 #'
 #' @param start_year Starting year (e.g., 2020)
 #' @param end_year Ending year (e.g., 2024)
 #'
-#' @details The maximum supported interval is 9 years. For performance reasons,
-#' longer time spans are not allowed and will return an error.
+#' @details The maximum supported interval is 9 years. For performance and compatibility
+#' with the API, longer time spans are not allowed and will return an error.
 #'
-#'
-#' @return A `ggplot2` object showing the SELIC rate over time.
+#' @return A `ggplot2` object showing the Brazilian interest rate over time.
 #' @export
 #'
 #' @examples
@@ -73,7 +86,7 @@ plot_selic <- function(start_year,
 #' @keywords internal
 get_selic_url <- function(first.date, last.date) {
   sprintf(
-    paste0('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?',
+    paste0('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados?',
            'formato=json&dataInicial=%s&dataFinal=%s'),
     format(first.date, '%d/%m/%Y'),
     format(last.date, '%d/%m/%Y')

@@ -14,7 +14,10 @@
 #' data <- get_unemployment(2018, 2024, language = "pt")
 #' }
 
-get_unemployment <- function(start_year, end_year, language = "eng") {
+get_unemployment <- function(start_year,
+                             end_year,
+                             language = "eng") {
+
   if (!requireNamespace("sidrar", quietly = TRUE)) {
     stop("The 'sidrar' package is required. Install with install.packages('sidrar')", call. = FALSE)
   }
@@ -32,7 +35,11 @@ get_unemployment <- function(start_year, end_year, language = "eng") {
     ) |>
     dplyr::filter(year >= start_year & year <= end_year)
 
-  # Se o idioma for português, adiciona atributo
-  attr(df, "language") <- match.arg(language, c("eng", "pt"))
+  if (language == "eng") {
+    colnames(df) <- c("quarter", "rate", "month", "year", "date")
+  } else {
+    colnames(df) <- c("trimestre", "taxa", "mes", "ano", "data")
+  }
+
   return(df)
 }

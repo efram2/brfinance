@@ -10,9 +10,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' data <- get_unemployment(2018, 2024, language = "pt")
-#' plot_unemployment(data, language = "pt")
+#' # Example 1: English version
+#' unemployment_data <- get_unemployment(2020, 2024)
+#' unemployment_plot <- plot_unemployment(unemployment_data)
+#' print(unemployment_plot)
+#'
+#' # Example 2: Portuguese version
+#' dados_desemprego <- get_unemployment(2020, 2024, language = "pt")
+#' grafico_desemprego <- plot_unemployment(dados_desemprego, language = "pt")
+#' print(grafico_desemprego)
 #' }
+
 
 plot_unemployment <- function(data,
                               language = "eng") {

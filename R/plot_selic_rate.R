@@ -5,8 +5,7 @@
 #' effective annualized rate (252-business-day basis) for overnight interbank loans
 #' and is the main instrument of Brazil’s monetary policy.
 #'
-#' @param start_year Starting year (e.g., 2020)
-#' @param end_year Ending year (e.g., 2024)
+#' @param data Tibble returned by `get_selic_rate()`
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
 #' @return A `ggplot2` object showing the SELIC rate over time.
@@ -14,7 +13,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' plot_selic_rate(2020, 2024, language = "eng")
+#' # Example 1: English version
+#' selic_data <- get_selic_rate(2020, 2024)
+#' selic_plot <- plot_selic_rate(selic_data)
+#' print(selic_plot)
+#'
+#' # Example 2: Portuguese version
+#' dados_selic <- get_selic_rate(2020, 2024, language = "pt")
+#' grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
+#' print(grafico_selic)
 #' }
 
 plot_selic_rate <- function(data,

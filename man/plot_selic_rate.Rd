@@ -4,12 +4,10 @@
 \alias{plot_selic_rate}
 \title{Plot Brazilian SELIC rate (annualized, base 252)}
 \usage{
-plot_selic_rate(start_year, end_year, language = "pt")
+plot_selic_rate(data, language = "eng")
 }
 \arguments{
-\item{start_year}{Starting year (e.g., 2020)}
-
-\item{end_year}{Ending year (e.g., 2024)}
+\item{data}{Tibble returned by \code{get_selic_rate()}}
 
 \item{language}{Language for titles and labels: "pt" (Portuguese) or "eng" (English).}
 }
@@ -24,6 +22,14 @@ and is the main instrument of Brazil’s monetary policy.
 }
 \examples{
 \dontrun{
-plot_selic_rate(2020, 2024, language = "eng")
+# Example 1: English version
+selic_data <- get_selic_rate(2020, 2024)
+selic_plot <- plot_selic_rate(selic_data)
+print(selic_plot)
+
+# Example 2: Portuguese version
+dados_selic <- get_selic_rate(2020, 2024, language = "pt")
+grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
+print(grafico_selic)
 }
 }

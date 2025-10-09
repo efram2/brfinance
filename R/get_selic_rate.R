@@ -16,8 +16,8 @@
 #' }
 
 get_selic_rate <- function(start_year,
-                      end_year,
-                      language = "eng") {
+                           end_year,
+                           language = "eng") {
 
   if (!requireNamespace("httr2", quietly = TRUE)) {
     stop("The 'httr2' package is required. Install it with install.packages('httr2').")

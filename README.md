@@ -3,44 +3,77 @@
 brfinance is a simple R package that provides easy access to macroeconomic data from Brazil, such as the basic interest rate (SELIC) and the unemployment rate, using official sources like the Central Bank of Brazil (BCB) and the Brazilian Institute of Geography and Statistics (IBGE) via SIDRA.
 
 This package is part of an effort to simplify the retrieval and visualization of Brazilian macroeconomic indicators directly in R, and soon visualizations of financial market trends.
+
 ## Installation
 
 You can install the development version from GitHub with:
 
-```
+```r
 install.packages("devtools")  # if not installed
 devtools::install_github("efram2/brfinance")
 ```
 
 ## Usage
 
-The two main functions currently available are:
+The package provides separate functions for data retrieval and visualization:
+
 
 ```
 library(brfinance)
 
-# Plot the SELIC interest rate from 2020 to 2024
-plot_selic(2020, 2024)
+# Example 1: SELIC rate (English)
+selic_data <- get_selic_rate(2020, 2024)
+selic_plot <- plot_selic_rate(selic_data)
+print(selic_plot)
 
-# Plot the unemployment rate from 2018 to 2024
-plot_desemprego(2018, 2024)
+# Example 2: Unemployment rate (English)
+unemployment_data <- get_unemployment(2020, 2024)
+unemployment_plot <- plot_unemployment(unemployment_data)
+print(unemployment_plot)
+
+# Example 3: Portuguese versions
+dados_selic <- get_selic_rate(2020, 2024, language = "pt")
+grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
+print(grafico_selic)
 
 ```
 
-## Functionality
+## Available Functions
 
-**plot_selic(start_year, end_year)**
+**get_selic_rate(start_year, end_year, language = "eng")**
 
 * Downloads the official historical daily series of the SELIC Target Rate, using the Central Bank of Brazil's SGS system (series code 432).
-* Displays a line chart showing the evolution of the rate between the selected years.
-* ⚠️ Limitation: The function only works when the interval between start_year and end_year is less than 10 years, due to API constraints from the Central Bank of Brazil.
+* Returns a dataframe with the SELIC rate data.
+* Supports both English ("eng") and Portuguese ("pt") column names.
 * Source: Central Bank of Brazil (SGS).
 
-**plot_desemprego(start_year, end_year)**
+**get_unemployment(start_year, end_year, language = "eng")**
 
 * Retrieves the quarterly unemployment rate in Brazil using SIDRA (IBGE database), series code 6381 from the Continuous PNAD survey.
-* Displays a time series graph showing how the rate changed across the specified years.
+* Returns a dataframe with the unemployment rate data.
+* Supports both English ("eng") and Portuguese ("pt") column names.
 * Source: IBGE (SIDRA/PNAD Contínua).
+
+## Visualization Functions
+
+**plot_selic_rate(data, language = "eng")**
+
+* Creates a time series plot of the SELIC interest rate.
+* Accepts data from get_selic_rate() function.
+* Supports both English and Portuguese labels.
+
+**plot_unemployment(data, language = "eng")**
+
+* Creates a time series plot of the unemployment rate.
+* Accepts data from get_unemployment() function.
+* Supports both English and Portuguese labels.
+
+## Language Support
+
+All functions support both English and Portuguese through the language parameter:
+
+* language = "eng" (default): Returns English column names and labels
+* language = "pt": Returns Portuguese column names and labels
 
 ## About the data
 

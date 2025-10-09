@@ -3,7 +3,7 @@
 #' Generates a ggplot2 line chart of unemployment rate in Brazil.
 #'
 #' @param data Tibble returned by `get_unemployment()`
-#' @param language Language for labels: "eng" (default) or "pt"
+#' @param language Language for column names: "pt" for Portuguese or "eng" (default) for English
 #'
 #' @return A ggplot2 object
 #' @export
@@ -14,7 +14,9 @@
 #' plot_unemployment(data, language = "pt")
 #' }
 
-plot_unemployment <- function(data, language = "eng") {
+plot_unemployment <- function(data,
+                              language = "eng") {
+
   lang <- match.arg(language, c("eng", "pt"))
 
   # Define textos conforme idioma

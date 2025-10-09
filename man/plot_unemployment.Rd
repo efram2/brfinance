@@ -9,7 +9,7 @@ plot_unemployment(data, language = "eng")
 \arguments{
 \item{data}{Tibble returned by \code{get_unemployment()}}
 
-\item{language}{Language for labels: "eng" (default) or "pt"}
+\item{language}{Language for column names: "pt" for Portuguese or "eng" (default) for English}
 }
 \value{
 A ggplot2 object

@@ -28,7 +28,7 @@ There was 1 NOTE:
 
 * The package provides easy access to Brazilian macroeconomic and financial data, which includes common acronyms and terms in Portuguese and English. To clarify:
 
-  - **SELIC** refers to the *Sistema Especial de Liquidação e Custódia*, which is the Brazilian central bank’s base interest rate, equivalent to the policy rate.
+  - **SELIC** O **Selic** refers to the *Sistema Especial de Liquidação e Custódia*, which is the Brazilian central bank’s base interest rate, equivalent to the policy rate.
   - **IBGE** is the *Instituto Brasileiro de Geografia e Estatística*, Brazil’s national statistics agency.
   - **SIDRA** is the *Sistema IBGE de Recuperação Automática*, a system to retrieve statistical tables from IBGE.
   - **Desemprego** means *unemployment*, a key labor market indicator widely used in economics.

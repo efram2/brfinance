@@ -4,4 +4,8 @@ utils::globalVariables(c("data", "valor", "Valor", "trimestre", "ultimo_mes",
 
                          #get_unemployment
 
-                         "month", "year", "rate"))
+                         "month", "year", "rate",
+
+                         #plot_unemployment
+
+                         "ylab"))

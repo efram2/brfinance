@@ -32,13 +32,17 @@ plot_unemployment <- function(data,
     title <- "Brasil | Taxa de Desemprego (PNAD Continua)"
     ylab <- "Taxa de Desemprego"
     caption <- "Fonte: IBGE - SIDRA (Tabela 6381)"
+    x_var <- "data"
+    y_var <- "taxa"
   } else {
     title <- "Brazil | Unemployment Rate (Continuous PNAD)"
     ylab <- "Unemployment Rate"
     caption <- "Source: IBGE - SIDRA (Table 6381)"
+    x_var <- "date"
+    y_var <- "rate"
   }
 
-  ggplot2::ggplot(data, ggplot2::aes(x = date, y = rate)) +
+  ggplot2::ggplot(data, ggplot2::aes(x = x_var, y = y_var)) +
     ggplot2::geom_line(color = "#2c3e50", linewidth = 1) +
     ggplot2::geom_point(color = "#e74c3c", size = 2) +
     ggplot2::theme_minimal(base_size = 14) +

@@ -45,7 +45,7 @@ plot_unemployment <- function(data,
     y_var <- "rate"
   } else {
     title <- "Brasil | Taxa de Desemprego (PNAD Continua)"
-    y_label <- "Taxa de Desemprego (%)"
+    y_label <- "Taxa de desemprego (%)"
     caption <- "Fonte: IBGE - SIDRA (Tabela 6381)"
     x_var <- "data"
     y_var <- "taxa"
@@ -62,7 +62,7 @@ plot_unemployment <- function(data,
     ggplot2::labs(
       title = title,
       x = NULL,
-      y = ylab,
+      y = y_label,
       caption = caption
     ) +
     ggplot2::theme(

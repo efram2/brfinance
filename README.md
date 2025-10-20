@@ -65,8 +65,6 @@ print(grafico_selic)
 * Supports both English ("eng") and Portuguese ("pt") column names.
 * Source: IBGE (SIDRA/PNAD Contínua).
 
-## Visualization Functions
-
 **get_inflation_rate(start_date = "2012-01-01", end_date = NULL, language = "eng", labels = TRUE)**
 
 Downloads monthly IPCA inflation data from the Brazilian Central Bank and calculates year-to-date (YTD) and 12-month accumulated inflation.

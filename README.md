@@ -1,21 +1,40 @@
-# brfinance
+# brfinance 📊🇧🇷
 
-brfinance is a simple R package that provides easy access to macroeconomic data from Brazil, such as the basic interest rate (SELIC) and the unemployment rate, using official sources like the Central Bank of Brazil (BCB) and the Brazilian Institute of Geography and Statistics (IBGE) via SIDRA.
+[![CRAN Status](https://www.r-pkg.org/badges/version/brfinance)](https://cran.r-project.org/package=brfinance)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![R-CMD-check](https://github.com/efram2/brfinance/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/efram2/brfinance/actions/workflows/R-CMD-check.yaml)
+[![Downloads](https://cranlogs.r-pkg.org/badges/brfinance)](https://cran.r-project.org/package=brfinance)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/brfinance)](https://cran.r-project.org/package=brfinance)
+[![GitHub stars](https://img.shields.io/github/stars/efram2/brfinance.svg)](https://github.com/efram2/brfinance/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/efram2/brfinance.svg)](https://github.com/efram2/brfinance/network)
 
-This package is part of an effort to simplify the retrieval and visualization of Brazilian macroeconomic indicators directly in R, and soon visualizations of financial market trends.
+
+> **Democratizing access to Brazilian economic data** 📈
+
+`brfinance` is an R package that provides easy access to macroeconomic data from Brazil using official sources like the Central Bank of Brazil (BCB) and IBGE.
+
+## Quick Navigation
+
+- [Features](#-features)
+- [Installation](#-installation) 
+- [Quick Start](#-quick-start)
+- [Available Data](#-available-data)
+- [Visualization](#-visualization)
+- [Language Support](#-language-support)
+- [Advanced Usage](#-advanced-usage)
+- [Learn More](#-learn-more)
+- [Contribution](#-contribution)
 
 ## Installation
 
-You can install the development version from GitHub with:
-
 ```r
-# For development version
-install.packages("devtools")  # if not installed
-devtools::install_github("efram2/brfinance")
-library(brfinance)
-
-# Version available on CRAN of R
+# Install from CRAN (stable version)
 install.packages("brfinance")
+
+# Or development version from GitHub
+install.packages("devtools")
+devtools::install_github("efram2/brfinance")
+
 library(brfinance)
 
 ```

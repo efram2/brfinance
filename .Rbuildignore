@@ -1,5 +1,6 @@
 ^.*\.qmd$
 ^_quarto\.yml
+^_freeze$
 ^.*\.check$
 ^brfinance\.Rproj$
 ^\.Rproj\.user$

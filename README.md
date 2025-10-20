@@ -9,8 +9,15 @@ This package is part of an effort to simplify the retrieval and visualization of
 You can install the development version from GitHub with:
 
 ```r
+# For development version
 install.packages("devtools")  # if not installed
 devtools::install_github("efram2/brfinance")
+library(brfinance)
+
+# Version available on CRAN of R
+install.packages("brfinance")
+library(brfinance)
+
 ```
 
 ## Usage
@@ -31,7 +38,11 @@ unemployment_data <- get_unemployment(2020, 2024)
 unemployment_plot <- plot_unemployment(unemployment_data)
 print(unemployment_plot)
 
-# Example 3: Portuguese versions
+# Example 3: Inflation rate (IPCA)
+inflation_data <- get_inflation_rate("2020-01-01", "2024-01-01")
+print(inflation_data)
+
+# Example 4: Portuguese versions
 dados_selic <- get_selic_rate(2020, 2024, language = "pt")
 grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
 print(grafico_selic)
@@ -53,6 +64,26 @@ print(grafico_selic)
 * Returns a dataframe with the unemployment rate data.
 * Supports both English ("eng") and Portuguese ("pt") column names.
 * Source: IBGE (SIDRA/PNAD Contínua).
+
+## Visualization Functions
+
+**get_inflation_rate(start_date = "2012-01-01", end_date = NULL, language = "eng", labels = TRUE)**
+
+Downloads monthly IPCA inflation data from the Brazilian Central Bank and calculates year-to-date (YTD) and 12-month accumulated inflation.
+
+*Parameters:*
+
+* start_date: Start date in "YYYY-MM-DD" format (default: "2012-01-01")
+* end_date: End date in "YYYY-MM-DD" format (default: NULL - most recent data)
+* language: "eng" (default) for English, "pt" for Portuguese
+* labels: TRUE (default) to include variable labels, FALSE to remove
+
+*Features*
+
+* Automatic calculation of accumulated inflation rates
+* Handles missing values for 12-month calculations
+* Supports flexible date ranges
+* Bilingual output (English/Portuguese)
 
 ## Visualization Functions
 

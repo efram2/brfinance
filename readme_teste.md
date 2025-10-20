@@ -8,9 +8,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/efram2/brfinance.svg)](https://github.com/efram2/brfinance/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/efram2/brfinance.svg)](https://github.com/efram2/brfinance/network)
 
-> **Democratizing access to Brazilian economic data** 📈
+> **Democratizing access to Brazilian economic data** 
 
-`brfinance` is an R package that provides easy access to macroeconomic data from Brazil using official sources like the Central Bank of Brazil (BCB) and IBGE.
+`brfinance` is an R package that provides easy access to Brazilian macroeconomic data from official sources like the Central Bank of Brazil (BCB) and IBGE.
 
 ## 🚀 Quick Navigation
 

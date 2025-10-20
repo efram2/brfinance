@@ -8,22 +8,19 @@
 [![GitHub stars](https://img.shields.io/github/stars/efram2/brfinance.svg)](https://github.com/efram2/brfinance/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/efram2/brfinance.svg)](https://github.com/efram2/brfinance/network)
 
-
 > **Democratizing access to Brazilian economic data** 📈
 
 `brfinance` is an R package that provides easy access to macroeconomic data from Brazil using official sources like the Central Bank of Brazil (BCB) and IBGE.
 
-## Quick Navigation
+## 📘 Vignettes
 
-- [Features](#-features)
-- [Installation](#-installation) 
-- [Quick Start](#-quick-start)
-- [Available Data](#-available-data)
-- [Visualization](#-visualization)
-- [Language Support](#-language-support)
-- [Advanced Usage](#-advanced-usage)
-- [Learn More](#-learn-more)
-- [Contribution](#-contribution)
+| Topic | Description |
+|-------|--------------|
+| [Introduction to brfinance](https://efram2.github.io/brfinance/articles/intro_brfinance.html) | Overview of package goals, structure, and supported datasets. |
+| [SELIC Rate](https://efram2.github.io/brfinance/articles/selic.html) | Retrieve and visualize SELIC target rate data. |
+| [Inflation (IPCA)](https://efram2.github.io/brfinance/articles/inflation.html) | Download and analyze Brazilian inflation data. |
+| [Unemployment (PNAD)](https://efram2.github.io/brfinance/articles/unemployment.html) | Access quarterly unemployment rates from IBGE. |
+| [Visualization Tools](https://efram2.github.io/brfinance/articles/visualization.html) | Learn how to customize charts and bilingual plots. |
 
 ## Installation
 
@@ -37,6 +34,24 @@ devtools::install_github("efram2/brfinance")
 
 library(brfinance)
 
+```
+
+## Quick Start
+
+```R
+library(brfinance)
+
+# Get current inflation data
+inflation <- get_inflation_rate("2023-01-01")
+head(inflation)
+
+# Get SELIC interest rate
+selic <- get_selic_rate(2020, 2024)
+head(selic)
+
+# Get unemployment rate
+unemployment <- get_unemployment(2020, 2024)
+head(unemployment)
 ```
 
 ## Usage

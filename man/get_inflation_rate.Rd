@@ -7,7 +7,8 @@
 get_inflation_rate(
   start_date = "2012-01-01",
   end_date = NULL,
-  language = "eng"
+  language = "eng",
+  labels = TRUE
 )
 }
 \arguments{
@@ -15,7 +16,9 @@ get_inflation_rate(
 
 \item{end_date}{End date in "YYYY-MM-DD" format. Default is NULL (most recent data).}
 
-\item{language}{Output language: "en" (English, default) or "pt" (Português).}
+\item{language}{Language for column names: "pt" for Portuguese or "eng" (default) for English.}
+
+\item{labels}{By default it is TRUE, if you do not want labels use FALSE.}
 }
 \value{
 A data.frame with:

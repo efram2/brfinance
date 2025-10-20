@@ -5,7 +5,8 @@
 #'
 #' @param start_date Start date in "YYYY-MM-DD" format. Default is "2012-01-01".
 #' @param end_date End date in "YYYY-MM-DD" format. Default is NULL (most recent data).
-#' @param language Output language: "en" (English, default) or "pt" (Português).
+#' @param language Language for column names: "pt" for Portuguese or "eng" (default) for English.
+#' @param labels By default it is TRUE, if you do not want labels use FALSE.
 #'
 #' @return A data.frame with:
 #' \describe{
@@ -34,7 +35,8 @@
 
 get_inflation_rate <- function(start_date = "2012-01-01",
                                end_date = NULL,
-                               language = "eng") {
+                               language = "eng",
+                               labels = TRUE) {
 
   # Calculate start date for data download (12 months earlier)
   download_start_date <- as.Date(start_date) - lubridate::years(1)
@@ -98,24 +100,25 @@ get_inflation_rate <- function(start_date = "2012-01-01",
     )
   }
 
-  # Add descriptive labels (requires labelled package)
-  if (requireNamespace("labelled", quietly = TRUE)) {
-    if (language == "pt") {
-      data <- labelled::set_variable_labels(
-        data,
-        data_referencia = "Mes de referencia",
-        inflacao_mensal = "Variacao mensal do IPCA (%)",
-        inflacao_acumulada_ano = "Inflacao acumulada no ano (%)",
-        inflacao_12_meses = "Inflacao acumulada nos ultimos 12 meses (%)"
-      )
-    } else {
-      data <- labelled::set_variable_labels(
-        data,
-        date = "Reference month",
-        monthly_inflation = "Monthly IPCA variation (%)",
-        ytd_inflation = "Year-to-date accumulated inflation (%)",
-        twelve_month_inflation = "12-month accumulated inflation (%)"
-      )
+  if(isTRUE(labels)) {
+    if (requireNamespace("labelled", quietly = TRUE)) {
+      if (language == "pt") {
+        data <- labelled::set_variable_labels(
+          data,
+          data_referencia = "Mes de referencia",
+          inflacao_mensal = "Variacao mensal do IPCA (%)",
+          inflacao_acumulada_ano = "Inflacao acumulada no ano (%)",
+          inflacao_12_meses = "Inflacao acumulada nos ultimos 12 meses (%)"
+        )
+      } else {
+        data <- labelled::set_variable_labels(
+          data,
+          date = "Reference month",
+          monthly_inflation = "Monthly IPCA variation (%)",
+          ytd_inflation = "Year-to-date accumulated inflation (%)",
+          twelve_month_inflation = "12-month accumulated inflation (%)"
+        )
+      }
     }
   }
 

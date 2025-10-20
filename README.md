@@ -12,7 +12,7 @@
 
 `brfinance` is an R package that provides easy access to macroeconomic data from Brazil using official sources like the Central Bank of Brazil (BCB) and IBGE.
 
-## 📘 Vignettes
+##  Summary
 
 | Topic | Description |
 |-------|--------------|
@@ -25,7 +25,6 @@
 ## Installation
 
 ```r
-# Install from CRAN (stable version)
 install.packages("brfinance")
 
 # Or development version from GitHub

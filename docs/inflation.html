@@ -12,7 +12,7 @@
 
 
 
-<title>inflation</title>
+<title>2. Inflation Analysis</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,18 +336,45 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">inflation</h1>
+<h1 class="title toc-ignore">2. Inflation Analysis</h1>
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(brfinance)</span>
-<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co">#&gt; brfinance - Democratizing access to Brazilian economic data</span></span>
-<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co">#&gt; Use get_*() functions to download datasets (e.g., get_unemployment()).</span></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; Use plot_*() functions to visualize them (e.g., plot_unemployment()).</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; Set language = &#39;pt&#39; for Portuguese labels. Enjoy!</span></span>
-<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; Developed by Joao Paulo dos Santos P. Barbosa.</span></span>
-<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt; To learn more: https://github.com/efram2/brfinance</span></span></code></pre></div>
+<div id="monitoring-brazilian-inflation-with-ipca" class="section level2">
+<h2>Monitoring Brazilian Inflation with IPCA</h2>
+<p>The <code>get_inflation_rate()</code> function fetches official IPCA
+data directly from the Central Bank, with automatic accumulated
+calculations.</p>
+<p>How to use:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;efram2/brfinance&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(brfinance)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Complete data since 2012</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>inflation <span class="ot">&lt;-</span> <span class="fu">get_inflation_rate</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># Specific period</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>inflation_data <span class="ot">&lt;-</span> brfinance<span class="sc">::</span><span class="fu">get_inflation_rate</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">start_date =</span> <span class="st">&quot;2020-01-01&quot;</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">end_date =</span> <span class="st">&quot;2024-12-01&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>)</span></code></pre></div>
+<p><em>Output:</em></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">head</span>(inflation_data)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   date       monthly_inflation  year ytd_inflation twelve_month_inflation</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   &lt;date&gt;                 &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;                  &lt;dbl&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 1 2020-01-01              0.21  2020        0.210                    4.19</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 2 2020-02-01              0.25  2020        0.461                    4.00</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 3 2020-03-01              0.07  2020        0.531                    3.30</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 4 2020-04-01             -0.31  2020        0.219                    2.40</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 5 2020-05-01             -0.38  2020       -0.162                    1.88</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 6 2020-06-01              0.26  2020        0.0979                   2.13</span></span></code></pre></div>
+<p><em>Returned data:</em></p>
+<ul>
+<li>Monthly IPCA variation</li>
+<li>Year-to-date accumulated</li>
+<li>12-month accumulated</li>
+</ul>
+</div>
 
 
 

@@ -8,9 +8,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/efram2/brfinance.svg)](https://github.com/efram2/brfinance/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/efram2/brfinance.svg)](https://github.com/efram2/brfinance/network)
 
-> **Democratizing access to Brazilian economic data** 📈
-
-
 
 ## Overview
 
@@ -36,7 +33,7 @@ Explore the main vignettes included in **brfinance** to learn how to use each fe
 
 | Vignette | Description | Rmd |
 |-----------|--------------|------|
-| **Inflation Analysis** | Learn how to download and visualize inflation indicators from official Brazilian sources. | [inflation.Rmd](vignettes/inflation.Rmd) |
+| **Inflation Analysis** | Learn how to download and visualize inflation indicators from official Brazilian sources. | [inflation.Rmd](vignettes/inflation.html) |
 | **Selic and Interest Rates** | Explore how to extract and analyze Selic rate data. | [selic.Rmd](vignettes/selic.Rmd) |
 | **Unemployment Data** | Understand how to use the package to analyze unemployment rates. | [unemployment.Rmd](vignettes/unemployment.Rmd) |
 | **Visualization Guide** | Learn how to create informative visualizations with `brfinance`. | [visualization.Rmd](vignettes/visualization.Rmd) |

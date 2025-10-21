@@ -12,7 +12,7 @@
 
 
 
-<title>inflation</title>
+<title>2. Inflation Analysis</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,11 +336,68 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">inflation</h1>
+<h1 class="title toc-ignore">2. Inflation Analysis</h1>
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(brfinance)</span></code></pre></div>
+<div id="get_inflation_rate" class="section level2">
+<h2>get_inflation_rate()</h2>
+<p>Downloads monthly IPCA inflation data from Central Bank of
+Brazil.</p>
+<div id="parameters" class="section level3">
+<h3>Parameters</h3>
+<ul>
+<li><code>start_date</code>: Start date “YYYY-MM-DD” (default:
+“2012-01-01”)</li>
+<li><code>end_date</code>: End date “YYYY-MM-DD” (default: NULL - most
+recent)</li>
+<li><code>language</code>: Column names - <code>&quot;eng&quot;</code> (default)
+or <code>&quot;pt&quot;</code></li>
+<li><code>labels</code>: Whether to add variable labels (default:
+TRUE)</li>
+</ul>
+</div>
+<div id="usage" class="section level3">
+<h3>Usage</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;efram2/brfinance&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(brfinance)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Complete data (default)</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>inflation <span class="ot">&lt;-</span> <span class="fu">get_inflation_rate</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co"># Specific period in English</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>inflation_eng <span class="ot">&lt;-</span> <span class="fu">get_inflation_rate</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="at">start_date =</span> <span class="st">&quot;2020-01-01&quot;</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="at">end_date =</span> <span class="st">&quot;2024-12-01&quot;</span>, </span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="at">language =</span> <span class="st">&quot;eng&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co"># Portuguese version</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>inflation_pt <span class="ot">&lt;-</span> <span class="fu">get_inflation_rate</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  <span class="at">start_date =</span> <span class="st">&quot;2020-01-01&quot;</span>, </span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>  <span class="at">language =</span> <span class="st">&quot;pt&quot;</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="output-structure" class="section level3">
+<h3>Output Structure</h3>
+<p><strong>English:</strong></p>
+<pre><code># A tibble: 156 × 5
+   date       monthly_inflation ytd_inflation twelve_month_inflation year
+   &lt;date&gt;                 &lt;dbl&gt;         &lt;dbl&gt;                 &lt;dbl&gt; &lt;dbl&gt;
+ 1 2020-01-01             0.21          0.21                  4.18  2020</code></pre>
+<p><strong>Portuguese:</strong></p>
+<pre><code># A tibble: 156 × 5
+   data_referencia inflacao_mensal inflacao_acumulada_ano inflacao_12_meses   ano
+   &lt;date&gt;                     &lt;dbl&gt;                 &lt;dbl&gt;             &lt;dbl&gt; &lt;dbl&gt;
+ 1 2020-01-01                 0.21                  0.21              4.18  2020</code></pre>
+<p><em>Returned data:</em></p>
+<ul>
+<li>Monthly IPCA variation</li>
+<li>Year-to-date accumulated</li>
+<li>12-month accumulated</li>
+</ul>
+</div>
+</div>
 
 
 

@@ -33,18 +33,10 @@ Explore the main vignettes included in **brfinance** to learn how to use each fe
 
 | Vignette | Description | Rmd |
 |-----------|--------------|------|
-| **Inflation Analysis** | Learn how to download and visualize inflation indicators from official Brazilian sources. | [inflation.html](vignettes/inflation.html) |
-| **Selic and Interest Rates** | Explore how to extract and analyze Selic rate data. | [selic.Rmd](vignettes/selic.Rmd) |
-| **Unemployment Data** | Understand how to use the package to analyze unemployment rates. | [unemployment.Rmd](vignettes/unemployment.Rmd) |
-| **Visualization Guide** | Learn how to create informative visualizations with `brfinance`. | [visualization.Rmd](vignettes/visualization.Rmd) |
-| **Introduction to brfinance** | Get started with the basics of the package and its core functions. | [intro_brfinance.Rmd](vignettes/intro_brfinance.Rmd) |
-
-
-**[1 - Introduction to brfinance](vignettes/intro_brfinance.Rmd)**  
-**[2 - Inflation Analysis](vignettes/inflation.Rmd)**  
-**[3 - Selic and Interest Rates](vignettes/selic.Rmd)**  
-**[4 - Unemployment Data](vignettes/unemployment.Rmd)**  
-**[5 - Visualization Guide](vignettes/visualization.Rmd)**
+| **Introduction to brfinance** | Get started with the basics of the package and its core functions. | [click here to learn more](https://efram2.github.io/brfinance/intro_brfinance.html) |
+| **Inflation Analysis** | Learn how to download and visualize inflation indicators from official Brazilian sources. | [click here to learn more](https://efram2.github.io/brfinance/inflation.html) |
+| **Selic and Interest Rates** | Explore how to extract and analyze Selic rate data. | [click here to learn more](https://efram2.github.io/brfinance/selic.html) |
+| **Unemployment Data** | Understand how to use the package to analyze unemployment rates. | [click here to learn more](https://efram2.github.io/brfinance/unemployment.html) |
 
 ## Quick Start
 

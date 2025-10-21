@@ -1,0 +1,33 @@
+---
+title: "SELIC Rate Data — brfinance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{SELIC Rate Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(brfinance)
+```
+
+# Overview
+
+This vignette demonstrates how to retrieve and visualize the SELIC target rate using the brfinance package.
+
+```r
+# To access the data
+selic <- get_selic_rate(2020, 2024)
+head(selic)
+
+# To generate an automatic graph of the data
+plot_selic_rate(selic)
+``` 
+

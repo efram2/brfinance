@@ -26,4 +26,6 @@ Imports:
     labelled
 Suggests: 
     testthat (>= 3.0.0),
-    rmarkdown
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

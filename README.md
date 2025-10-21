@@ -10,7 +10,12 @@
 
 > **Democratizing access to Brazilian economic data** 📈
 
-`brfinance` is an R package that provides easy access to macroeconomic data from Brazil using official sources like the Central Bank of Brazil (BCB) and IBGE.
+
+
+## Overview
+
+The `brfinance` package simplifies access to official Brazilian macroeconomic data from reliable institutions such as the Central Bank of Brazil (BCB) and the IBGE.
+It is designed to make it easier to collect, organize, and visualize key indicators like inflation, interest rates, and unemployment, directly from R.
 
 ## Installation
 
@@ -25,30 +30,39 @@ library(brfinance)
 
 ```
 
-##  Main features
+##  Documentation and Vignettes
 
-| Topic | Description |
-|-------|--------------|
-| [get_selic_rate](https://efram2.github.io/brfinance/articles/intro_brfinance.html) | x |
-| [get_inflation_rate](https://efram2.github.io/brfinance/articles/selic.html) | x |
-| [get_unemployment](https://efram2.github.io/brfinance/articles/inflation.html) | x |
-| [plot_selic_rate](https://efram2.github.io/brfinance/articles/unemployment.html) | x |
-| [plot_inflation_rate](https://efram2.github.io/brfinance/articles/visualization.html) | x |
+Explore the main vignettes included in **brfinance** to learn how to use each feature:
+
+| Vignette | Description | Rmd |
+|-----------|--------------|------|
+| **Inflation Analysis** | Learn how to download and visualize inflation indicators from official Brazilian sources. | [inflation.Rmd](vignettes/inflation.Rmd) |
+| **Selic and Interest Rates** | Explore how to extract and analyze Selic rate data. | [selic.Rmd](vignettes/selic.Rmd) |
+| **Unemployment Data** | Understand how to use the package to analyze unemployment rates. | [unemployment.Rmd](vignettes/unemployment.Rmd) |
+| **Visualization Guide** | Learn how to create informative visualizations with `brfinance`. | [visualization.Rmd](vignettes/visualization.Rmd) |
+| **Introduction to brfinance** | Get started with the basics of the package and its core functions. | [intro_brfinance.Rmd](vignettes/intro_brfinance.Rmd) |
+
+
+**[1 - Introduction to brfinance](vignettes/intro_brfinance.Rmd)**  
+**[2 - Inflation Analysis](vignettes/inflation.Rmd)**  
+**[3 - Selic and Interest Rates](vignettes/selic.Rmd)**  
+**[4 - Unemployment Data](vignettes/unemployment.Rmd)**  
+**[5 - Visualization Guide](vignettes/visualization.Rmd)**
 
 ## Quick Start
 
 ```R
 library(brfinance)
 
-# Get current inflation data
+# Download inflation data for 2023
 inflation <- get_inflation_rate("2023-01-01")
 head(inflation)
 
-# Get SELIC interest rate
+# Retrieve SELIC rate from 2020 to 2024
 selic <- get_selic_rate(2020, 2024)
 head(selic)
 
-# Get unemployment rate
+# Retrieve unemployment data
 unemployment <- get_unemployment(2020, 2024)
 head(unemployment)
 ```

@@ -12,16 +12,6 @@
 
 `brfinance` is an R package that provides easy access to macroeconomic data from Brazil using official sources like the Central Bank of Brazil (BCB) and IBGE.
 
-##  Summary
-
-| Topic | Description |
-|-------|--------------|
-| [Introduction to brfinance](https://efram2.github.io/brfinance/articles/intro_brfinance.html) | Overview of package goals, structure, and supported datasets. |
-| [SELIC Rate](https://efram2.github.io/brfinance/articles/selic.html) | Retrieve and visualize SELIC target rate data. |
-| [Inflation (IPCA)](https://efram2.github.io/brfinance/articles/inflation.html) | Download and analyze Brazilian inflation data. |
-| [Unemployment (PNAD)](https://efram2.github.io/brfinance/articles/unemployment.html) | Access quarterly unemployment rates from IBGE. |
-| [Visualization Tools](https://efram2.github.io/brfinance/articles/visualization.html) | Learn how to customize charts and bilingual plots. |
-
 ## Installation
 
 ```r
@@ -34,6 +24,16 @@ devtools::install_github("efram2/brfinance")
 library(brfinance)
 
 ```
+
+##  Main features
+
+| Topic | Description |
+|-------|--------------|
+| [get_selic_rate](https://efram2.github.io/brfinance/articles/intro_brfinance.html) | x |
+| [get_inflation_rate](https://efram2.github.io/brfinance/articles/selic.html) | x |
+| [get_unemployment](https://efram2.github.io/brfinance/articles/inflation.html) | x |
+| [plot_selic_rate](https://efram2.github.io/brfinance/articles/unemployment.html) | x |
+| [plot_inflation_rate](https://efram2.github.io/brfinance/articles/visualization.html) | x |
 
 ## Quick Start
 
@@ -52,84 +52,6 @@ head(selic)
 unemployment <- get_unemployment(2020, 2024)
 head(unemployment)
 ```
-
-## Usage
-
-The package provides separate functions for data retrieval and visualization:
-
-
-```
-library(brfinance)
-
-# Example 1: SELIC rate (English)
-selic_data <- get_selic_rate(2020, 2024)
-selic_plot <- plot_selic_rate(selic_data)
-print(selic_plot)
-
-# Example 2: Unemployment rate (English)
-unemployment_data <- get_unemployment(2020, 2024)
-unemployment_plot <- plot_unemployment(unemployment_data)
-print(unemployment_plot)
-
-# Example 3: Inflation rate (IPCA)
-inflation_data <- get_inflation_rate("2020-01-01", "2024-01-01")
-print(inflation_data)
-
-# Example 4: Portuguese versions
-dados_selic <- get_selic_rate(2020, 2024, language = "pt")
-grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
-print(grafico_selic)
-
-```
-
-## Available Functions
-
-**get_selic_rate(start_year, end_year, language = "eng")**
-
-* Downloads the official historical daily series of the SELIC Target Rate, using the Central Bank of Brazil's SGS system (series code 432).
-* Returns a dataframe with the SELIC rate data.
-* Supports both English ("eng") and Portuguese ("pt") column names.
-* Source: Central Bank of Brazil (SGS).
-
-**get_unemployment(start_year, end_year, language = "eng")**
-
-* Retrieves the quarterly unemployment rate in Brazil using SIDRA (IBGE database), series code 6381 from the Continuous PNAD survey.
-* Returns a dataframe with the unemployment rate data.
-* Supports both English ("eng") and Portuguese ("pt") column names.
-* Source: IBGE (SIDRA/PNAD Contínua).
-
-**get_inflation_rate(start_date = "2012-01-01", end_date = NULL, language = "eng", labels = TRUE)**
-
-Downloads monthly IPCA inflation data from the Brazilian Central Bank and calculates year-to-date (YTD) and 12-month accumulated inflation.
-
-*Parameters:*
-
-* start_date: Start date in "YYYY-MM-DD" format (default: "2012-01-01")
-* end_date: End date in "YYYY-MM-DD" format (default: NULL - most recent data)
-* language: "eng" (default) for English, "pt" for Portuguese
-* labels: TRUE (default) to include variable labels, FALSE to remove
-
-*Features*
-
-* Automatic calculation of accumulated inflation rates
-* Handles missing values for 12-month calculations
-* Supports flexible date ranges
-* Bilingual output (English/Portuguese)
-
-## Visualization Functions
-
-**plot_selic_rate(data, language = "eng")**
-
-* Creates a time series plot of the SELIC interest rate.
-* Accepts data from get_selic_rate() function.
-* Supports both English and Portuguese labels.
-
-**plot_unemployment(data, language = "eng")**
-
-* Creates a time series plot of the unemployment rate.
-* Accepts data from get_unemployment() function.
-* Supports both English and Portuguese labels.
-
 ## Language Support
 
 All functions support both English and Portuguese through the language parameter:

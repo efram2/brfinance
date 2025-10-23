@@ -12,6 +12,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - uses: r-lib/actions/setup-r@v2
-      - uses: r-lib/actions/setup-r-dependencies@v2
-      - uses: r-lib/actions/check-r-package@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Install R dependencies
+        run: |
+          R -e 'install.packages(c("remotes", "rcmdcheck"))'
+          R -e 'remotes::install_deps(dependencies = TRUE)'
+
+      - name: Check package
+        run: |
+          R -e 'rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")'

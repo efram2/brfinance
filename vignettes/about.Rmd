@@ -1,0 +1,26 @@
+---
+title: "About the Author"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{About the Author}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+**João Paulo dos Santos Pereira Barbosa** is an undergraduate student in **Economics at PUC-Rio (Pontifical Catholic University of Rio de Janeiro)**, currently in his 5th semester.  
+He focuses on **financial analysis and data science**, working at the intersection between **economics and technology** to transform data into strategic insights.
+
+💡 João is the **developer of the `{brfinance}` package**, available on the  
+[CRAN (R Project)](https://cran.r-project.org/package=brfinance).  
+This personal initiative was designed to make **Brazilian financial and macroeconomic data more accessible and easier to analyze directly within R**, combining automation with analytical precision.
+
+He also participates in an **academic exchange program in Ecuador**, an experience that has broadened his understanding of regional integration and Latin American economic policies.
+
+João has experience in **valuation**, **financial statement analysis**, and **programming in R and Python**.  
+He is passionate about developing open-source tools that make **economic research and data-driven decision-making more accessible**.
+
+His professional goal is to pursue a career as a **Quantitative Analyst** or **Data Scientist**, combining the rigor of economic theory with the ability to translate data into tangible value for investment and strategy.
+
+**Contact:** [joao.31582129@gmail.com](mailto:joao.31582129@gmail.com)  
+**LinkedIn:** [João Paulo Barbosa](https://www.linkedin.com/in/jo%C3%A3o-paulo-barbosa-6896241bb/)  
+**GitHub:** [efram2](https://github.com/efram2)

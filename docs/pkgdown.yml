@@ -1,0 +1,13 @@
+pandoc: '3.4'
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  about: about.html
+  inflation: inflation.html
+  intro_brfinance: intro_brfinance.html
+  selic: selic.html
+  unemployment: unemployment.html
+last_built: 2025-10-23T14:46Z
+urls:
+  reference: https://efram2.github.io/brfinance/reference
+  article: https://efram2.github.io/brfinance/articles

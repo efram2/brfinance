@@ -63,7 +63,7 @@ The package aims to simplify the access and visualization of key Brazilian macro
 
 ## 1. Inflation Analysis
 
-`get_inflation_rate()`
+### `get_inflation_rate()`
 
 Downloads monthly IPCA inflation data from the Central Bank of Brazil.
 

@@ -31,47 +31,72 @@ get_gdp_growth <- function(start_date = "2000-01-01",
                            language = "eng",
                            labels = TRUE) {
 
-  # Declaration of global variables
-  gdp_growth <- gdp_nominal <- NULL
 
-  url <- "https://api.bcb.gov.br/dados/serie/bcdata.sgs.2010/dados?formato=json"
+  # Usa a função interna para baixar os dados
+  data <- .get_sgs_series(
+    series_id = 2010,  # GDP nominal code
+    start_date = start_date,
+    end_date = end_date
+  )
 
-  data <- jsonlite::fromJSON(url) |>
+  # Garante que temos as colunas com os nomes corretos
+  # A função .get_sgs_series SEMPRE retorna 'data' e 'valor'
+  if (!all(c("data", "valor") %in% names(data))) {
+    stop("Internal error: expected columns 'data' and 'valor' not found", call. = FALSE)
+  }
+
+  # Agora processa os dados
+  data <- data |>
+    dplyr::arrange(data) |>
     dplyr::mutate(
-      data = as.Date(data, format = "%d/%m/%Y"),
-      gdp_nominal = as.numeric(valor)
-    ) |>
-    dplyr::arrange(date) |>
-    dplyr::mutate(
+      gdp_nominal = as.numeric(valor),
       gdp_growth = (gdp_nominal / dplyr::lag(gdp_nominal) - 1) * 100
+    ) |>
+    dplyr::select(
+      date = data,
+      gdp_growth,
+      gdp_nominal
     )
 
+  # Aplica filtro de data final (já foi aplicado na função interna, mas mantém)
   if (!is.null(end_date)) {
-    data <- dplyr::filter(data, date <= as.Date(end_date))
+    data <- data |> dplyr::filter(date <= as.Date(end_date))
   }
 
+  # Tradução para português se necessário
   if (tolower(language) == "pt") {
-    data <- dplyr::rename(
-      data,
-      data_referencia = date,
-      crescimento_pib = gdp_growth
-    )
+    data <- data |>
+      dplyr::rename(
+        data_referencia = date,
+        crescimento_pib = gdp_growth,
+        pib_nominal = gdp_nominal
+      )
   }
 
+  # Adiciona labels se solicitado
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
-    if (language == "pt") {
+    if (tolower(language) == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        data_referencia = "Trimestre de referencia",
-        crescimento_pib = "Crescimento do PIB real (%)"
+        data_referencia = "Trimestre de referência",
+        crescimento_pib = "Crescimento do PIB real (%)",
+        pib_nominal = "PIB nominal (R$ milhões)"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
         date = "Reference quarter",
-        gdp_growth = "GDP growth rate (%)"
+        gdp_growth = "GDP growth rate (%)",
+        gdp_nominal = "Nominal GDP (R$ millions)"
       )
     }
+  }
+
+  # Remove a coluna gdp_nominal do resultado final (mantém só o crescimento)
+  if (tolower(language) == "pt") {
+    data <- dplyr::select(data, data_referencia,  )
+  } else {
+    data <- dplyr::select(data, date, gdp_growth)
   }
 
   return(data)

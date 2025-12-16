@@ -2,26 +2,22 @@
 % Please edit documentation in R/download_sgs.R
 \name{.get_sgs_series}
 \alias{.get_sgs_series}
-\title{Download a SGS time series from the Brazilian Central Bank}
+\title{Download SGS series from Brazilian Central Bank}
 \usage{
 .get_sgs_series(series_id, start_date = NULL, end_date = NULL)
 }
 \arguments{
 \item{series_id}{Numeric. SGS series ID.}
 
-\item{start_date}{Optional start date ("YYYY-MM-DD").}
+\item{start_date}{Start date (YYYY, YYYY-MM, or YYYY-MM-DD format).}
 
-\item{end_date}{Optional end date ("YYYY-MM-DD").}
+\item{end_date}{End date (YYYY, YYYY-MM, YYYY-MM-DD format, or NULL for current date).}
 }
 \value{
-A data.frame with columns:
-\describe{
-\item{date}{Reference date.}
-\item{value}{Series value.}
-}
+A data.frame with columns 'date' (Date) and 'value' (numeric).
 }
 \description{
-Internal helper function to download and format time series
-data from the Central Bank of Brazil (SGS API).
+Internal helper function to download time series data from BCB SGS API.
+Uses httr2 for robust HTTP requests with automatic fallback strategy.
 }
 \keyword{internal}

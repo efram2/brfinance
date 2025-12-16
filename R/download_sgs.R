@@ -1,13 +1,20 @@
+#' Download SGS series from Brazilian Central Bank
+#'
+#' Internal helper function to download time series data from BCB SGS API.
+#' Uses httr2 for robust HTTP requests with automatic fallback strategy.
+#'
 #' @param series_id Numeric. SGS series ID.
 #' @param start_date Start date (YYYY, YYYY-MM, or YYYY-MM-DD format).
 #' @param end_date End date (YYYY, YYYY-MM, YYYY-MM-DD format, or NULL for current date).
 #'
 #' @return A data.frame with columns 'date' (Date) and 'value' (numeric).
 #' @keywords internal
-
-.get_sgs <- function(series_id,
+.get_sgs_series <- function(series_id,
                             start_date = NULL,
                             end_date = NULL) {
+
+  # Declare global variables
+  value <- NULL
 
   # Normalize dates
   data_inicio <- .normalize_date(start_date, is_start = TRUE)

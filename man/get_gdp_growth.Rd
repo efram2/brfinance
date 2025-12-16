@@ -12,34 +12,66 @@ get_gdp_growth(
 )
 }
 \arguments{
-\item{start_date}{Start date in "YYYY-MM-DD" format. Default is "2000-01-01".}
+\item{start_date}{Start date for the data period. Accepts multiple formats:
+\itemize{
+\item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
+\item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
+\item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
+}}
 
-\item{end_date}{End date in "YYYY-MM-DD" format. Default is NULL (most recent data).}
+\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
+\itemize{
+\item \code{"YYYY"} (e.g., \code{"2023"} becomes \code{"2023-12-31"})
+\item \code{"YYYY-MM"} (e.g., \code{"2023-12"} becomes the last day of December 2023)
+\item \code{"YYYY-MM-DD"} for a specific date
+\item \code{NULL} defaults to the current date (today)
+}}
 
-\item{language}{Language for column names: "pt" for Portuguese or "eng" (default) for English.}
+\item{language}{Language for column names in the returned data.frame:
+\itemize{
+\item \code{"eng"} (default): Returns columns \code{date} and \code{gdp_growth}
+\item \code{"pt"}: Returns columns \code{data_referencia} and \code{crescimento_pib}
+}}
 
-\item{labels}{By default it is TRUE, if you do not want labels use FALSE.}
+\item{labels}{Logical indicating whether to add variable labels using the \code{labelled}
+package. Labels provide descriptive text for each column when available.}
 }
 \value{
-A data.frame with GDP growth rate.
+A data.frame with GDP growth rate. Columns depend on the \code{language} parameter:
+\itemize{
+\item English (\code{language = "eng"}): \code{date} (Date), \code{gdp_growth} (numeric, \%)
+\item Portuguese (\code{language = "pt"}): \code{data_referencia} (Date), \code{crescimento_pib} (numeric, \%)
+}
 }
 \description{
-Downloads quarterly GDP growth data (\% change) from BCB/SGS.
+Downloads quarterly GDP growth data (\% change) from BCB/SGS (Brazilian Central Bank).
+This function retrieves nominal GDP values (SGS series 2010) and calculates the
+quarter-over-quarter growth rate.
+}
+\note{
+\strong{Important limitation}: The nominal GDP series (SGS 2010) is currently
+available only until 2014. Requests for periods after 2014 will return
+empty results or a warning.
 }
 \examples{
 \dontrun{
+  # Default: data from 2000 to current date (but limited to 2014)
   df <- get_gdp_growth()
 
-  # Specific period
-  df2 <- get_gdp_growth("2015-01-01", "2020-12-01")
+  # Specific period (within available range)
+  df2 <- get_gdp_growth("2010", "2014")
 
-  # By a specific date (from the beginning until 2000)
-  df3 <- get_gdp_growth(end_date = "2020-12-01")
+  # Using year-month format
+  df3 <- get_gdp_growth("2012-06", "2013-12")
 
-  # With language in Portuguese
-  df4 <- get_gdp_growth(language = "pt")
+  # End date only (from earliest available to 2020-12-31)
+  df4 <- get_gdp_growth(end_date = "2020-12-01")
 
-  df5 <- get_gdp_growth("2015-01-01", "2020-12-01", language = "pt")
+  # Portuguese column names and labels
+  df5 <- get_gdp_growth(language = "pt")
+
+  # Complete example with all parameters
+  df6 <- get_gdp_growth("2011-01-01", "2014-12-31", language = "pt", labels = TRUE)
 }
 
 }

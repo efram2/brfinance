@@ -76,7 +76,7 @@ get_selic_rate <- function(start_date = "2020-01-01",
   # Declare global variables for dplyr operations
   value <- selic_rate <- NULL
 
-  # Use internal function to download data (SGS series 1178 = SELIC rate)
+  # Use internal function to download data
   data <- .get_sgs_series(
     series_id = 1178,  # Código da SELIC anual
     start_date = start_date,

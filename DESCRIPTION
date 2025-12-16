@@ -22,7 +22,6 @@ Imports:
     sidrar,
     stringr,
     janitor,
-    jsonlite,
     labelled
 Suggests: 
     testthat (>= 3.0.0),

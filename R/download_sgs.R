@@ -14,7 +14,7 @@
                             end_date = NULL) {
 
   # Declare global variables
-  value <- NULL
+  value <- data <- valor <- NULL
 
   # Normalize dates
   data_inicio <- .normalize_date(start_date, is_start = TRUE)

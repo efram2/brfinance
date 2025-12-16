@@ -12,40 +12,94 @@ get_inflation_rate(
 )
 }
 \arguments{
-\item{start_date}{Start date in "YYYY-MM-DD" format. Default is "2012-01-01".}
+\item{start_date}{Start date for the data period. Accepts multiple formats:
+\itemize{
+\item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
+\item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
+\item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
+\item \code{NULL} defaults to \code{"2020-01-01"} (aligned with other functions in the package)
+}}
 
-\item{end_date}{End date in "YYYY-MM-DD" format. Default is NULL (most recent data).}
+\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
+\itemize{
+\item \code{"YYYY"} (e.g., \code{"2023"} becomes \code{"2023-12-31"})
+\item \code{"YYYY-MM"} (e.g., \code{"2023-12"} becomes the last day of December 2023)
+\item \code{"YYYY-MM-DD"} for a specific date
+\item \code{NULL} defaults to the current date (today)
+}}
 
-\item{language}{Language for column names: "pt" for Portuguese or "eng" (default) for English.}
+\item{language}{Language for column names in the returned data.frame:
+\itemize{
+\item \code{"eng"} (default): Returns columns \code{date}, \code{monthly_inflation}, \code{ytd_inflation}, \code{twelve_month_inflation}
+\item \code{"pt"}: Returns columns \code{data_referencia}, \code{inflacao_mensal}, \code{inflacao_acumulada_ano}, \code{inflacao_12_meses}
+}}
 
-\item{labels}{By default it is TRUE, if you do not want labels use FALSE.}
+\item{labels}{Logical indicating whether to add variable labels using the \code{labelled}
+package. Labels provide descriptive text for each column when available.}
 }
 \value{
-A data.frame with:
-\describe{
-\item{date}{Reference date (month).}
-\item{monthly_inflation}{Monthly IPCA variation (\%).}
-\item{ytd_inflation}{Accumulated inflation in the current year (\%).}
-\item{twelve_month_inflation}{Accumulated inflation over the last 12 months (\%).}
+A data.frame with inflation metrics. Columns depend on the \code{language} parameter:
+\itemize{
+\item English (\code{language = "eng"}):
+\itemize{
+\item \code{date} (Date): Reference month
+\item \code{monthly_inflation} (numeric): Monthly IPCA variation (\%)
+\item \code{ytd_inflation} (numeric): Year-to-date accumulated inflation (\%)
+\item \code{twelve_month_inflation} (numeric): 12-month accumulated inflation (\%)
+}
+\item Portuguese (\code{language = "pt"}):
+\itemize{
+\item \code{data_referencia} (Date): Mês de referência
+\item \code{inflacao_mensal} (numeric): Variação mensal do IPCA (\%)
+\item \code{inflacao_acumulada_ano} (numeric): Inflação acumulada no ano (\%)
+\item \code{inflacao_12_meses} (numeric): Inflação acumulada nos últimos 12 meses (\%)
+}
 }
 }
 \description{
-Downloads monthly IPCA inflation data from the Brazilian Central Bank (BCB)
-and calculates both year-to-date (YTD) and 12-month accumulated inflation.
+Downloads monthly IPCA (Broad National Consumer Price Index) inflation data
+from the Brazilian Central Bank's SGS API and calculates accumulated inflation rates.
+IPCA is Brazil's official inflation index, calculated monthly by IBGE.
+}
+\note{
+\strong{Default Period}: When \code{start_date = NULL}, defaults to \code{"2020-01-01"}, providing
+data from the start of 2020. This period covers significant economic events including
+the COVID-19 pandemic and recent inflationary pressures in Brazil.
+
+\strong{Data Processing}: This function automatically downloads an extra 12 months
+of historical data to calculate 12-month accumulated inflation correctly.
+The final output is filtered to show only the requested period.
+
+\strong{Calculation Details}:
+\itemize{
+\item Year-to-date inflation: Cumulative product of monthly rates within each calendar year
+\item 12-month inflation: Rolling 12-month cumulative product of monthly rates
+}
 }
 \examples{
 \dontrun{
-  # Complete data (default)
+  # Default: from 2020 to current date (aligned with SELIC function)
   df <- get_inflation_rate()
 
-  # Specific period
-  df <- get_inflation_rate("2015-01-01", "2020-12-01")
+  # Specific period with year-only format
+  df2 <- get_inflation_rate("2021", "2023")
 
-  # By a specific date (from the beginning until 2020)
-  df <- get_inflation_rate(end_date = "2020-12-01")
+  # Using year-month format for precise month selection
+  df3 <- get_inflation_rate("2022-03", "2023-06")
 
-  # With language in Portuguese
-  df <- get_inflation_rate("2015-01-01", "2020-12-01", language = "pt")
+  # Portuguese column names and labels
+  df4 <- get_inflation_rate(language = "pt")
+
+  # Without variable labels
+  df5 <- get_inflation_rate("2020-01-01", "2022-12-31", labels = FALSE)
+
+  # Current year analysis
+  current_year <- format(Sys.Date(), "\%Y")
+  df6 <- get_inflation_rate(start_date = current_year)
+
+  # Compare with SELIC rate (same default period)
+  selic_data <- get_selic_rate()  # Also starts at 2020-01-01
+  inflation_data <- get_inflation_rate()  # Same start date
 }
 
 }

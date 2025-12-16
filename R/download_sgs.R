@@ -1,143 +1,127 @@
-#' Download a SGS time series from the Brazilian Central Bank
-#'
-#' Internal helper function to download and format time series
-#' data from the Central Bank of Brazil (SGS API).
-#'
 #' @param series_id Numeric. SGS series ID.
-#' @param start_date Optional start date ("YYYY-MM-DD").
-#' @param end_date Optional end date ("YYYY-MM-DD").
+#' @param start_date Start date (YYYY, YYYY-MM, or YYYY-MM-DD format).
+#' @param end_date End date (YYYY, YYYY-MM, YYYY-MM-DD format, or NULL for current date).
 #'
-#' @return A data.frame with columns:
-#' \describe{
-#'   \item{date}{Reference date.}
-#'   \item{value}{Series value.}
-#' }
-#'
+#' @return A data.frame with columns 'date' (Date) and 'value' (numeric).
 #' @keywords internal
 
-.get_sgs_series <- function(series_id,
+.get_sgs <- function(series_id,
                             start_date = NULL,
                             end_date = NULL) {
 
-  # 1. Normalize dates first
-  start_date_norm <- .normalize_date(start_date, is_start = TRUE)
-  end_date_norm   <- .normalize_date(end_date, is_start = FALSE)
+  # Normalize dates
+  data_inicio <- .normalize_date(start_date, is_start = TRUE)
+  data_fim   <- .normalize_date(end_date, is_start = FALSE)
 
-  # 2. Strategy 1: Try with date filters (ONLY if BOTH dates are provided)
-  if (!is.null(start_date_norm) && !is.null(end_date_norm)) {
-    url_with_dates <- sprintf(
-      "https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json&dataInicial=%s&dataFinal=%s",
+  # Attempt download WITH date filters
+  dados_baixados <- tryCatch({
+
+    url_filtrado <- sprintf(
+      'https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json&dataInicial=%s&dataFinal=%s',
       series_id,
-      format(start_date_norm, "%d/%m/%Y"),
-      format(end_date_norm, "%d/%m/%Y")
+      format(data_inicio, '%d/%m/%Y'),
+      format(data_fim, '%d/%m/%Y')
     )
 
-    # Attempt download WITH dates, but suppress the 404 warning
-    data <- suppressWarnings(
-      tryCatch({
-        temp_data <- jsonlite::fromJSON(url_with_dates)
-        # Check if we got valid data back (not an empty list/df)
-        if (length(temp_data) > 0 && nrow(temp_data) > 0) {
-          message(sprintf("Series %s downloaded successfully using date filters.", series_id))
-          return(temp_data) # Exit early, success!
-        }
-        # If data is empty, trigger fallback
-        stop("No data returned with filters")
-      }, error = function(e) {
-        # Silently return NULL to trigger fallback to Strategy 2
-        return(NULL)
-      })
-    )
+    resposta <- url_filtrado |>
+      httr2::request() |>
+      httr2::req_perform()
 
-    # If 'data' is not NULL, the function has already returned it above.
-    # If we are here, it means Strategy 1 failed and 'data' is NULL.
-  }
+    httr2::resp_body_json(resposta, simplifyVector = TRUE)
 
-  # 3. Strategy 2: Download the FULL series (no date filters in URL)
-  message(sprintf("Downloading full SGS series %s from Brazilian Central Bank...", series_id))
-
-  url_full <- sprintf(
-    "https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json",
-    series_id
-  )
-
-  data <- tryCatch({
-    jsonlite::fromJSON(url_full)
   }, error = function(e) {
-    stop(sprintf("Error downloading series %s: %s", series_id, e$message), call. = FALSE)
+    # Fallback: download WITHOUT date filters
+    message(sprintf("Series %s: Filtered download failed. Fetching full series...", series_id))
+
+    url_completo <- sprintf(
+      'https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json',
+      series_id
+    )
+
+    resposta <- url_completo |>
+      httr2::request() |>
+      httr2::req_perform()
+
+    httr2::resp_body_json(resposta, simplifyVector = TRUE)
   })
 
-  # 4. Process the data
-  data <- data |>
+  # Convert to data.frame (handle both list and data.frame returns)
+  if (is.data.frame(dados_baixados)) {
+    df <- dados_baixados
+  } else {
+    df <- dplyr::bind_rows(dados_baixados)
+  }
+
+  # Clean and standardize
+  df <- df |>
     dplyr::mutate(
-      data = as.Date(data, format = "%d/%m/%Y"),
-      valor = as.numeric(valor)
+      date = as.Date(data, format = "%d/%m/%Y"),
+      value = as.numeric(gsub(",", ".", valor, fixed = TRUE))
     ) |>
-    dplyr::arrange(data)
+    dplyr::arrange(date) |>
+    dplyr::select(date, value)  # Standard column names
 
-  # 5. Apply date filters LOCALLY if they were requested
-  if (!is.null(start_date_norm)) {
-    data <- dplyr::filter(data, data >= start_date_norm)
-  }
-  if (!is.null(end_date_norm)) {
-    data <- dplyr::filter(data, data <= end_date_norm)
+  # Apply date filters locally (ensures precision)
+  df <- dplyr::filter(df, date >= data_inicio & date <= data_fim)
+
+  # Check if data exists for requested period
+  if (nrow(df) == 0) {
+    periodo_disponivel <- if (nrow(df) == 0) {
+      "No data available"
+    } else {
+      paste(format(range(df$date), "%Y-%m"), collapse = " to ")
+    }
+
+    warning(sprintf(
+      "Series %s has no data for requested period (%s to %s). Available: %s",
+      series_id,
+      format(data_inicio, "%Y-%m"),
+      format(data_fim, "%Y-%m"),
+      periodo_disponivel
+    ), call. = FALSE)
+
+    # Return empty data.frame with correct structure
+    return(data.frame(date = as.Date(character()), value = numeric()))
   }
 
-  # 6. Check if any data remains
-  if (nrow(data) == 0) {
-    warning(sprintf("Series %s has no data for the requested period.", series_id), call. = FALSE)
-    return(data.frame(data = as.Date(character()), valor = numeric()))
-  }
-
-  return(data)
+  return(df)
 }
 
 # NORMALIZAÇÃO DE DATAS
 
 .normalize_date <- function(x, is_start = TRUE) {
 
-  # 1. Se for NULL, define valor padrão
+  # Handle NULL: start = distant past, end = today
   if (is.null(x)) {
-    return(Sys.Date())
+    return(if (is_start) as.Date("1900-01-01") else Sys.Date())
   }
 
-  # Converte para string (segurança)
+  # Ensure character
   x <- as.character(x)
 
-  # 2. Se vier só ano: "2000"
-  if (nchar(x) == 4) {
-    if (is_start) {
-      return(as.Date(paste0(x, "-01-01")))
-    } else {
-      return(as.Date(paste0(x, "-12-31")))
-    }
+  # Year only: "2020"
+  if (nchar(x) == 4 && grepl("^\\d{4}$", x)) {
+    return(as.Date(paste0(x, if (is_start) "-01-01" else "-12-31")))
   }
 
-  # 3. Se vier ano-mês: "2000-02"
-  if (nchar(x) == 7) {
+  # Year-month: "2020-06"
+  if (nchar(x) == 7 && grepl("^\\d{4}-\\d{2}$", x)) {
     if (is_start) {
       return(as.Date(paste0(x, "-01")))
     } else {
-      # Último dia do mês (solução segura)
-      ano_mes <- as.Date(paste0(x, "-01"))
-      library(lubridate)
-      return(rollback(ano_mes + months(1)))
-
-      # Alternativa SEM lubridate:
-      # ano <- as.integer(substr(x, 1, 4))
-      # mes <- as.integer(substr(x, 6, 7))
-      # ultimo_dia <- ifelse(mes == 2,
-      #                      28 + as.integer((ano %% 4 == 0 & ano %% 100 != 0) | (ano %% 400 == 0)),
-      #                      ifelse(mes %in% c(4, 6, 9, 11), 30, 31))
-      # return(as.Date(paste0(x, "-", ultimo_dia)))
+      # Simple approach: use day 28 (safe for all months in BCB API)
+      return(as.Date(paste0(x, "-28")))
     }
   }
 
-  # 4. Se já veio completo: "2000-02-15"
+  # Full date: "2020-06-15" (or any other valid format)
   tryCatch(
     as.Date(x),
     error = function(e) {
-      stop("Data '", x, "' em formato inválido. Use: NULL, YYYY, YYYY-MM ou YYYY-MM-DD", call. = FALSE)
+      stop(
+        sprintf("Invalid date format: '%s'. Use: NULL, YYYY, YYYY-MM, or YYYY-MM-DD", x),
+        call. = FALSE
+      )
     }
   )
 }

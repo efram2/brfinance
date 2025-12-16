@@ -1,69 +1,142 @@
-#' Get daily Brazilian SELIC rate data (annualized, base 252)
+#' Get Daily Brazilian SELIC Rate (Annualized, Base 252)
 #'
-#' Downloads the daily SELIC rate series (ID 1178) from the Central Bank of Brazil’s
-#' SGS (Time Series Management System) API. Returns a tidy data frame.
+#' Downloads the daily SELIC rate series from the Central Bank of Brazil's SGS API.
+#' The SELIC rate (Special System for Settlement and Custody) is Brazil's benchmark
+#' overnight interest rate, used as the primary monetary policy instrument.
 #'
-#' @param start_year Starting year (e.g., 2020)
-#' @param end_year Ending year (e.g., 2024)
-#' @param language Language for column names: "pt" for Portuguese or "eng" (default) for English
+#' @param start_date Start date for the data period. Accepts multiple formats:
+#'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
+#'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
+#'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
+#' @param end_date End date for the data period. Accepts the same formats as `start_date`:
+#'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
+#'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
+#'   - `"YYYY-MM-DD"` for a specific date
+#'   - `NULL` defaults to the current date (today)
+#' @param language Language for column names in the returned data.frame:
+#'   - `"eng"` (default): Returns columns `date` and `selic_rate`
+#'   - `"pt"`: Returns columns `data_referencia` and `taxa_selic`
+#' @param labels Logical indicating whether to add variable labels using the `labelled`
+#'   package. Labels provide descriptive text for each column when available.
 #'
-#' @return A tibble with SELIC rate data between the selected years.
-#' @export
+#' @return A data.frame with SELIC rate. Columns depend on the `language` parameter:
+#'   - English (`language = "eng"`): `date` (Date), `selic_rate` (numeric, % per year)
+#'   - Portuguese (`language = "pt"`): `data_referencia` (Date), `taxa_selic` (numeric, % ao ano)
+#'
+#' @note
+#' **IMPORTANT API LIMITATION**: The BCB API imposes a **10-year maximum window**
+#' for daily frequency series like SELIC. Requests spanning more than 10 years will fail.
+#' For longer historical analyses, split your request into multiple 10-year periods.
 #'
 #' @examples
 #' \dontrun{
-#' selic_data <- get_selic_rate(2020, 2024)
+#'   # Default: last 30 days of SELIC rate
+#'   df <- get_selic_rate()
+#'
+#'   # Specific period within 10-year limit
+#'   df2 <- get_selic_rate("2020-01-01", "2023-12-31")
+#'
+#'   # Using year-only format (respects 10-year limit)
+#'   df3 <- get_selic_rate("2015", "2024")
+#'
+#'   # Portuguese column names and labels
+#'   df4 <- get_selic_rate(language = "pt")
+#'
+#'   # Current year only
+#'   df5 <- get_selic_rate(start_date = format(Sys.Date(), "%Y"))
 #' }
+#'
+#' @export
+get_selic_rate <- function(start_date = NULL,
+                           end_date = NULL,
+                           language = "eng",
+                           labels = TRUE) {
 
-get_selic_rate <- function(start_year,
-                           end_year,
-                           language = "eng") {
-
-  if (!requireNamespace("httr2", quietly = TRUE)) {
-    stop("The 'httr2' package is required. Install it with install.packages('httr2').")
+  # === PARAMETER VALIDATION ===
+  # Validate 'language' parameter
+  if (!is.character(language) || length(language) != 1) {
+    stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
   }
 
-  data_inicio <- as.Date(paste0(start_year, "-01-01"))
-  data_fim <- as.Date(paste0(end_year, "-12-31"))
+  language <- tolower(language)
+  if (!language %in% c("eng", "pt")) {
+    stop("'language' must be either 'eng' (English) or 'pt' (Portuguese)", call. = FALSE)
+  }
 
-  # Função auxiliar interna
-  get_selic_url <- function(first.date, last.date) {
-    sprintf(
-      paste0('https://api.bcb.gov.br/dados/serie/bcdata.sgs.1178/dados?',
-             'formato=json&dataInicial=%s&dataFinal=%s'),
-      format(first.date, '%d/%m/%Y'),
-      format(last.date, '%d/%m/%Y')
+  # Validate 'labels' parameter
+  if (!is.logical(labels) || length(labels) != 1) {
+    stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
+  }
+
+  # CRÍTICO: Verificar limite de 10 anos para séries diárias
+  data_inicio <- .normalize_date(start_date, is_start = TRUE)
+  data_fim <- .normalize_date(end_date, is_start = FALSE)
+
+  # Calcula diferença em anos
+  diff_years <- as.numeric(difftime(data_fim, data_inicio, units = "days")) / 365.25
+
+  if (diff_years > 10) {
+    stop(
+      sprintf(
+        "SELIC series has a 10-year maximum window (BCB API limitation).\nRequested period: %.1f years (%s to %s).\nPlease split into multiple requests.",
+        diff_years,
+        format(data_inicio, "%Y-%m-%d"),
+        format(data_fim, "%Y-%m-%d")
+      ),
+      call. = FALSE
     )
   }
 
-  url <- get_selic_url(data_inicio, data_fim)
-
-  dados <- try({
-    url |>
-      httr2::request() |>
-      httr2::req_perform() |>
-      httr2::resp_body_json()
-  }, silent = TRUE)
-
-  if (inherits(dados, "try-error") || is.null(dados)) {
-    stop("Erro ao buscar dados da API do Banco Central.")
+  # Set default start_date if NULL (last 30 days by default for SELIC)
+  if (is.null(start_date)) {
+    start_date <- Sys.Date() - 30  # Last 30 days
+    data_inicio <- .normalize_date(start_date, is_start = TRUE)
   }
 
-  df <- dplyr::bind_rows(dados) |>
-    dplyr::mutate(
-      data = as.Date(data, format = "%d/%m/%Y"),
-      valor = as.numeric(gsub(",", ".", valor))
+  # === FUNCTION BODY ===
+  # Declare global variables for dplyr operations
+  value <- NULL
+
+  # Use internal function to download data (SGS series 1178 = SELIC rate)
+  data <- .get_sgs_series(
+    series_id = 1178,  # Código da SELIC
+    start_date = start_date,
+    end_date = end_date
+  )
+
+  # Process the data
+  data <- data |>
+    dplyr::arrange(date) |>
+    dplyr::select(
+      date,
+      selic_rate = value  # Rename for clarity
     )
 
-  # Tradução automática dos nomes das colunas
-  if (language == "eng") {
-    df <- df |>
-      dplyr::rename(date = data, rate = valor)
-  } else {
-    df <- df |>
-      dplyr::rename(data = data, taxa = valor)
+  # Translation to Portuguese if needed
+  if (language == "pt") {
+    data <- data |>
+      dplyr::rename(
+        data_referencia = date,
+        taxa_selic = selic_rate
+      )
   }
 
-  return(df)
+  # Add labels if requested and package is available
+  if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
+    if (language == "pt") {
+      data <- labelled::set_variable_labels(
+        data,
+        data_referencia = "Data de referencia",
+        taxa_selic = "Taxa SELIC (% ao ano) - Sistema Especial de Liquidacao e Custodia"
+      )
+    } else {
+      data <- labelled::set_variable_labels(
+        data,
+        date = "Reference date",
+        selic_rate = "SELIC rate (% per year) - Special System for Settlement and Custody"
+      )
+    }
+  }
+
+  return(data)
 }
-

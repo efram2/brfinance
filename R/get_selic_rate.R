@@ -1,6 +1,6 @@
-#' Get Daily Brazilian SELIC Rate (Annualized, Base 252)
+#' Get Annual Brazilian SELIC Rate (Annualized, Base 252)
 #'
-#' Downloads the daily SELIC rate series from the Central Bank of Brazil's SGS API.
+#' Downloads the annual SELIC rate series from the Central Bank of Brazil's SGS API.
 #' The SELIC rate (Special System for Settlement and Custody) is Brazil's benchmark
 #' overnight interest rate, used as the primary monetary policy instrument.
 #'
@@ -8,6 +8,7 @@
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
+#'   - `NULL` defaults to `"2020-01-01"` (sensible default for analysis)
 #' @param end_date End date for the data period. Accepts the same formats as `start_date`:
 #'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
@@ -28,26 +29,29 @@
 #' for daily frequency series like SELIC. Requests spanning more than 10 years will fail.
 #' For longer historical analyses, split your request into multiple 10-year periods.
 #'
+#' **DEFAULT PERIOD**: When `start_date = NULL`, defaults to `"2020-01-01"` (start of 2020),
+#' providing recent data while avoiding the 10-year API limit with current dates.
+#'
 #' @examples
 #' \dontrun{
-#'   # Default: last 30 days of SELIC rate
+#'   # Default: from 2020 to current date
 #'   df <- get_selic_rate()
 #'
 #'   # Specific period within 10-year limit
 #'   df2 <- get_selic_rate("2020-01-01", "2023-12-31")
 #'
-#'   # Using year-only format (respects 10-year limit)
-#'   df3 <- get_selic_rate("2015", "2024")
+#'   # Last 5 years (respecting 10-year limit)
+#'   df3 <- get_selic_rate(start_date = "2019")
 #'
 #'   # Portuguese column names and labels
 #'   df4 <- get_selic_rate(language = "pt")
 #'
-#'   # Current year only
-#'   df5 <- get_selic_rate(start_date = format(Sys.Date(), "%Y"))
+#'   # Complete year analysis
+#'   df5 <- get_selic_rate("2018", "2023")
 #' }
 #'
 #' @export
-get_selic_rate <- function(start_date = NULL,
+get_selic_rate <- function(start_date = "2020-01-01",
                            end_date = NULL,
                            language = "eng",
                            labels = TRUE) {
@@ -68,38 +72,13 @@ get_selic_rate <- function(start_date = NULL,
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  # CRÍTICO: Verificar limite de 10 anos para séries diárias
-  data_inicio <- .normalize_date(start_date, is_start = TRUE)
-  data_fim <- .normalize_date(end_date, is_start = FALSE)
-
-  # Calcula diferença em anos
-  diff_years <- as.numeric(difftime(data_fim, data_inicio, units = "days")) / 365.25
-
-  if (diff_years > 10) {
-    stop(
-      sprintf(
-        "SELIC series has a 10-year maximum window (BCB API limitation).\nRequested period: %.1f years (%s to %s).\nPlease split into multiple requests.",
-        diff_years,
-        format(data_inicio, "%Y-%m-%d"),
-        format(data_fim, "%Y-%m-%d")
-      ),
-      call. = FALSE
-    )
-  }
-
-  # Set default start_date if NULL (last 30 days by default for SELIC)
-  if (is.null(start_date)) {
-    start_date <- Sys.Date() - 30  # Last 30 days
-    data_inicio <- .normalize_date(start_date, is_start = TRUE)
-  }
-
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
-  value <- NULL
+  value <- selic_rate <- NULL
 
   # Use internal function to download data (SGS series 1178 = SELIC rate)
   data <- .get_sgs_series(
-    series_id = 1178,  # Código da SELIC
+    series_id = 1178,  # Código da SELIC anual
     start_date = start_date,
     end_date = end_date
   )
@@ -127,13 +106,13 @@ get_selic_rate <- function(start_date = NULL,
       data <- labelled::set_variable_labels(
         data,
         data_referencia = "Data de referencia",
-        taxa_selic = "Taxa SELIC (% ao ano) - Sistema Especial de Liquidacao e Custodia"
+        taxa_selic = "Taxa SELIC anual (% ao ano) - Sistema Especial de Liquidacao e Custodia"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
         date = "Reference date",
-        selic_rate = "SELIC rate (% per year) - Special System for Settlement and Custody"
+        selic_rate = "Annual SELIC rate (% per year) - Special System for Settlement and Custody"
       )
     }
   }

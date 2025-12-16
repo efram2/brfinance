@@ -31,12 +31,33 @@ plot_selic_rate <- function(data,
     stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
   }
 
-  # Verifica se as colunas necessárias existem
+  # Declare global variables for dplyr operations
+  value <- selic_rate <- data_referencia <- taxa_selic <- NULL
+
+  # === COMPATIBILITY LAYER: Map new column names to old expected names ===
+  # This ensures backward compatibility while we update the vignette
+  if (language == "pt") {
+    # Portuguese: check for new column names and rename to old expected names
+    if ("data_referencia" %in% names(data) && "taxa_selic" %in% names(data)) {
+      data <- data |>
+        dplyr::rename(data = data_referencia, taxa = taxa_selic)
+    }
+    # If columns are already "data" and "taxa", do nothing
+  } else {
+    # English: check for "selic_rate" and rename to "rate" if needed
+    if ("selic_rate" %in% names(data)) {
+      data <- data |>
+        dplyr::rename(rate = selic_rate)
+    }
+  }
+
+  # Verifica se as colunas necessárias existem (APÓS o mapeamento)
   required_cols <- if (language == "eng") c("date", "rate") else c("data", "taxa")
 
   missing_cols <- setdiff(required_cols, names(data))
   if (length(missing_cols) > 0) {
-    stop("Dataframe is missing required columns: ", paste(missing_cols, collapse = ", "))
+    stop("Dataframe is missing required columns: ", paste(missing_cols, collapse = ", "),
+         "\nAvailable columns: ", paste(names(data), collapse = ", "))
   }
 
   # Define textos conforme o idioma
@@ -45,7 +66,7 @@ plot_selic_rate <- function(data,
     y_label <- "SELIC Rate (% p.a.)"
     caption <- "Source: Central Bank of Brazil (SGS 1178)"
     x_var <- "date"
-    y_var <- "rate"
+    y_var <- "rate"  # Note: changed from "selic_rate" to "rate"
   } else {
     title <- "Brasil | Taxa SELIC (Efetiva Anualizada, base 252)"
     y_label <- "Taxa SELIC (% a.a.)"

@@ -48,6 +48,9 @@ plot_exchange_rate <- function(data,
 
   # === FUNCTION BODY ===
 
+  # Declare global variables for dplyr operations
+  value <- cotacao <- rate <- NULL
+
   # Define texts based on language
   if (language == "eng") {
     # Check column names for English
@@ -88,8 +91,8 @@ plot_exchange_rate <- function(data,
       x_var = "data",
       y_var = "taxa",
       plot_type = "line",
-      title = "Brasil | Taxa de Câmbio (USD/BRL)",
-      y_label = "Taxa de Câmbio (R$/US$)",
+      title = "Brasil | Taxa de Cambio (USD/BRL)",
+      y_label = "Taxa de Cambio (R$/US$)",
       caption = "Fonte: Banco Central do Brasil",
       y_suffix = NULL,  # No suffix for exchange rate
       color = "#2c3e50",

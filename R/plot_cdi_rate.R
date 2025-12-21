@@ -49,6 +49,9 @@ plot_cdi_rate <- function(data,
 
   # === FUNCTION BODY ===
 
+  # Declare global variables for dplyr operations
+  value <- taxa_cdi <- data_referencia <- rate <- NULL
+
   # Define texts based on language
   if (language == "eng") {
     # Check column names for English

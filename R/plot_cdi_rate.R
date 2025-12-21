@@ -4,7 +4,7 @@
 #' The CDI is the benchmark interest rate for interbank deposits in Brazil and serves
 #' as a reference for many fixed income investments.
 #'
-#' @param data Tibble returned by `get_cdi_rate()`
+#' @param data Tibble returned by `get_cdi_rate()`, with columns `date` and `value`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
 #' @return A `ggplot2` object showing the CDI rate over time.
@@ -33,11 +33,19 @@ plot_cdi_rate <- function(data,
     stop("'data' must be a data frame or tibble", call. = FALSE)
   }
 
-  if (nrow(data) == 0) {
-    stop("'data' must have at least one row", call. = FALSE)
+  required_cols <- c("date", "value")
+  missing_cols <- setdiff(required_cols, names(data))
+
+  if (length(missing_cols) > 0) {
+    stop(
+      paste0(
+        "'data' must contain columns: ",
+        paste(required_cols, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
 
-  # Validate 'language' parameter
   if (!is.character(language) || length(language) != 1) {
     stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
   }
@@ -52,54 +60,31 @@ plot_cdi_rate <- function(data,
   # Declare global variables for dplyr operations
   value <- taxa_cdi <- data_referencia <- rate <- NULL
 
-  # Define texts based on language
+  # === TEXT DEFINITIONS ===
+
   if (language == "eng") {
-    # Check column names for English
-    if ("taxa_cdi" %in% names(data) && !"rate" %in% names(data)) {
-      data <- dplyr::rename(data, rate = taxa_cdi)
-    }
-    if ("data_referencia" %in% names(data) && !"date" %in% names(data)) {
-      data <- dplyr::rename(data, date = data_referencia)
-    }
-
-    # Use internal plotting function
-    .plot_time_series(
-      data = data,
-      x_var = "date",
-      y_var = "cdi_rate",
-      plot_type = "line",
-      title = "Brazil | CDI Interest Rate",
-      y_label = "CDI Rate (% p.a.)",
-      caption = "Source: Central Bank of Brazil",
-      y_suffix = "%",
-      color = "#3498db",
-      point_color = "#e74c3c",
-      show_points = TRUE,
-      date_breaks = "6 months"
-    )
+    title   <- "Brazil | CDI Rate"
+    y_label <- "Daily CDI rate (% per day)"
+    caption <- "Source: Central Bank of Brazil"
   } else {
-    # Check column names for Portuguese
-    if ("cdi_rate" %in% names(data) && !"taxa" %in% names(data)) {
-      data <- dplyr::rename(data, taxa = rate)
-    }
-    if ("date" %in% names(data) && !"data" %in% names(data)) {
-      data <- dplyr::rename(data, data = date)
-    }
-
-    # Use internal plotting function
-    .plot_time_series(
-      data = data,
-      x_var = "data_referencia",
-      y_var = "taxa_cdi",
-      plot_type = "line",
-      title = "Brasil | Taxa CDI",
-      y_label = "Taxa CDI (% a.a.)",
-      caption = "Fonte: Banco Central do Brasil",
-      y_suffix = "%",
-      color = "#3498db",
-      point_color = "#e74c3c",
-      show_points = TRUE,
-      date_breaks = "6 meses"
-    )
+    title   <- "Brasil | Taxa CDI"
+    y_label <- "Taxa CDI diária (% ao dia)"
+    caption <- "Fonte: Banco Central do Brasil"
   }
+
+  # === PLOT ===
+
+  .plot_time_series(
+    data = data,
+    x_var = "date",
+    y_var = "value",
+    plot_type = "line",
+    title = title,
+    y_label = y_label,
+    caption = caption,
+    y_suffix = "%",
+    color = "#3498db",
+    show_points = TRUE,
+    date_breaks = "6 months"
+  )
 }

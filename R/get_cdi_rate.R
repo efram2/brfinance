@@ -19,9 +19,12 @@
 #' @param labels Logical indicating whether to add variable labels using the `labelled`
 #'   package. Labels provide descriptive text for each column when available.
 #'
-#' @return A data.frame with CDI rate. Columns depend on the `language` parameter:
-#'   - English (`language = "eng"`): `date` (Date), `cdi_rate` (numeric, % per year)
-#'   - Portuguese (`language = "pt"`): `data_referencia` (Date), `taxa_cdi` (numeric, % ao ano)
+#' @return A data.frame with columns:
+#' \describe{
+#'   \item{date}{Reference date}
+#'   \item{value}{Daily CDI rate (% per day)}
+#'   \item{value_annualized}{Annualized CDI rate (% per year, 252 business days)}
+#' }
 #'
 #' @note
 #' **Series information**: This function uses SGS series 12, which represents the
@@ -91,33 +94,31 @@ get_cdi_rate <- function(start_date = NULL,
   # Process the data
   data <- data |>
     dplyr::arrange(date) |>
+    dplyr::mutate(
+      value_annualized = ((1+value/100)^252-1)*100
+    ) |>
     dplyr::select(
       date,
-      cdi_rate = value  # Rename for clarity
+      value,
+      value_annualized
     )
 
-  # Translation to Portuguese if needed
-  if (language == "pt") {
-    data <- data |>
-      dplyr::rename(
-        data_referencia = date,
-        taxa_cdi = cdi_rate
-      )
-  }
-
-  # Add labels if requested and package is available
+  # === VARIABLE LABELS ===
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
+
     if (language == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        data_referencia = "Data de referencia",
-        taxa_cdi = "Taxa CDI (% ao ano) - Certificado de Deposito Interbancario"
+        date = "Data de referencia",
+        value = "Taxa CDI diaria (% ao dia)",
+        value_annualized = "Taxa CDI anualizada (% ao ano, 252 dias uteis)"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
         date = "Reference date",
-        cdi_rate = "CDI rate (% per year) - Interbank Deposit Certificate"
+        value = "Daily CDI rate (% per day)",
+        value_annualized = "Annualized CDI rate (% per year, 252 business days)"
       )
     }
   }

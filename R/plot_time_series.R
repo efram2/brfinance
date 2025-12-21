@@ -44,54 +44,48 @@
                               y_suffix = NULL,
                               theme_base_size = 14,
                               rotate_x_angle = 45,
-                              show_points = TRUE,
-                              ...) {
+                              show_points = TRUE) {
 
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
-  }
-
-  if (!requireNamespace("scales", quietly = TRUE)) {
-    stop("The 'scales' package is required. Install it with install.packages('scales').")
-  }
-
-  # Validate inputs
   plot_type <- match.arg(plot_type)
 
-  # Set default colors if not provided
   if (is.null(color)) {
     color <- if (plot_type == "step") "#1f78b4" else "#2c3e50"
   }
 
   point_color <- if (plot_type == "step") "#e31a1c" else "#e74c3c"
 
-  # Create base plot
-  p <- ggplot2::ggplot(data, ggplot2::aes(x = !!ggplot2::sym(x_var),
-                                          y = !!ggplot2::sym(y_var)))
-
-  # Add the main geom based on plot_type
-  switch(plot_type,
-         "line" = {
-           p <- p + ggplot2::geom_line(color = color, linewidth = line_size, ...)
-           if (show_points) {
-             p <- p + ggplot2::geom_point(color = point_color, size = point_size)
-           }
-         },
-         "step" = {
-           p <- p + ggplot2::geom_step(color = color, linewidth = line_size, ...)
-           if (show_points) {
-             p <- p + ggplot2::geom_point(color = point_color, size = point_size)
-           }
-         },
-         "bar" = {
-           p <- p + ggplot2::geom_bar(stat = "identity", fill = color, ...)
-         },
-         "point" = {
-           p <- p + ggplot2::geom_point(color = color, size = point_size, ...)
-         }
+  p <- ggplot2::ggplot(
+    data,
+    ggplot2::aes(
+      x = !!ggplot2::sym(x_var),
+      y = !!ggplot2::sym(y_var)
+    )
   )
 
-  # Apply theme and scales
+  if (plot_type %in% c("line", "step")) {
+    geom_fun <- if (plot_type == "line") ggplot2::geom_line else ggplot2::geom_step
+
+    p <- p + geom_fun(color = color, linewidth = line_size)
+
+    if (isTRUE(show_points)) {
+      p <- p + ggplot2::geom_point(
+        color = point_color,
+        size = point_size
+      )
+    }
+  }
+
+  if (plot_type == "bar") {
+    p <- p + ggplot2::geom_col(fill = color)
+  }
+
+  if (plot_type == "point") {
+    p <- p + ggplot2::geom_point(
+      color = color,
+      size = point_size
+    )
+  }
+
   p <- p +
     ggplot2::theme_minimal(base_size = theme_base_size) +
     ggplot2::theme(
@@ -104,7 +98,6 @@
       )
     )
 
-  # Format x-axis if it's a date
   if (inherits(data[[x_var]], c("Date", "POSIXct", "POSIXt"))) {
     p <- p + ggplot2::scale_x_date(
       date_breaks = date_breaks,
@@ -112,14 +105,12 @@
     )
   }
 
-  # Format y-axis
   if (!is.null(y_suffix)) {
     p <- p + ggplot2::scale_y_continuous(
       labels = scales::label_number(suffix = y_suffix)
     )
   }
 
-  # Add labels
   p <- p + ggplot2::labs(
     title = title,
     subtitle = subtitle,

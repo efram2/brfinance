@@ -22,7 +22,8 @@ Imports:
     sidrar,
     stringr,
     janitor,
-    labelled
+    labelled,
+    tidyr
 Suggests: 
     testthat (>= 3.0.0),
     rmarkdown,

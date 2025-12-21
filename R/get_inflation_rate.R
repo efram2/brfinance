@@ -27,10 +27,10 @@
 #'     - `ytd_inflation` (numeric): Year-to-date accumulated inflation (%)
 #'     - `twelve_month_inflation` (numeric): 12-month accumulated inflation (%)
 #'   - Portuguese (`language = "pt"`):
-#'     - `data_referencia` (Date): Mês de referência
-#'     - `inflacao_mensal` (numeric): Variação mensal do IPCA (%)
-#'     - `inflacao_acumulada_ano` (numeric): Inflação acumulada no ano (%)
-#'     - `inflacao_12_meses` (numeric): Inflação acumulada nos últimos 12 meses (%)
+#'     - `data_referencia` (Date): Mes de referencia
+#'     - `inflacao_mensal` (numeric): Variacao mensal do IPCA (%)
+#'     - `inflacao_acumulada_ano` (numeric): Inflacao acumulada no ano (%)
+#'     - `inflacao_12_meses` (numeric): Inflacao acumulada nos ultimos 12 meses (%)
 #'
 #' @note
 #' **Default Period**: When `start_date = NULL`, defaults to `"2020-01-01"`, providing
@@ -95,96 +95,62 @@ get_inflation_rate <- function(start_date = "2012-01-01",
 
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
-  value <- monthly_inflation <- year <- ytd_inflation <- twelve_month_inflation <- NULL
+  value <- monthly_inflation <- ytd_inflation <- twelve_month_inflation <- year <- NULL
 
-  # Calculate start date for download (12 months earlier for 12-month inflation calculation)
-  # First normalize the user's start_date
+  # === DATE NORMALIZATION ===
   start_date_norm <- .normalize_date(start_date, is_start = TRUE)
+  end_date_norm   <- .normalize_date(end_date, is_start = FALSE)
 
-  # Download starting 12 months earlier than requested
-  download_start_date <- start_date_norm - months(12)
-  download_start_date_str <- format(download_start_date, "%Y-%m-%d")
+  download_start <- start_date_norm - lubridate::period(months = 12)
 
-  # Use internal function to download data (SGS series 433 = IPCA monthly)
-  # We need to pass the earlier start date for calculations
-  data_full <- .get_sgs_series(
-    series_id = 433,  # Código do IPCA mensal
-    start_date = download_start_date_str,
-    end_date = end_date
+  # === DOWNLOAD DATA (IPCA mensal SGS 433) ===
+  data <- .get_sgs_series(
+    series_id = 433,
+    start_date = format(download_start, "%Y-%m-%d"),
+    end_date   = end_date
   )
 
-  # Process the data - keep your original variable names
-  data <- data_full |>
+  # === PROCESS DATA ===
+  data <- data |>
     dplyr::arrange(date) |>
     dplyr::mutate(
-      monthly_inflation = as.numeric(value),
-      year = lubridate::year(date)
+      value = as.numeric(value),
+      year  = lubridate::year(date)
     ) |>
-    dplyr::select(date, monthly_inflation, year)
-
-  # Filter for end_date (if provided) - already handled in .get_sgs_series but double-check
-  if (!is.null(end_date)) {
-    end_date_norm <- .normalize_date(end_date, is_start = FALSE)
-    data <- data |>
-      dplyr::filter(date <= end_date_norm)
-  }
-
-  # Year-to-date accumulated inflation (your original calculation)
-  data <- data |>
     dplyr::group_by(year) |>
     dplyr::mutate(
-      ytd_inflation = (cumprod(1 + monthly_inflation / 100) - 1) * 100
+      ytd_inflation = (cumprod(1 + value / 100) - 1) * 100
     ) |>
-    dplyr::ungroup()
-
-  # 12-month accumulated inflation (your original calculation)
-  data <- data |>
-    dplyr::arrange(date) |>
+    dplyr::ungroup() |>
     dplyr::mutate(
       twelve_month_inflation = sapply(
-        seq_along(monthly_inflation),
+        seq_along(value),
         function(i) {
           if (i < 12) return(NA_real_)
-          (prod(1 + monthly_inflation[(i-11):i] / 100) - 1) * 100
+          (prod(1 + value[(i - 11):i] / 100) - 1) * 100
         }
       )
-    )
+    ) |>
+    dplyr::filter(date >= start_date_norm & date <= end_date_norm) |>
+    dplyr::select(date, value, ytd_inflation, twelve_month_inflation)
 
-  # Filter to show only the requested period (remove the extra 12 months)
-  data <- data |>
-    dplyr::filter(date >= start_date_norm)
-
-  # Remove year column from final output (not in your original output)
-  data <- dplyr::select(data, -year)
-
-  # Translate column names if language = "pt" (your original logic)
-  if (language == "pt") {
-    data <- data |>
-      dplyr::rename(
-        data_referencia = date,
-        inflacao_mensal = monthly_inflation,
-        inflacao_acumulada_ano = ytd_inflation,
-        inflacao_12_meses = twelve_month_inflation
-      )
-  }
-
-  # Add labels if requested (your original logic)
+  # === LABELS ===
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
     if (language == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        data_referencia = "Mes de referencia",
-        inflacao_mensal = "Variacao mensal do IPCA (%)",
-        inflacao_acumulada_ano = "Inflacao acumulada no ano (%)",
-        inflacao_12_meses = "Inflacao acumulada nos ultimos 12 meses (%)"
+        date  = "Mes de referencia",
+        value = "Inflacao mensal IPCA (%)",
+        ytd_inflation = "Inflacao acumulada no ano (%)",
+        twelve_month_inflation = "Inflacao acumulada em 12 meses (%)"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
-        date = "Reference month",
-        monthly_inflation = "Monthly IPCA variation (%)",
-        ytd_inflation = "Year-to-date accumulated inflation (%)",
-        twelve_month_inflation = "12-month accumulated inflation (%)"
+        date  = "Reference month",
+        value = "Monthly IPCA inflation (%)",
+        ytd_inflation = "Year-to-date inflation (%)",
+        twelve_month_inflation = "12-month inflation (%)"
       )
     }
   }

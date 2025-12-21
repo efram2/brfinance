@@ -82,7 +82,7 @@ get_cdi_rate <- function(start_date = NULL,
 
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
-  value <- cdi_rate <- NULL
+  value <- cdi_rate <- value_annualized <- NULL
 
   # Use internal function to download data (SGS series 12 = CDI rate)
   data <- .get_sgs_series(

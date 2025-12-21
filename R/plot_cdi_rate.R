@@ -68,7 +68,7 @@ plot_cdi_rate <- function(data,
     caption <- "Source: Central Bank of Brazil"
   } else {
     title   <- "Brasil | Taxa CDI"
-    y_label <- "Taxa CDI diária (% ao dia)"
+    y_label <- "Taxa CDI diaria (% ao dia)"
     caption <- "Fonte: Banco Central do Brasil"
   }
 

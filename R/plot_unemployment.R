@@ -62,7 +62,7 @@ plot_unemployment <- function(data,
     y_label <- "Unemployment Rate (%)"
     caption <- "Source: IBGE - SIDRA (Table 6381)"
   } else {
-    title   <- "Brasil | Taxa de Desemprego (PNAD Contínua)"
+    title   <- "Brasil | Taxa de Desemprego (PNAD Continua)"
     y_label <- "Taxa de desemprego (%)"
     caption <- "Fonte: IBGE - SIDRA (Tabela 6381)"
   }

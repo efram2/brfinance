@@ -67,6 +67,13 @@ get_exchange_rate <- function(start_date = NULL,
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
+  # Set default start_date if NULL (last 30 days by default for CDI)
+  if (is.null(start_date)) {
+    start_date <- Sys.Date() - 30  # Last 30 days
+  }
+
+  # === FUNCTION BODY ===
+
   # Set default start_date if NULL (last 30 days by default for exchange rate)
   if (is.null(start_date)) {
     start_date <- Sys.Date() - 30  # Last 30 days
@@ -87,31 +94,23 @@ get_exchange_rate <- function(start_date = NULL,
     dplyr::arrange(date) |>
     dplyr::select(
       date,
-      exchange_rate = value  # Rename for clarity
+      value
     )
 
-  # Translation to Portuguese if needed
-  if (language == "pt") {
-    data <- data |>
-      dplyr::rename(
-        data_referencia = date,
-        taxa_cambio = exchange_rate
-      )
-  }
-
-  # Add labels if requested and package is available
+  # === VARIABLE LABELS ===
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
+
     if (language == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        data_referencia = "Data de referencia",
-        taxa_cambio = "Taxa de cambio (R$/US$) - comercial, venda"
+        date = "Data de referencia",
+        value = "Taxa de cambio (R$/US$) - comercial, venda"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
         date = "Reference date",
-        exchange_rate = "Exchange rate (R$/US$) - commercial, selling"
+        value = "Exchange rate (R$/US$) - commercial, selling"
       )
     }
   }

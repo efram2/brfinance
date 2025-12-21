@@ -32,11 +32,19 @@ plot_exchange_rate <- function(data,
     stop("'data' must be a data frame or tibble", call. = FALSE)
   }
 
-  if (nrow(data) == 0) {
-    stop("'data' must have at least one row", call. = FALSE)
+  required_cols <- c("date", "value")
+  missing_cols <- setdiff(required_cols, names(data))
+
+  if (length(missing_cols) > 0) {
+    stop(
+      paste0(
+        "'data' must contain columns: ",
+        paste(required_cols, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
 
-  # Validate 'language' parameter
   if (!is.character(language) || length(language) != 1) {
     stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
   }
@@ -51,54 +59,33 @@ plot_exchange_rate <- function(data,
   # Declare global variables for dplyr operations
   value <- cotacao <- rate <- NULL
 
-  # Define texts based on language
+  # === TEXT DEFINITIONS ===
+
   if (language == "eng") {
-    # Check column names for English
-    if ("cotacao" %in% names(data) && !"rate" %in% names(data)) {
-      data <- dplyr::rename(data, rate = cotacao)
-    }
-    if ("data" %in% names(data) && !"date" %in% names(data)) {
-      data <- dplyr::rename(data, date = data)
-    }
-
-    # Use internal plotting function
-    .plot_time_series(
-      data = data,
-      x_var = "date",
-      y_var = "rate",
-      plot_type = "line",
-      title = "Brazil | Exchange Rate (USD/BRL)",
-      y_label = "Exchange Rate (R$/US$)",
-      caption = "Source: Central Bank of Brazil",
-      y_suffix = NULL,  # No suffix for exchange rate
-      color = "#2c3e50",
-      point_color = "#e74c3c",
-      show_points = TRUE,
-      date_breaks = "3 months"  # More frequent breaks for exchange rates
-    )
+    title   <- "Brazil | Exchange Rate (USD/BRL)"
+    y_label <- "Exchange Rate (R$/US$)"
+    caption <- "Source: Central Bank of Brazil"
+    date_breaks <- "3 months"
   } else {
-    # Check column names for Portuguese
-    if ("date" %in% names(data) && !"data" %in% names(data)) {
-      data <- dplyr::rename(data, data = date)
-    }
-    if ("rate" %in% names(data) && !"taxa" %in% names(data)) {
-      data <- dplyr::rename(data, taxa = rate)
-    }
-
-    # Use internal plotting function
-    .plot_time_series(
-      data = data,
-      x_var = "data",
-      y_var = "taxa",
-      plot_type = "line",
-      title = "Brasil | Taxa de Cambio (USD/BRL)",
-      y_label = "Taxa de Cambio (R$/US$)",
-      caption = "Fonte: Banco Central do Brasil",
-      y_suffix = NULL,  # No suffix for exchange rate
-      color = "#2c3e50",
-      point_color = "#e74c3c",
-      show_points = TRUE,
-      date_breaks = "3 meses"  # Portuguese version
-    )
+    title   <- "Brasil | Taxa de Cambio (USD/BRL)"
+    y_label <- "Taxa de cambio (R$/US$)"
+    caption <- "Fonte: Banco Central do Brasil"
+    date_breaks <- "3 months"
   }
+
+  # === PLOT ===
+
+  .plot_time_series(
+    data = data,
+    x_var = "date",
+    y_var = "value",
+    plot_type = "line",
+    title = title,
+    y_label = y_label,
+    caption = caption,
+    y_suffix = NULL,
+    color = "#2c3e50",
+    show_points = TRUE,
+    date_breaks = date_breaks
+  )
 }

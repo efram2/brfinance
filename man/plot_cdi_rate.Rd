@@ -7,7 +7,7 @@
 plot_cdi_rate(data, language = "eng")
 }
 \arguments{
-\item{data}{Tibble returned by \code{get_cdi_rate()}}
+\item{data}{Tibble returned by \code{get_cdi_rate()}, with columns \code{date} and \code{value}.}
 
 \item{language}{Language for titles and labels: "pt" (Portuguese) or "eng" (English).}
 }

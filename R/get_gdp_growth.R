@@ -55,84 +55,54 @@ get_gdp_growth <- function(start_date = "2000-01-01",
                            language = "eng",
                            labels = TRUE) {
 
-  # Validate 'language' parameter
+  # === PARAMETER VALIDATION ===
   if (!is.character(language) || length(language) != 1) {
     stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
   }
 
   language <- tolower(language)
   if (!language %in% c("eng", "pt")) {
-    stop("'language' must be either 'eng' (English) or 'pt' (Portuguese)", call. = FALSE)
+    stop("'language' must be either 'eng' or 'pt'", call. = FALSE)
   }
 
-  # Validate 'labels' parameter
   if (!is.logical(labels) || length(labels) != 1) {
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  # Note: 'start_date' and 'end_date' are validated in the internal function
-  # .normalize_date() which handles NULLs and various date formats
+  # === FUNCTION BODY ===
+  value <- NULL
 
-  # Declare global variables for dplyr operations
-  value <- gdp_nominal <- gdp_growth <- data_referencia <- crescimento_pib <- NULL
-
-
-  # Use internal function to download data
+  # Download nominal GDP series (SGS 2010)
   data <- .get_sgs_series(
-    series_id = 2010,  # GDP nominal code
+    series_id = 2010,
     start_date = start_date,
     end_date = end_date
   )
 
-  # Process the data
+  # Compute quarterly growth rate
   data <- data |>
     dplyr::arrange(date) |>
     dplyr::mutate(
-      gdp_nominal = as.numeric(value),
-      gdp_growth = (gdp_nominal / dplyr::lag(gdp_nominal) - 1) * 100
+      value = (as.numeric(value) / dplyr::lag(as.numeric(value)) - 1) * 100
     ) |>
-    dplyr::select(
-      date,
-      gdp_growth,
-      gdp_nominal
-    )
+    dplyr::select(date, value)
 
-  # Note: date filtering is already applied in .get_sgs_series
-  # No need for additional filtering here
-
-  # Translation to Portuguese if needed
-  if (language == "pt") {
-    data <- data |>
-      dplyr::rename(
-        data_referencia = date,
-        crescimento_pib = gdp_growth,
-        pib_nominal = gdp_nominal
-      )
-  }
-
+  # Add labels if requested
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
-    if (tolower(language) == "pt") {
+
+    if (language == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        data_referencia = "Trimestre de referencia",
-        crescimento_pib = "Crescimento do PIB real (%)",
-        pib_nominal = "PIB nominal (R$ milhoes)"
+        date  = "Trimestre de referencia",
+        value = "Crescimento do PIB (%)"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
-        date = "Reference quarter",
-        gdp_growth = "GDP growth rate (%)",
-        gdp_nominal = "Nominal GDP (R$ millions)"
+        date  = "Reference quarter",
+        value = "GDP growth rate (%)"
       )
     }
-  }
-
-  # Remove gdp_nominal column from final result (keep only growth rate)
-  if (tolower(language) == "pt") {
-    data <- dplyr::select(data, data_referencia, crescimento_pib)
-  } else {
-    data <- dplyr::select(data, date, gdp_growth)
   }
 
   return(data)

@@ -88,31 +88,23 @@ get_selic_rate <- function(start_date = "2020-01-01",
     dplyr::arrange(date) |>
     dplyr::select(
       date,
-      selic_rate = value  # Rename for clarity
+      value
     )
 
-  # Translation to Portuguese if needed
-  if (language == "pt") {
-    data <- data |>
-      dplyr::rename(
-        data_referencia = date,
-        taxa_selic = selic_rate
-      )
-  }
-
-  # Add labels if requested and package is available
+  # === VARIABLE LABELS ===
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
+
     if (language == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        data_referencia = "Data de referencia",
-        taxa_selic = "Taxa SELIC anual (% ao ano) - Sistema Especial de Liquidacao e Custodia"
+        date = "Data de referencia",
+        value = "Taxa SELIC anual (% ao ano)"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
         date = "Reference date",
-        selic_rate = "Annual SELIC rate (% per year) - Special System for Settlement and Custody"
+        value = "Annual SELIC rate (% per year)"
       )
     }
   }

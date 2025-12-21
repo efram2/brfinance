@@ -37,10 +37,11 @@ get_cdi_rate(
 package. Labels provide descriptive text for each column when available.}
 }
 \value{
-A data.frame with CDI rate. Columns depend on the \code{language} parameter:
-\itemize{
-\item English (\code{language = "eng"}): \code{date} (Date), \code{cdi_rate} (numeric, \% per year)
-\item Portuguese (\code{language = "pt"}): \code{data_referencia} (Date), \code{taxa_cdi} (numeric, \% ao ano)
+A data.frame with columns:
+\describe{
+\item{date}{Reference date}
+\item{value}{Daily CDI rate (\% per day)}
+\item{value_annualized}{Annualized CDI rate (\% per year, 252 business days)}
 }
 }
 \description{

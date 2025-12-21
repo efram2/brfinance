@@ -49,10 +49,10 @@ A data.frame with inflation metrics. Columns depend on the \code{language} param
 }
 \item Portuguese (\code{language = "pt"}):
 \itemize{
-\item \code{data_referencia} (Date): Mês de referência
-\item \code{inflacao_mensal} (numeric): Variação mensal do IPCA (\%)
-\item \code{inflacao_acumulada_ano} (numeric): Inflação acumulada no ano (\%)
-\item \code{inflacao_12_meses} (numeric): Inflação acumulada nos últimos 12 meses (\%)
+\item \code{data_referencia} (Date): Mes de referencia
+\item \code{inflacao_mensal} (numeric): Variacao mensal do IPCA (\%)
+\item \code{inflacao_acumulada_ano} (numeric): Inflacao acumulada no ano (\%)
+\item \code{inflacao_12_meses} (numeric): Inflacao acumulada nos ultimos 12 meses (\%)
 }
 }
 }

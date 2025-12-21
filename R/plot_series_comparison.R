@@ -53,6 +53,7 @@ plot_series_comparison <- function(data_list,
                                    show_legend = TRUE,
                                    legend_position = "bottom") {
 
+  # === PARAMETER VALIDATION ===
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
   }
@@ -65,6 +66,7 @@ plot_series_comparison <- function(data_list,
     stop("The 'tidyr' package is required. Install it with install.packages('tidyr').")
   }
 
+  # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
   value <- series <- NULL
 

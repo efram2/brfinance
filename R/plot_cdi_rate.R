@@ -1,31 +1,30 @@
-#' Plot Brazilian SELIC rate (annualized, base 252)
+#' Plot Brazilian CDI rate
 #'
-#' Generates a time series plot of the SELIC interest rate using data from `get_selic()`.
-#' The SELIC rate ("Sistema Especial de Liquidação e de Custódia") represents the
-#' effective annualized rate (252-business-day basis) for overnight interbank loans
-#' and is the main instrument of Brazil’s monetary policy.
+#' Generates a time series plot of the CDI (Certificado de Depósito Interbancário) rate.
+#' The CDI is the benchmark interest rate for interbank deposits in Brazil and serves
+#' as a reference for many fixed income investments.
 #'
-#' @param data Tibble returned by `get_selic_rate()`
+#' @param data Tibble returned by `get_cdi_rate()`, with columns `date` and `value`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
-#' @return A `ggplot2` object showing the SELIC rate over time.
+#' @return A `ggplot2` object showing the CDI rate over time.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' # Example 1: English version
-#' selic_data <- get_selic_rate(2020, 2024)
-#' selic_plot <- plot_selic_rate(selic_data)
-#' print(selic_plot)
+#' cdi_data <- get_cdi_rate(2020, 2024)
+#' cdi_plot <- plot_cdi_rate(cdi_data)
+#' print(cdi_plot)
 #'
 #' # Example 2: Portuguese version
-#' dados_selic <- get_selic_rate(2020, 2024, language = "pt")
-#' grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
-#' print(grafico_selic)
+#' dados_cdi <- get_cdi_rate(2020, 2024, language = "pt")
+#' grafico_cdi <- plot_cdi_rate(dados_cdi, language = "pt")
+#' print(grafico_cdi)
 #' }
 
-plot_selic_rate <- function(data,
-                            language = "eng") {
+plot_cdi_rate <- function(data,
+                          language = "eng") {
 
   # === PARAMETER VALIDATION ===
 
@@ -59,18 +58,18 @@ plot_selic_rate <- function(data,
   # === FUNCTION BODY ===
 
   # Declare global variables for dplyr operations
-  value <- selic_rate <- data_referencia <- taxa_selic <- NULL
+  value <- taxa_cdi <- data_referencia <- rate <- NULL
 
   # === TEXT DEFINITIONS ===
 
   if (language == "eng") {
-    title   <- "Brazil | SELIC Interest Rate (Effective Annual, 252-day basis)"
-    y_label <- "SELIC Rate (% p.a.)"
-    caption <- "Source: Central Bank of Brazil (SGS 1178)"
+    title   <- "Brazil | CDI Rate"
+    y_label <- "Daily CDI rate (% per day)"
+    caption <- "Source: Central Bank of Brazil"
   } else {
-    title   <- "Brasil | Taxa SELIC (Efetiva Anualizada, base 252)"
-    y_label <- "Taxa SELIC (% a.a.)"
-    caption <- "Fonte: Banco Central do Brasil (SGS 1178)"
+    title   <- "Brasil | Taxa CDI"
+    y_label <- "Taxa CDI diaria (% ao dia)"
+    caption <- "Fonte: Banco Central do Brasil"
   }
 
   # === PLOT ===
@@ -79,12 +78,13 @@ plot_selic_rate <- function(data,
     data = data,
     x_var = "date",
     y_var = "value",
-    plot_type = "step",
+    plot_type = "line",
     title = title,
     y_label = y_label,
     caption = caption,
     y_suffix = "%",
-    color = "#1f78b4",
-    show_points = TRUE
+    color = "#3498db",
+    show_points = TRUE,
+    date_breaks = "6 months"
   )
 }

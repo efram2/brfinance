@@ -21,7 +21,6 @@
 #' print(grafico_desemprego)
 #' }
 
-
 plot_unemployment <- function(data,
                               language = "eng") {
 
@@ -29,44 +28,55 @@ plot_unemployment <- function(data,
     stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
   }
 
-  # Verifica se as colunas necessárias existem
-  required_cols <- if (language == "eng") c("date", "rate") else c("data", "taxa")
-  missing_cols <- setdiff(required_cols, names(data))
-  if (length(missing_cols) > 0) {
-    stop("Dataframe is missing required columns: ", paste(missing_cols, collapse = ", "))
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("The 'dplyr' package is required. Install it with install.packages('dplyr').")
   }
 
-  # Define textos conforme o idioma
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("The 'tidyr' package is required. Install it with install.packages('tidyr').")
+  }
+
+  if (!is.data.frame(data)) {
+    stop("'data' must be a data frame or tibble", call. = FALSE)
+  }
+
+  if (nrow(data) == 0) {
+    stop("'data' must have at least one row", call. = FALSE)
+  }
+
+  # Validate 'language' parameter
+  if (!is.character(language) || length(language) != 1) {
+    stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
+  }
+
+  # Define texts based on language
   if (language == "eng") {
-    title <- "Brazil | Unemployment Rate (Continuous PNAD)"
-    y_label <- "Unemployment Rate (%)"
-    caption <- "Source: IBGE - SIDRA (Table 6381)"
-    x_var <- "date"
-    y_var <- "rate"
-  } else {
-    title <- "Brasil | Taxa de Desemprego (PNAD Continua)"
-    y_label <- "Taxa de desemprego (%)"
-    caption <- "Fonte: IBGE - SIDRA (Tabela 6381)"
-    x_var <- "data"
-    y_var <- "taxa"
-  }
-
-  # Gera o gráfico usando aes() com !!sym() para variáveis dinâmicas
-
-  ggplot2::ggplot(data, ggplot2::aes(x = !!ggplot2::sym(x_var), y = !!ggplot2::sym(y_var))) +
-    ggplot2::geom_line(color = "#2c3e50", linewidth = 1) +
-    ggplot2::geom_point(color = "#e74c3c", size = 2) +
-    ggplot2::theme_minimal(base_size = 14) +
-    ggplot2::scale_x_date(date_breaks = "6 months", date_labels = "%b/%Y") +
-    ggplot2::scale_y_continuous(labels = scales::label_number(suffix = "%")) +
-    ggplot2::labs(
-      title = title,
-      x = NULL,
-      y = y_label,
-      caption = caption
-    ) +
-    ggplot2::theme(
-      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5),
-      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+    .plot_time_series(
+      data = data,
+      x_var = "date",
+      y_var = "rate",
+      plot_type = "line",
+      title = "Brazil | Unemployment Rate (Continuous PNAD)",
+      y_label = "Unemployment Rate (%)",
+      caption = "Source: IBGE - SIDRA (Table 6381)",
+      y_suffix = "%",
+      color = "#2c3e50",
+      point_color = "#e74c3c",
+      show_points = TRUE
     )
+  } else {
+    .plot_time_series(
+      data = data,
+      x_var = "data",
+      y_var = "taxa",
+      plot_type = "line",
+      title = "Brasil | Taxa de Desemprego (PNAD Continua)",
+      y_label = "Taxa de desemprego (%)",
+      caption = "Fonte: IBGE - SIDRA (Tabela 6381)",
+      y_suffix = "%",
+      color = "#2c3e50",
+      point_color = "#e74c3c",
+      show_points = TRUE
+    )
+  }
 }

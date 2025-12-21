@@ -31,65 +31,71 @@ plot_selic_rate <- function(data,
     stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
   }
 
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("The 'dplyr' package is required. Install it with install.packages('dplyr').")
+  }
+
+  if (!requireNamespace("tidyr", quietly = TRUE)) {
+    stop("The 'tidyr' package is required. Install it with install.packages('tidyr').")
+  }
+
+  if (!is.data.frame(data)) {
+    stop("'data' must be a data frame or tibble", call. = FALSE)
+  }
+
+  if (nrow(data) == 0) {
+    stop("'data' must have at least one row", call. = FALSE)
+  }
+
+  # Validate 'language' parameter
+  if (!is.character(language) || length(language) != 1) {
+    stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
+  }
+
   # Declare global variables for dplyr operations
   value <- selic_rate <- data_referencia <- taxa_selic <- NULL
 
-  # === COMPATIBILITY LAYER: Map new column names to old expected names ===
-  # This ensures backward compatibility while we update the vignette
+  # === COMPATIBILITY LAYER ===
   if (language == "pt") {
-    # Portuguese: check for new column names and rename to old expected names
     if ("data_referencia" %in% names(data) && "taxa_selic" %in% names(data)) {
       data <- data |>
         dplyr::rename(data = data_referencia, taxa = taxa_selic)
     }
-    # If columns are already "data" and "taxa", do nothing
   } else {
-    # English: check for "selic_rate" and rename to "rate" if needed
     if ("selic_rate" %in% names(data)) {
       data <- data |>
         dplyr::rename(rate = selic_rate)
     }
   }
 
-  # Verifica se as colunas necessárias existem (APÓS o mapeamento)
-  required_cols <- if (language == "eng") c("date", "rate") else c("data", "taxa")
-
-  missing_cols <- setdiff(required_cols, names(data))
-  if (length(missing_cols) > 0) {
-    stop("Dataframe is missing required columns: ", paste(missing_cols, collapse = ", "),
-         "\nAvailable columns: ", paste(names(data), collapse = ", "))
-  }
-
-  # Define textos conforme o idioma
+  # Define texts based on language
   if (language == "eng") {
-    title <- "Brazil | SELIC Interest Rate (Effective Annual, 252-day basis)"
-    y_label <- "SELIC Rate (% p.a.)"
-    caption <- "Source: Central Bank of Brazil (SGS 1178)"
-    x_var <- "date"
-    y_var <- "rate"  # Note: changed from "selic_rate" to "rate"
-  } else {
-    title <- "Brasil | Taxa SELIC (Efetiva Anualizada, base 252)"
-    y_label <- "Taxa SELIC (% a.a.)"
-    caption <- "Fonte: Banco Central do Brasil (SGS 1178)"
-    x_var <- "data"
-    y_var <- "taxa"
-  }
-
-  # Gera o gráfico usando aes() com !!sym() para variáveis dinâmicas
-  ggplot2::ggplot(data, ggplot2::aes(x = !!ggplot2::sym(x_var), y = !!ggplot2::sym(y_var))) +
-    ggplot2::geom_step(color = "#1f78b4", linewidth = 1) +
-    ggplot2::geom_point(color = "#e31a1c", size = 1) +
-    ggplot2::scale_x_date(date_breaks = "6 months", date_labels = "%b/%Y") +
-    ggplot2::scale_y_continuous(labels = scales::label_number(suffix = "%")) +
-    ggplot2::labs(
-      title = title,
-      x = NULL,
-      y = y_label,
-      caption = caption
-    ) +
-    ggplot2::theme_minimal(base_size = 14) +
-    ggplot2::theme(
-      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5),
-      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+    .plot_time_series(
+      data = data,
+      x_var = "date",
+      y_var = "rate",
+      plot_type = "step",
+      title = "Brazil | SELIC Interest Rate (Effective Annual, 252-day basis)",
+      y_label = "SELIC Rate (% p.a.)",
+      caption = "Source: Central Bank of Brazil (SGS 1178)",
+      y_suffix = "%",
+      color = "#1f78b4",
+      point_color = "#e31a1c",
+      show_points = TRUE
     )
+  } else {
+    .plot_time_series(
+      data = data,
+      x_var = "data",
+      y_var = "taxa",
+      plot_type = "step",
+      title = "Brasil | Taxa SELIC (Efetiva Anualizada, base 252)",
+      y_label = "Taxa SELIC (% a.a.)",
+      caption = "Fonte: Banco Central do Brasil (SGS 1178)",
+      y_suffix = "%",
+      color = "#1f78b4",
+      point_color = "#e31a1c",
+      show_points = TRUE
+    )
+  }
 }

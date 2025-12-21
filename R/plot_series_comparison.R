@@ -65,6 +65,9 @@ plot_series_comparison <- function(data_list,
     stop("The 'tidyr' package is required. Install it with install.packages('tidyr').")
   }
 
+  # Declare global variables for dplyr operations
+  value <- series <- NULL
+
   scale_type <- match.arg(scale_type)
 
   # Validate inputs
@@ -156,7 +159,7 @@ plot_series_comparison <- function(data_list,
     if (language == "eng") {
       title <- "Comparison of Economic Indicators"
     } else {
-      title <- "Comparação de Indicadores Econômicos"
+      title <- "Comparacao de Indicadores Economicos"
     }
   }
 

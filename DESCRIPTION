@@ -22,10 +22,10 @@ Imports:
     sidrar,
     stringr,
     janitor,
-    labelled,
-    tidyr
+    labelled
 Suggests: 
     testthat (>= 3.0.0),
     rmarkdown,
-    knitr
+    knitr,
+    tidyr
 VignetteBuilder: knitr

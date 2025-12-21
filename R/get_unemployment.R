@@ -83,19 +83,12 @@ get_unemployment <- function(start_date = "2020-01-01",
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  # Check for required packages
-  if (!requireNamespace("sidrar", quietly = TRUE)) {
-    stop("The 'sidrar' package is required. Install with install.packages('sidrar')", call. = FALSE)
+  # Set default start_date if NULL (last 30 days by default for CDI)
+  if (is.null(start_date)) {
+    start_date <- Sys.Date() - 30  # Last 30 days
   }
 
-  if (!requireNamespace("janitor", quietly = TRUE)) {
-    stop("The 'janitor' package is required. Install with install.packages('janitor')", call. = FALSE)
-  }
-
-  if (!requireNamespace("stringr", quietly = TRUE)) {
-    stop("The 'stringr' package is required. Install with install.packages('stringr')", call. = FALSE)
-  }
-
+  # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
   value <- trimestre <- month <- year <- data <- NULL
 
@@ -116,7 +109,7 @@ get_unemployment <- function(start_date = "2020-01-01",
   df <- dados |>
     janitor::clean_names() |>
     dplyr::select("trimestre_movel", "valor") |>
-    dplyr::rename(trimestre = "trimestre_movel", rate = "valor") |>
+    dplyr::rename(trimestre = "trimestre_movel", value = "valor") |>
     dplyr::mutate(
       month = stringr::str_extract(trimestre, "(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)(?=\\s)"),
       year = as.numeric(stringr::str_extract(trimestre, "\\d{4}$")),
@@ -124,21 +117,15 @@ get_unemployment <- function(start_date = "2020-01-01",
     ) |>
     dplyr::filter(year >= start_year & year <= end_year)
 
-  # Language-specific column names (MANTENDO OS NOMES ORIGINAIS)
   if (language == "eng") {
-    colnames(df) <- c("quarter", "rate", "month", "year", "date")
+    colnames(df) <- c("quarter", "value", "month", "year", "date")
   } else {
-    colnames(df) <- c("trimestre", "taxa", "mes", "ano", "data")
+    colnames(df) <- c("trimestre", "value", "mes", "ano", "date")
   }
 
   # Additional filtering by exact date range (more precise than just year)
-  if (language == "eng") {
-    df <- df |>
-      dplyr::filter(date >= start_date_norm & date <= end_date_norm)
-  } else {
-    df <- df |>
-      dplyr::filter(data >= start_date_norm & data <= end_date_norm)
-  }
+  df <- df |>
+    dplyr::filter(date >= start_date_norm & date <= end_date_norm)
 
   # Add labels if requested
   if (isTRUE(labels) && requireNamespace("labelled", quietly = TRUE)) {
@@ -146,16 +133,16 @@ get_unemployment <- function(start_date = "2020-01-01",
       df <- labelled::set_variable_labels(
         df,
         trimestre = "Trimestre movel de referencia",
-        taxa = "Taxa de desemprego (%)",
+        value = "Taxa de desemprego (%)",
         mes = "Mes de termino do trimestre",
         ano = "Ano",
-        data = "Data de referencia (primeiro dia do mes de termino)"
+        date = "Data de referencia (primeiro dia do mes de termino)"
       )
     } else {
       df <- labelled::set_variable_labels(
         df,
         quarter = "Moving quarter reference",
-        rate = "Unemployment rate (%)",
+        value = "Unemployment rate (%)",
         month = "Quarter ending month",
         year = "Year",
         date = "Reference date (first day of quarter ending month)"

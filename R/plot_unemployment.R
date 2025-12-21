@@ -25,60 +25,61 @@ plot_unemployment <- function(data,
                               language = "eng") {
 
   # === PARAMETER VALIDATION ===
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
-  }
 
-  if (!requireNamespace("dplyr", quietly = TRUE)) {
-    stop("The 'dplyr' package is required. Install it with install.packages('dplyr').")
-  }
-
-  if (!requireNamespace("tidyr", quietly = TRUE)) {
-    stop("The 'tidyr' package is required. Install it with install.packages('tidyr').")
-  }
-
+  # Validate 'data' parameter
   if (!is.data.frame(data)) {
     stop("'data' must be a data frame or tibble", call. = FALSE)
   }
 
-  if (nrow(data) == 0) {
-    stop("'data' must have at least one row", call. = FALSE)
+  required_cols <- c("date", "value")
+  missing_cols <- setdiff(required_cols, names(data))
+
+  if (length(missing_cols) > 0) {
+    stop(
+      paste0(
+        "'data' must contain columns: ",
+        paste(required_cols, collapse = ", ")
+      ),
+      call. = FALSE
+    )
   }
 
-  # Validate 'language' parameter
   if (!is.character(language) || length(language) != 1) {
     stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
   }
 
-  # === FUNCTION BODY ===
-  # Define texts based on language
-  if (language == "eng") {
-    .plot_time_series(
-      data = data,
-      x_var = "date",
-      y_var = "rate",
-      plot_type = "line",
-      title = "Brazil | Unemployment Rate (Continuous PNAD)",
-      y_label = "Unemployment Rate (%)",
-      caption = "Source: IBGE - SIDRA (Table 6381)",
-      y_suffix = "%",
-      color = "#2c3e50",
-      point_color = "#e74c3c",
-      show_points = TRUE
-    )
-  } else {
-    .plot_time_series(
-      data = data,
-      x_var = "data",
-      y_var = "taxa",
-      plot_type = "line",
-      title = "Brasil | Taxa de Desemprego (PNAD Continua)",
-      y_label = "Taxa de desemprego (%)",
-      caption = "Fonte: IBGE - SIDRA (Tabela 6381)",
-      y_suffix = "%",
-      color = "#2c3e50",
-      point_color = "#e74c3c",
-      show_points = TRUE
-    )
+  language <- tolower(language)
+  if (!language %in% c("eng", "pt")) {
+    stop("'language' must be either 'eng' (English) or 'pt' (Portuguese)", call. = FALSE)
   }
+
+  # === FUNCTION BODY ===
+
+  # === TEXT DEFINITIONS ===
+
+  if (language == "eng") {
+    title   <- "Brazil | Unemployment Rate (Continuous PNAD)"
+    y_label <- "Unemployment Rate (%)"
+    caption <- "Source: IBGE - SIDRA (Table 6381)"
+  } else {
+    title   <- "Brasil | Taxa de Desemprego (PNAD Contínua)"
+    y_label <- "Taxa de desemprego (%)"
+    caption <- "Fonte: IBGE - SIDRA (Tabela 6381)"
+  }
+
+  # === PLOT ===
+
+  .plot_time_series(
+    data = data,
+    x_var = "date",
+    y_var = "value",
+    plot_type = "line",
+    title = title,
+    y_label = y_label,
+    caption = caption,
+    y_suffix = "%",
+    color = "#2c3e50",
+    show_points = TRUE,
+    date_breaks = "1 year"
+  )
 }

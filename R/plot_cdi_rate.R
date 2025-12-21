@@ -66,7 +66,7 @@ plot_cdi_rate <- function(data,
     .plot_time_series(
       data = data,
       x_var = "date",
-      y_var = "rate",
+      y_var = "cdi_rate",
       plot_type = "line",
       title = "Brazil | CDI Interest Rate",
       y_label = "CDI Rate (% p.a.)",
@@ -79,7 +79,7 @@ plot_cdi_rate <- function(data,
     )
   } else {
     # Check column names for Portuguese
-    if ("rate" %in% names(data) && !"taxa" %in% names(data)) {
+    if ("cdi_rate" %in% names(data) && !"taxa" %in% names(data)) {
       data <- dplyr::rename(data, taxa = rate)
     }
     if ("date" %in% names(data) && !"data" %in% names(data)) {
@@ -89,8 +89,8 @@ plot_cdi_rate <- function(data,
     # Use internal plotting function
     .plot_time_series(
       data = data,
-      x_var = "data",
-      y_var = "taxa",
+      x_var = "data_referencia",
+      y_var = "taxa_cdi",
       plot_type = "line",
       title = "Brasil | Taxa CDI",
       y_label = "Taxa CDI (% a.a.)",

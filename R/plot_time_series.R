@@ -58,14 +58,6 @@
   # Validate inputs
   plot_type <- match.arg(plot_type)
 
-  # Check if columns exist
-  missing_cols <- setdiff(c(x_var, y_var), names(data))
-  if (length(missing_cols) > 0) {
-    stop("Dataframe is missing required columns: ",
-         paste(missing_cols, collapse = ", "),
-         "\nAvailable columns: ", paste(names(data), collapse = ", "))
-  }
-
   # Set default colors if not provided
   if (is.null(color)) {
     color <- if (plot_type == "step") "#1f78b4" else "#2c3e50"

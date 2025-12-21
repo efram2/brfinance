@@ -27,6 +27,7 @@
 plot_selic_rate <- function(data,
                             language = "eng") {
 
+  # === PARAMETER VALIDATION ===
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
   }
@@ -47,6 +48,7 @@ plot_selic_rate <- function(data,
     stop("'data' must have at least one row", call. = FALSE)
   }
 
+  # === FUNCTION BODY ===
   # Validate 'language' parameter
   if (!is.character(language) || length(language) != 1) {
     stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)

@@ -24,6 +24,7 @@
 plot_unemployment <- function(data,
                               language = "eng") {
 
+  # === PARAMETER VALIDATION ===
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("The 'ggplot2' package is required. Install it with install.packages('ggplot2').")
   }
@@ -49,6 +50,7 @@ plot_unemployment <- function(data,
     stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
   }
 
+  # === FUNCTION BODY ===
   # Define texts based on language
   if (language == "eng") {
     .plot_time_series(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculators.R
 \name{calc_future_value}
 \alias{calc_future_value}
-\title{Future Value (FV)}
+\title{Future Value (FV) - Basic}
 \usage{
 calc_future_value(pv, rate, n)
 }

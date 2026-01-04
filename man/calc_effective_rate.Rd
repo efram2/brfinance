@@ -18,6 +18,6 @@ Effective interest rate.
 Converts a nominal interest rate into an effective rate.
 }
 \examples{
-calc_effective_rate(nominal_rate = 0.12, m = 12)
+calc_effective_rate(nominal_rate = 0.12, m = 12) # 12\% nominal monthly
 
 }

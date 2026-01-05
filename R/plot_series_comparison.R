@@ -29,7 +29,7 @@
 #'
 #' comparison_plot <- plot_series_comparison(
 #'   data_list = list(SELIC = selic, IPCA = ipca, IGP-M = igpm),
-#'   y_vars = c("rate", "value", "value"),
+#'   y_vars = c("value", "value", "value"),
 #'   date_vars = c("date", "date", "date"),
 #'   scale_type = "index",
 #'   title = "Comparison of Brazilian Economic Indicators",

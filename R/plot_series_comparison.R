@@ -6,8 +6,12 @@
 #' @param y_vars Vector of column names containing the values to plot from each data frame
 #' @param date_vars Vector of column names containing dates from each data frame
 #' @param language Language for labels: "pt" (Portuguese) or "eng" (English)
-#' @param scale_type Type of scaling: "none" (raw values), "index" (index to 100),
-#'                   "percent_change" (percentage change from first observation)
+#' @param scale_type Scaling applied to the series:
+#' \describe{
+#'   \item{"none"}{Plots raw values as provided}
+#'   \item{"index"}{Indexes all series to 100 at the first observation}
+#'   \item{"percent_change"}{Plots percentage change relative to the first observation}
+#' }
 #' @param title Plot title
 #' @param subtitle Plot subtitle
 #' @param y_label Y-axis label

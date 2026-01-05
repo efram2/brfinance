@@ -51,7 +51,7 @@ library(brfinance)
 
 # 🚀 Quick Start
 
-Inflation (IPCA)
+**Inflation (IPCA)**
 
 ``` r
 plot_inflation_rate(
@@ -61,7 +61,7 @@ plot_inflation_rate(
 
 <img src="README_files/figure-gfm/fig.ipca-1.png" style="display: block; margin: auto;" />
 
-SELIC interest rate
+**SELIC interest rate**
 
 ``` r
 plot_selic_rate(
@@ -71,7 +71,7 @@ plot_selic_rate(
 
 <img src="README_files/figure-gfm/fig.selic-1.png" style="display: block; margin: auto;" />
 
-Unemployment rate
+**Unemployment rate**
 
 ``` r
 plot_unemployment(
@@ -81,7 +81,11 @@ plot_unemployment(
 
 <img src="README_files/figure-gfm/fig.unemp-1.png" style="display: block; margin: auto;" />
 
-Compare multiple indicators in one chart
+**Compare multiple indicators in one chart**
+
+You can compare different economic indicators using: 1. raw values 2.
+indexed series (base = first observation) 3. percentage change from the
+first observation
 
 - Want to analyze how different economic indicators evolve together?
 - Use *plot_series_comparison()* to compare multiple time series in a
@@ -104,7 +108,7 @@ plot_series_comparison(
 
 <img src="README_files/figure-gfm/fig.compare-1.png" style="display: block; margin: auto;" />
 
-## Financial Calculators (minimalista)
+**Financial Calculators (minimalista)**
 
 ``` r
 # Net Present Value
@@ -162,12 +166,6 @@ All `get_*` functions support flexible date inputs: `"YYYY"`,
 - `calc_continuous_interest()` → Continuous compounding
 - `calc_rule72()` → Rule of 72 approximation
 - `calc_rule114()` → Rule of 114 approximation
-
-# Visualization
-
-- Inflation, SELIC, CDI and exchange rate plots
-- Unemployment time series
-- Multi-series comparison plots
 
 # Language Support
 

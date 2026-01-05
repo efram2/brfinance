@@ -56,7 +56,7 @@ library(brfinance)
 ```
 # 🚀 Quick Start
 
-Inflation (IPCA)
+**Inflation (IPCA)**
 
 ```{r fig.ipca, fig.width=7, fig.height=4}
 plot_inflation_rate(
@@ -64,7 +64,7 @@ plot_inflation_rate(
 )
 ```
 
-SELIC interest rate
+**SELIC interest rate**
 
 ```{r fig.selic, fig.width=7, fig.height=4}
 plot_selic_rate(
@@ -72,7 +72,7 @@ plot_selic_rate(
 )
 ```
 
-Unemployment rate
+**Unemployment rate**
 
 ```{r fig.unemp, fig.width=7, fig.height=4}
 plot_unemployment(
@@ -80,7 +80,12 @@ plot_unemployment(
 )
 ```
 
-Compare multiple indicators in one chart
+**Compare multiple indicators in one chart**
+
+You can compare different economic indicators using: 
+1. raw values
+2. indexed series (base = first observation)
+3. percentage change from the first observation
 
 * Want to analyze how different economic indicators evolve together?
 * Use *plot_series_comparison()* to compare multiple time series in a single, clean visualization.
@@ -100,7 +105,7 @@ plot_series_comparison(
 )
 ```
 
-## Financial Calculators (minimalista)
+**Financial Calculators (minimalista)**
 
 ```r
 # Net Present Value

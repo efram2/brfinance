@@ -1,7 +1,5 @@
 README
 ================
-brfinance
-2026-01-05
 
 # brfinance 📊🇧🇷
 
@@ -119,22 +117,51 @@ calc_irr(c(-1000, 300, 400, 500))
 calc_pmt(rate = 0.02, n = 24, pv = 10000)
 ```
 
-# Available Features
+# Function Reference
 
-- Inflation (IPCA)
-- SELIC and CDI rates
-- Exchange rates
-- GDP growth
-- Unemployment (PNAD Contínua)
-- Central Bank time series (SGS)
+## Data retrieval functions (`get_*`)
 
-# Financial Calculators
+- `get_inflation_rate()` → Retrieves Brazil’s official inflation rate
+  (IPCA)
+- `get_selic_rate()` → Retrieves the SELIC interest rate
+- `get_cdi_rate()` → Retrieves the CDI interest rate
+- `get_exchange_rate()` → Retrieves official exchange rates
+- `get_gdp_growth()` → Retrieves GDP growth rates
+- `get_unemployment()` → Retrieves unemployment rate from PNAD Contínua
+- `get_sgs_series()` → Retrieves any Central Bank (SGS) time series by
+  code
 
-- Present & Future Value (PV / FV)
-- Compound & continuous interest
-- NPV, IRR, PMT, rate, nper
-- Annuities and amortization schedules
-- Rule of 72 and Rule of 114
+All `get_*` functions support flexible date inputs: `"YYYY"`,
+`"YYYY-MM"`, or `"YYYY-MM-DD"`.
+
+------------------------------------------------------------------------
+
+## Plotting functions (`plot_*`)
+
+- `plot_inflation_rate()` → Plots IPCA inflation over time
+- `plot_selic_rate()` → Plots the SELIC interest rate
+- `plot_cdi_rate()` → Plots the CDI interest rate
+- `plot_exchange_rate()` → Plots exchange rate time series
+- `plot_gdp_growth()` → Plots GDP growth over time
+- `plot_unemployment()` → Plots unemployment rate time series
+- `plot_series_comparison()` → Compares multiple economic indicators in
+  one chart
+
+------------------------------------------------------------------------
+
+## Financial calculators (`calc_*`)
+
+- `calc_pv()` → Present Value
+- `calc_fv()` → Future Value
+- `calc_npv()` → Net Present Value
+- `calc_irr()` → Internal Rate of Return
+- `calc_pmt()` → Loan payment calculation
+- `calc_rate()` → Interest rate calculation
+- `calc_nper()` → Number of periods
+- `calc_compound_interest()` → Compound interest calculation
+- `calc_continuous_interest()` → Continuous compounding
+- `calc_rule72()` → Rule of 72 approximation
+- `calc_rule114()` → Rule of 114 approximation
 
 # Visualization
 

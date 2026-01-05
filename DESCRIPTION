@@ -1,6 +1,6 @@
 Package: brfinance
 Title: Simplified Access to Brazilian Financial and Macroeconomic Data
-Version: 0.7.1.900
+Version: 0.7.2.900
 Authors@R: 
     person(given = "João Paulo", family = "dos Santos Pereira Barbosa", email = "joao.31582129@gmail.com",role = c("aut", "cre"))
 Description: It offers simplified access to Brazilian macroeconomic and financial indicators selected from official sources, such as the 'IBGE' (Brazilian Institute of Geography and Statistics) via the 'SIDRA' API and the 'Central Bank of Brazil' via the 'SGS' API. It allows users to quickly retrieve and visualize data series such as the unemployment rate and the Selic interest rate. This package was developed for data access and visualization purposes, without generating forecasts or statistical results. For more information, see the official APIs: <https://sidra.ibge.gov.br/> and <https://dadosabertos.bcb.gov.br/dataset/>.
@@ -10,7 +10,7 @@ BugReports: https://github.com/efram2/brfinance/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.1.0)
 Imports: 

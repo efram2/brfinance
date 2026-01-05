@@ -29,8 +29,12 @@ plot_series_comparison(
 
 \item{language}{Language for labels: "pt" (Portuguese) or "eng" (English)}
 
-\item{scale_type}{Type of scaling: "none" (raw values), "index" (index to 100),
-"percent_change" (percentage change from first observation)}
+\item{scale_type}{Scaling applied to the series:
+\describe{
+\item{"none"}{Plots raw values as provided}
+\item{"index"}{Indexes all series to 100 at the first observation}
+\item{"percent_change"}{Plots percentage change relative to the first observation}
+}}
 
 \item{title}{Plot title}
 
@@ -63,7 +67,7 @@ igpm <- get_igpm(2020, 2024)
 
 comparison_plot <- plot_series_comparison(
   data_list = list(SELIC = selic, IPCA = ipca, IGP-M = igpm),
-  y_vars = c("rate", "value", "value"),
+  y_vars = c("value", "value", "value"),
   date_vars = c("date", "date", "date"),
   scale_type = "index",
   title = "Comparison of Brazilian Economic Indicators",

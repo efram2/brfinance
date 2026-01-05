@@ -4,11 +4,10 @@
 #' This script creates the comprehensive dataset of Brazilian economic series
 #' that is included in the brfinance package.
 
-library(tibble)
-library(dplyr)
-library(readr)
-
 # Dataset completo com 31 séries principais do BCB
+
+br_available_series <- NULL
+
 br_available_series <- tibble::tibble(
   series_id = c(
     # Inflação (6)

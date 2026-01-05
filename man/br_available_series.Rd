@@ -5,28 +5,33 @@
 \alias{br_available_series}
 \title{Brazilian Economic Series Database}
 \format{
-A tibble with 9 rows and 16 columns:
+A tibble with multiple rows and the following columns:
 \describe{
 \item{series_id}{SGS code from Central Bank of Brazil}
-\item{source}{Data source ("BCB" for Central Bank of Brazil)}
-\item{source_system}{Source system ("SGS" for Time Series Management System)}
-\item{short_name}{Short name/abbreviation of the series}
-\item{long_name}{Full descriptive name of the series}
-\item{description}{Detailed description of what the series measures}
-\item{category}{Main category (e.g., "Macroeconomic")}
-\item{sub_category}{Sub-category (e.g., "Inflation", "Exchange Rate")}
-\item{frequency}{Data frequency ("daily", "monthly")}
-\item{unit}{Measurement unit ("percent", "BRL")}
-\item{seasonally_adjusted}{Logical indicating if series is seasonally adjusted}
+\item{source}{Data source}
+\item{source_system}{Source system}
+\item{short_name}{Short name of the series}
+\item{long_name_pt}{Full name in Portuguese}
+\item{long_name_en}{Full name in English}
+\item{description_pt}{Description in Portuguese}
+\item{description_en}{Description in English}
+\item{category_pt}{Category in Portuguese}
+\item{category_en}{Category in English}
+\item{sub_category_pt}{Sub-category in Portuguese}
+\item{sub_category_en}{Sub-category in English}
+\item{frequency}{Data frequency}
+\item{unit}{Measurement unit}
+\item{seasonally_adjusted}{Logical}
 \item{start_date}{Series start date}
-\item{end_date}{Series end date (NA if ongoing)}
-\item{default_transform}{Suggested default transformation for analysis}
-\item{suggested_scale}{Suggested scale for visualization}
-\item{notes}{Additional notes and comments}
+\item{end_date}{Series end date}
+\item{default_transform}{Suggested transformation}
+\item{suggested_scale}{Suggested visualization scale}
+\item{notes_pt}{Notes in Portuguese}
+\item{notes_en}{Notes in English}
 }
 }
 \source{
-Central Bank of Brazil - Time Series Management System (SGS)
+Central Bank of Brazil — SGS
 }
 \usage{
 br_available_series
@@ -36,14 +41,10 @@ A comprehensive database of Brazilian economic and financial time series
 available through the Central Bank of Brazil's SGS system.
 }
 \examples{
-# View the entire database
 br_available_series
 
-# Filter for inflation series
-dplyr::filter(br_available_series, sub_category == "Inflation")
-
-# Find series by ID
 br_available_series[br_available_series$series_id == "433", ]
 
+br_available_series[br_available_series$series_id == "433", ]
 }
 \keyword{datasets}

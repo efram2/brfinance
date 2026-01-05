@@ -4,24 +4,21 @@
 \alias{get_series_info}
 \title{Get Series Information}
 \usage{
-get_series_info(series_id, field = NULL)
+get_series_info(series_id, field = NULL, language = c("pt", "en"))
 }
 \arguments{
-\item{series_id}{The series ID (SGS code from BCB)}
+\item{series_id}{The series ID (SGS code)}
 
-\item{field}{Specific field to return (optional). If NULL, returns all information.}
+\item{field}{Specific field to return (optional)}
 }
 \value{
-A list or character with series information
+A list with series metadata or a single value
 }
 \description{
-Returns detailed information about a specific economic series.
+Returns detailed metadata about a specific economic series.
 }
 \examples{
-# Get all information about IPCA
 get_series_info("433")
-
-# Get only the description
 get_series_info("433", field = "description")
 
 }

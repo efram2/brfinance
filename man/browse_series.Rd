@@ -9,7 +9,8 @@ browse_series(
   sub_category = NULL,
   source = NULL,
   frequency = NULL,
-  search_text = NULL
+  search_text = NULL,
+  language = c("pt", "en")
 )
 }
 \arguments{
@@ -27,16 +28,11 @@ browse_series(
 A tibble with available series matching the criteria
 }
 \description{
-Displays a searchable table of available economic and financial series in Brazil.
+Displays a searchable table of available Brazilian economic series.
 }
 \examples{
-# View all available series
 browse_series()
-
-# Filter by category
 browse_series(category = "Macroeconomic")
-
-# Search for inflation series
 browse_series(search_text = "inflação")
 
 }

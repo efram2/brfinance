@@ -23,8 +23,6 @@ Imports:
     stringr,
     janitor,
     labelled,
-    tibble,
-    readr
 Suggests: 
     testthat (>= 3.0.0),
     rmarkdown,

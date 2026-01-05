@@ -23,6 +23,8 @@ browse_series(
 \item{frequency}{Filter by frequency (optional)}
 
 \item{search_text}{Text search across all columns (optional)}
+
+\item{language}{Language for returned labels. Either \code{"pt"} or \code{"en"}.}
 }
 \value{
 A tibble with available series matching the criteria

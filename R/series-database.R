@@ -1,3 +1,5 @@
+utils::globalVariables("br_available_series")
+
 # -------------------------------------------------------------------
 # Dataset documentation
 # -------------------------------------------------------------------
@@ -12,21 +14,26 @@
 #' @format A tibble with multiple rows and the following columns:
 #' \describe{
 #'   \item{series_id}{SGS code from Central Bank of Brazil}
-#'   \item{source}{Data source ("BCB" for Central Bank of Brazil)}
-#'   \item{source_system}{Source system ("SGS" for Time Series Management System)}
-#'   \item{short_name}{Short name or abbreviation of the series}
-#'   \item{long_name}{Full descriptive name of the series}
-#'   \item{description}{Detailed description of what the series measures}
-#'   \item{category}{Main category (e.g., "Macroeconomic")}
-#'   \item{sub_category}{Sub-category (e.g., "Inflation", "Exchange Rate")}
-#'   \item{frequency}{Data frequency ("daily", "monthly")}
-#'   \item{unit}{Measurement unit ("percent", "BRL")}
-#'   \item{seasonally_adjusted}{Logical indicating if the series is seasonally adjusted}
+#'   \item{source}{Data source}
+#'   \item{source_system}{Source system}
+#'   \item{short_name}{Short name of the series}
+#'   \item{long_name_pt}{Full name in Portuguese}
+#'   \item{long_name_en}{Full name in English}
+#'   \item{description_pt}{Description in Portuguese}
+#'   \item{description_en}{Description in English}
+#'   \item{category_pt}{Category in Portuguese}
+#'   \item{category_en}{Category in English}
+#'   \item{sub_category_pt}{Sub-category in Portuguese}
+#'   \item{sub_category_en}{Sub-category in English}
+#'   \item{frequency}{Data frequency}
+#'   \item{unit}{Measurement unit}
+#'   \item{seasonally_adjusted}{Logical}
 #'   \item{start_date}{Series start date}
-#'   \item{end_date}{Series end date (NA if ongoing)}
-#'   \item{default_transform}{Suggested default transformation}
+#'   \item{end_date}{Series end date}
+#'   \item{default_transform}{Suggested transformation}
 #'   \item{suggested_scale}{Suggested visualization scale}
-#'   \item{notes}{Additional notes}
+#'   \item{notes_pt}{Notes in Portuguese}
+#'   \item{notes_en}{Notes in English}
 #' }
 #'
 #' @source Central Bank of Brazil — SGS
@@ -34,7 +41,7 @@
 #' @examples
 #' br_available_series
 #'
-#' dplyr::filter(br_available_series, sub_category == "Inflation")
+#' br_available_series[br_available_series$series_id == "433", ]
 #'
 #' br_available_series[br_available_series$series_id == "433", ]
 "br_available_series"
@@ -53,6 +60,7 @@
 #' @param source Filter by source (optional)
 #' @param frequency Filter by frequency (optional)
 #' @param search_text Text search across all columns (optional)
+#' @param language Language for returned labels. Either \code{"pt"} or \code{"en"}.
 #'
 #' @return A tibble with available series matching the criteria
 #'
@@ -61,7 +69,6 @@
 #' browse_series(category = "Macroeconomic")
 #' browse_series(search_text = "inflação")
 #'
-#' @export
 #' @export
 browse_series <- function(category = NULL,
                           sub_category = NULL,
@@ -72,8 +79,7 @@ browse_series <- function(category = NULL,
 
   language <- match.arg(language)
 
-  data("br_available_series", package = "brfinance")
-  data <- br_available_series
+  data <- get("br_available_series", envir = asNamespace("brfinance"))
 
   # Mapeamento de colunas por idioma
   long_name_col    <- paste0("long_name_", language)
@@ -100,16 +106,10 @@ browse_series <- function(category = NULL,
     search_text <- tolower(search_text)
 
     matches <- apply(
-      data,
+      as.data.frame(data),
       1,
       function(row) {
-        any(
-          grepl(
-            search_text,
-            tolower(as.character(row)),
-            fixed = TRUE
-          )
-        )
+        any(grepl(search_text, tolower(as.character(row)), fixed = TRUE))
       }
     )
 
@@ -142,12 +142,13 @@ browse_series <- function(category = NULL,
 #'
 #' @param series_id The series ID (SGS code)
 #' @param field Specific field to return (optional)
+#' @param language Language for returned labels. Either \code{"pt"} or \code{"en"}.
 #'
 #' @return A list with series metadata or a single value
 #'
 #' @examples
 #' get_series_info("433")
-#' get_series_info("433", field = "description")
+#' get_series_info("433", field = "description", language = "en")
 #'
 #' @export
 get_series_info <- function(series_id,
@@ -156,8 +157,7 @@ get_series_info <- function(series_id,
 
   language <- match.arg(language)
 
-  data("br_available_series", package = "brfinance")
-  data <- br_available_series
+  data <- get("br_available_series", envir = asNamespace("brfinance"))
 
   if (!series_id %in% data$series_id) {
     stop(

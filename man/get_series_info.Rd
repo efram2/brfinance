@@ -10,6 +10,8 @@ get_series_info(series_id, field = NULL, language = c("pt", "en"))
 \item{series_id}{The series ID (SGS code)}
 
 \item{field}{Specific field to return (optional)}
+
+\item{language}{Language for returned labels. Either \code{"pt"} or \code{"en"}.}
 }
 \value{
 A list with series metadata or a single value
@@ -19,6 +21,6 @@ Returns detailed metadata about a specific economic series.
 }
 \examples{
 get_series_info("433")
-get_series_info("433", field = "description")
+get_series_info("433", field = "description", language = "en")
 
 }

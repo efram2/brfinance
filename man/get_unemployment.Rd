@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_unemployment.R
 \name{get_unemployment}
 \alias{get_unemployment}
-\title{Get Brazilian Quarterly Unemployment Rate}
+\title{Get Brazilian Unemployment Rate (PNAD Continua)}
 \usage{
 get_unemployment(
   start_date = "2020-01-01",
@@ -16,60 +16,44 @@ get_unemployment(
 \itemize{
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
-\item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
-\item \code{NULL} defaults to \code{"2020-01-01"} (aligned with other functions in the package)
+\item \code{"YYYY-MM-DD"} for a specific date
+\item \code{NULL} defaults to \code{"2020-01-01"}
 }}
 
-\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
+\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}.
 \itemize{
-\item \code{"YYYY"} (e.g., \code{"2023"} becomes \code{"2023-12-31"})
-\item \code{"YYYY-MM"} (e.g., \code{"2023-12"} becomes the last day of December 2023)
-\item \code{"YYYY-MM-DD"} for a specific date
-\item \code{NULL} defaults to the current date (today)
+\item \code{NULL} defaults to the current date
 }}
 
 \item{language}{Language for column names in the returned data.frame:
 \itemize{
-\item \code{"eng"} (default): Returns columns \code{quarter}, \code{rate}, \code{month}, \code{year}, \code{date}
-\item \code{"pt"}: Returns columns \code{trimestre}, \code{taxa}, \code{mes}, \code{ano}, \code{data}
+\item \code{"eng"} (default): Returns columns \code{date}, \code{unemployment_rate}
+\item \code{"pt"}: Returns columns \code{data}, \code{taxa_desemprego}
 }}
 
-\item{labels}{Logical indicating whether to add variable labels using the \code{labelled}
-package. Labels provide descriptive text for each column when available.}
+\item{labels}{Logical indicating whether to add variable labels using the
+\code{labelled} package.}
 }
 \value{
-A data.frame with unemployment rate. Columns depend on the \code{language} parameter:
+A data.frame with:
 \itemize{
-\item English (\code{language = "eng"}):
-\itemize{
-\item \code{quarter} (character): Moving quarter reference (e.g., "jan-mar 2023")
-\item \code{rate} (numeric): Unemployment rate (\%)
-\item \code{month} (character): Quarter ending month abbreviation
-\item \code{year} (numeric): Year
-\item \code{date} (Date): Reference date (first day of quarter ending month)
-}
-\item Portuguese (\code{language = "pt"}):
-\itemize{
-\item \code{trimestre} (character): Trimestre móvel de referência
-\item \code{taxa} (numeric): Taxa de desemprego (\%)
-\item \code{mes} (character): Mês de término do trimestre
-\item \code{ano} (numeric): Ano
-\item \code{data} (Date): Data de referência (primeiro dia do mês de término)
-}
+\item date (Date): Reference month
+\item value (numeric): Unemployment rate (\%)
 }
 }
 \description{
-Downloads quarterly unemployment rate data from IBGE's Continuous PNAD survey
-via the SIDRA API (table 6381). The unemployment rate represents the percentage
-of the labor force that is unemployed and actively seeking employment.
+Downloads monthly unemployment rate data from the Brazilian Central Bank's
+SGS (Sistema Gerenciador de Series Temporais). The series corresponds to the
+unemployment rate from IBGE's Continuous PNAD survey (PNAD Continua),
+replicated and made available by the Central Bank.
 }
 \note{
-\strong{Data Source}: IBGE's Continuous National Household Sample Survey (PNAD Contínua),
-table 6381 (Unemployment rate), series 4099. Data is available from 2012 onward
-with quarterly frequency (moving quarters).
+\strong{Data Source}: Brazilian Central Bank (SGS), series 24369.
+The data originates from IBGE's Continuous National Household Sample Survey
+(PNAD Continua) and is published with monthly frequency.
 
-\strong{Date Calculation}: The \code{date} column represents the first day of the month
-that ends the moving quarter (e.g., "jan-mar 2023" becomes "2023-03-01").
+Although published monthly, the unemployment rate follows IBGE's
+moving-quarter methodology.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
@@ -84,9 +68,5 @@ that ends the moving quarter (e.g., "jan-mar 2023" becomes "2023-03-01").
 
   # Without variable labels
   df4 <- get_unemployment("2020-01-01", "2022-12-31", labels = FALSE)
-
-  # Compare unemployment with inflation (same period)
-  unemployment_data <- get_unemployment("2020", "2023")
-  inflation_data <- get_inflation_rate("2020", "2023")
 \dontshow{\}) # examplesIf}
 }

@@ -1,20 +1,24 @@
-#' Plot Brazil's quarterly unemployment rate
+#' Plot Brazil's monthly unemployment rate
 #'
-#' Generates a ggplot2 line chart of unemployment rate in Brazil.
+#' Generates a ggplot2 line chart of Brazil's unemployment rate
+#' (PNAD Contínua) using data returned by `get_unemployment()`.
 #'
-#' @param data Tibble returned by `get_unemployment()`
-#' @param language Language for column names: "pt" for Portuguese or "eng" (default) for English
+#' @param data Tibble or data.frame returned by `get_unemployment()`.
+#'   Must contain columns `date` (Date) and `value` (numeric).
+#' @param language Language of plot labels:
+#'   - "eng" (default)
+#'   - "pt"
 #'
-#' @return A ggplot2 object
+#' @return A ggplot2 object.
 #'
 #' @examplesIf interactive()
 #' # Example 1: English version
-#' unemployment_data <- get_unemployment(2020, 2024)
+#' unemployment_data <- get_unemployment("2020", "2024")
 #' unemployment_plot <- plot_unemployment(unemployment_data)
 #' print(unemployment_plot)
 #'
 #' # Example 2: Portuguese version
-#' dados_desemprego <- get_unemployment(2020, 2024, language = "pt")
+#' dados_desemprego <- get_unemployment("2020", "2024")
 #' grafico_desemprego <- plot_unemployment(dados_desemprego, language = "pt")
 #' print(grafico_desemprego)
 #'
@@ -24,9 +28,8 @@ plot_unemployment <- function(data,
 
   # === PARAMETER VALIDATION ===
 
-  # Validate 'data' parameter
   if (!is.data.frame(data)) {
-    stop("'data' must be a data frame or tibble", call. = FALSE)
+    stop("'data' must be a data frame or tibble.", call. = FALSE)
   }
 
   required_cols <- c("date", "value")
@@ -42,27 +45,34 @@ plot_unemployment <- function(data,
     )
   }
 
+  if (!inherits(data$date, "Date")) {
+    stop("'date' column must be of class Date.", call. = FALSE)
+  }
+
+  if (!is.numeric(data$value)) {
+    stop("'value' column must be numeric.", call. = FALSE)
+  }
+
   if (!is.character(language) || length(language) != 1) {
-    stop("'language' must be a single character string ('eng' or 'pt')", call. = FALSE)
+    stop("'language' must be a single character string ('eng' or 'pt').", call. = FALSE)
   }
 
   language <- tolower(language)
-  if (!language %in% c("eng", "pt")) {
-    stop("'language' must be either 'eng' (English) or 'pt' (Portuguese)", call. = FALSE)
-  }
 
-  # === FUNCTION BODY ===
+  if (!language %in% c("eng", "pt")) {
+    stop("'language' must be either 'eng' or 'pt'.", call. = FALSE)
+  }
 
   # === TEXT DEFINITIONS ===
 
   if (language == "eng") {
-    title   <- "Brazil | Unemployment Rate (Continuous PNAD)"
+    title   <- "Brazil | Unemployment Rate (PNAD Continua)"
     y_label <- "Unemployment Rate (%)"
-    caption <- "Source: IBGE - SIDRA (Table 6381)"
+    caption <- "Source: Brazilian Central Bank (SGS 24369)"
   } else {
     title   <- "Brasil | Taxa de Desemprego (PNAD Continua)"
     y_label <- "Taxa de desemprego (%)"
-    caption <- "Fonte: IBGE - SIDRA (Tabela 6381)"
+    caption <- "Fonte: Banco Central do Brasil (SGS 24369)"
   }
 
   # === PLOT ===

@@ -68,11 +68,11 @@ plot_unemployment <- function(data,
   if (language == "eng") {
     title   <- "Brazil | Unemployment Rate (PNAD Continua)"
     y_label <- "Unemployment Rate (%)"
-    caption <- "Source: Brazilian Central Bank (SGS - series 24369)"
+    caption <- "Source: Brazilian Central Bank (SGS 24369)"
   } else {
     title   <- "Brasil | Taxa de Desemprego (PNAD Continua)"
     y_label <- "Taxa de desemprego (%)"
-    caption <- "Fonte: Banco Central do Brasil (SGS - serie 24369)"
+    caption <- "Fonte: Banco Central do Brasil (SGS 24369)"
   }
 
   # === PLOT ===

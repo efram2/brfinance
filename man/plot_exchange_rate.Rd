@@ -19,7 +19,7 @@ Generates a time series plot of the USD/BRL exchange rate using data from \code{
 Shows the commercial exchange rate for US Dollar to Brazilian Real.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: English version
 exchange_data <- get_exchange_rate("2023-01-01", "2023-12-31")
 exchange_plot <- plot_exchange_rate(exchange_data)
@@ -29,5 +29,5 @@ print(exchange_plot)
 dados_cambio <- get_exchange_rate("2023-01-01", "2023-12-31", language = "pt")
 grafico_cambio <- plot_exchange_rate(dados_cambio, language = "pt")
 print(grafico_cambio)
-}
+\dontshow{\}) # examplesIf}
 }

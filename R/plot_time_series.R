@@ -26,7 +26,38 @@
 #' @return A ggplot2 object
 #' @keywords internal
 #' @noRd
-
+#'
+#' @examples
+#' # Create example time series data
+#' df <- data.frame(
+#'   date = seq(as.Date("2020-01-01"), as.Date("2021-12-01"), by = "month"),
+#'   value = cumsum(rnorm(24, 0.5, 1))
+#' )
+#'
+#' # Line plot
+#' p1 <- brfinance:::.plot_time_series(
+#'   data = df,
+#'   x_var = "date",
+#'   y_var = "value",
+#'   plot_type = "line",
+#'   title = "Example Time Series",
+#'   y_label = "Index",
+#'   y_suffix = ""
+#' )
+#'
+#' print(p1)
+#'
+#' # Bar plot
+#' p2 <- brfinance:::.plot_time_series(
+#'   data = df,
+#'   x_var = "date",
+#'   y_var = "value",
+#'   plot_type = "bar",
+#'   title = "Bar Version",
+#'   y_label = "Index"
+#' )
+#'
+#' print(p2)
 .plot_time_series <- function(data,
                               x_var,
                               y_var,

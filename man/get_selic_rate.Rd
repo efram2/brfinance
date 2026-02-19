@@ -58,7 +58,7 @@ For longer historical analyses, split your request into multiple 10-year periods
 providing recent data while avoiding the 10-year API limit with current dates.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   # Default: from 2020 to current date
   df <- get_selic_rate()
 
@@ -73,6 +73,5 @@ providing recent data while avoiding the 10-year API limit with current dates.
 
   # Complete year analysis
   df5 <- get_selic_rate("2018", "2023")
-}
-
+\dontshow{\}) # examplesIf}
 }

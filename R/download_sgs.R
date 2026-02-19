@@ -9,6 +9,13 @@
 #'
 #' @return A data.frame with columns 'date' (Date) and 'value' (numeric).
 #' @keywords internal
+#'
+#' @examplesIf interactive()
+#' # Example: download SELIC series (ID 432)
+#' df <- brfinance:::.get_sgs_series(432, "2020", "2021")
+#'
+#' head(df)
+#' tail(df)
 .get_sgs_series <- function(series_id,
                             start_date = NULL,
                             end_date = NULL) {
@@ -30,27 +37,33 @@
       format(data_fim, '%d/%m/%Y')
     )
 
-    resposta <- url_filtrado |>
-      httr2::request() |>
+    resposta <- httr2::request(url_filtrado) |>
+      httr2::req_timeout(10) |>              # timeout curto
+      httr2::req_error(is_error = function(resp) FALSE) |>  # NÃO lançar erro automático
       httr2::req_perform()
+
+    if (httr2::resp_status(resposta) != 200) {
+      stop("BCB API unavailable.")
+    }
 
     httr2::resp_body_json(resposta, simplifyVector = TRUE)
 
   }, error = function(e) {
-    # Fallback: download WITHOUT date filters
-    message(sprintf("Series %s: Filtered download failed. Fetching full series...", series_id))
 
-    url_completo <- sprintf(
-      'https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json',
+    message(sprintf(
+      "Series %s: BCB API unavailable. Returning empty data frame.",
       series_id
-    )
+    ))
 
-    resposta <- url_completo |>
-      httr2::request() |>
-      httr2::req_perform()
-
-    httr2::resp_body_json(resposta, simplifyVector = TRUE)
+    return(NULL)
   })
+
+  if (is.null(dados_baixados) || length(dados_baixados) == 0) {
+    return(data.frame(
+      date = as.Date(character()),
+      value = numeric()
+    ))
+  }
 
   # Convert to data.frame (handle both list and data.frame returns)
   if (is.data.frame(dados_baixados)) {
@@ -73,19 +86,15 @@
 
   # Check if data exists for requested period
   if (nrow(df) == 0) {
-    periodo_disponivel <- if (nrow(df) == 0) {
-      "No data available"
-    } else {
-      paste(format(range(df$date), "%Y-%m"), collapse = " to ")
-    }
+    periodo_disponivel <- "No data available"
 
-    warning(sprintf(
+    message(sprintf(
       "Series %s has no data for requested period (%s to %s). Available: %s",
       series_id,
       format(data_inicio, "%Y-%m"),
       format(data_fim, "%Y-%m"),
       periodo_disponivel
-    ), call. = FALSE)
+    ))
 
     # Return empty data.frame with correct structure
     return(data.frame(date = as.Date(character()), value = numeric()))

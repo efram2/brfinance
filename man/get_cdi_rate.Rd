@@ -56,7 +56,7 @@ investments and interbank lending in Brazil. Data is available from 1986 onward
 with daily frequency (business days only).
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   # Default: last 30 days of CDI rate
   df <- get_cdi_rate()
 
@@ -74,6 +74,5 @@ with daily frequency (business days only).
 
   # Historical analysis
   df6 <- get_cdi_rate("2020-03-01", "2020-04-30")  # COVID period
-}
-
+\dontshow{\}) # examplesIf}
 }

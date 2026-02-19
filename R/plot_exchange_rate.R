@@ -7,10 +7,8 @@
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
 #' @return A `ggplot2` object showing the exchange rate over time.
-#' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Example 1: English version
 #' exchange_data <- get_exchange_rate("2023-01-01", "2023-12-31")
 #' exchange_plot <- plot_exchange_rate(exchange_data)
@@ -20,8 +18,8 @@
 #' dados_cambio <- get_exchange_rate("2023-01-01", "2023-12-31", language = "pt")
 #' grafico_cambio <- plot_exchange_rate(dados_cambio, language = "pt")
 #' print(grafico_cambio)
-#' }
-
+#'
+#' @export
 plot_exchange_rate <- function(data,
                                language = "eng") {
 

@@ -59,14 +59,14 @@ A ggplot2 object
 Plots multiple time series on the same chart for comparison.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example comparing multiple series
 selic <- get_selic_rate(2020, 2024)
 ipca <- get_ipca(2020, 2024)
 igpm <- get_igpm(2020, 2024)
 
 comparison_plot <- plot_series_comparison(
-  data_list = list(SELIC = selic, IPCA = ipca, IGP-M = igpm),
+  data_list = list(SELIC = selic, IPCA = ipca, IGPM = igpm),
   y_vars = c("value", "value", "value"),
   date_vars = c("date", "date", "date"),
   scale_type = "index",
@@ -75,5 +75,5 @@ comparison_plot <- plot_series_comparison(
   language = "eng"
 )
 print(comparison_plot)
-}
+\dontshow{\}) # examplesIf}
 }

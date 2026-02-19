@@ -32,8 +32,7 @@
 #' **DEFAULT PERIOD**: When `start_date = NULL`, defaults to `"2020-01-01"` (start of 2020),
 #' providing recent data while avoiding the 10-year API limit with current dates.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #'   # Default: from 2020 to current date
 #'   df <- get_selic_rate()
 #'
@@ -48,7 +47,6 @@
 #'
 #'   # Complete year analysis
 #'   df5 <- get_selic_rate("2018", "2023")
-#' }
 #'
 #' @export
 get_selic_rate <- function(start_date = "2020-01-01",

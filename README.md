@@ -1,5 +1,3 @@
-README
-================
 
 # brfinance 📊🇧🇷
 
@@ -132,8 +130,8 @@ calc_pmt(rate = 0.02, n = 24, pv = 10000)
 - `get_exchange_rate()` → Retrieves official exchange rates
 - `get_gdp_growth()` → Retrieves GDP growth rates
 - `get_unemployment()` → Retrieves unemployment rate from PNAD Contínua
-- `get_sgs_series()` → Retrieves any Central Bank (SGS) time series by
-  code
+- `brfinance:::.get_sgs_series()` → Retrieves any Central Bank (SGS)
+  time series by code
 
 All `get_*` functions support flexible date inputs: `"YYYY"`,
 `"YYYY-MM"`, or `"YYYY-MM-DD"`.

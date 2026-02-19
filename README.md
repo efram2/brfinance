@@ -13,9 +13,7 @@ stars](https://img.shields.io/github/stars/efram2/brfinance.svg)](https://github
 [![GitHub
 forks](https://img.shields.io/github/forks/efram2/brfinance.svg)](https://github.com/efram2/brfinance/network)
 
-**brfinance** is an R package that brings together **official Brazilian
-macroeconomic data** and **practical financial calculators** in a
-simple, ready-to-use interface.
+**brfinance** is an R package that provides simplified access to Brazilian macroeconomic time series from the Central Bank of Brazil, along with practical financial calculators.
 
 If you work with **Brazilian data**, **interest rates**, **inflation**,
 or **financial math**, this package is for you.
@@ -26,12 +24,12 @@ or **financial math**, this package is for you.
 
 With **brfinance**, you can:
 
-- Access **official Brazilian macroeconomic indicators** (BCB & IBGE)
-- Run **financial calculations** (NPV, IRR, PV, FV, PMT, rates)
-- Plot key indicators with **one line of code**
-- Use **Portuguese or English** outputs seamlessly
+- Access official Brazilian macroeconomic time series from the Central Bank of Brazil (SGS)
+- Retrieve clean and standardized time series (`date` + `value`)
+- Plot key indicators with one line of code
+- Run financial calculations (NPV, IRR, PV, FV, PMT, rates)
 
-No APIs. No scraping. No manual cleaning.
+No manual API handling. No data wrangling required.
 
 ------------------------------------------------------------------------
 
@@ -130,8 +128,6 @@ calc_pmt(rate = 0.02, n = 24, pv = 10000)
 - `get_exchange_rate()` → Retrieves official exchange rates
 - `get_gdp_growth()` → Retrieves GDP growth rates
 - `get_unemployment()` → Retrieves unemployment rate from PNAD Contínua
-- `brfinance:::.get_sgs_series()` → Retrieves any Central Bank (SGS)
-  time series by code
 
 All `get_*` functions support flexible date inputs: `"YYYY"`,
 `"YYYY-MM"`, or `"YYYY-MM-DD"`.
@@ -174,10 +170,9 @@ All main functions support bilingual output:
 
 # Data sources
 
-All data come from *official Brazilian institutions:*
+All data are retrieved from official Brazilian institutions:
 
-- Central Bank of Brazil (BCB / SGS)
-- IBGE (SIDRA / PNAD Contínua)
+- Central Bank of Brazil (BCB) via the SGS API
 
 # Contribution
 

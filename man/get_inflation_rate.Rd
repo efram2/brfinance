@@ -77,7 +77,7 @@ The final output is filtered to show only the requested period.
 }
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   # Default: from 2020 to current date (aligned with SELIC function)
   df <- get_inflation_rate()
 
@@ -100,6 +100,5 @@ The final output is filtered to show only the requested period.
   # Compare with SELIC rate (same default period)
   selic_data <- get_selic_rate()  # Also starts at 2020-01-01
   inflation_data <- get_inflation_rate()  # Same start date
-}
-
+\dontshow{\}) # examplesIf}
 }

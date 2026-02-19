@@ -20,7 +20,7 @@ The CDI is the benchmark interest rate for interbank deposits in Brazil and serv
 as a reference for many fixed income investments.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: English version
 cdi_data <- get_cdi_rate(2020, 2024)
 cdi_plot <- plot_cdi_rate(cdi_data)
@@ -30,5 +30,5 @@ print(cdi_plot)
 dados_cdi <- get_cdi_rate(2020, 2024, language = "pt")
 grafico_cdi <- plot_cdi_rate(dados_cdi, language = "pt")
 print(grafico_cdi)
-}
+\dontshow{\}) # examplesIf}
 }

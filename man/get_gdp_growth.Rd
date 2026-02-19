@@ -54,7 +54,7 @@ available only until 2014. Requests for periods after 2014 will return
 empty results or a warning.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   # Default: data from 2000 to current date (but limited to 2014)
   df <- get_gdp_growth()
 
@@ -72,6 +72,5 @@ empty results or a warning.
 
   # Complete example with all parameters
   df6 <- get_gdp_growth("2011-01-01", "2014-12-31", language = "pt", labels = TRUE)
-}
-
+\dontshow{\}) # examplesIf}
 }

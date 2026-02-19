@@ -8,10 +8,8 @@
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
 #' @return A `ggplot2` object showing the CDI rate over time.
-#' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Example 1: English version
 #' cdi_data <- get_cdi_rate(2020, 2024)
 #' cdi_plot <- plot_cdi_rate(cdi_data)
@@ -21,8 +19,8 @@
 #' dados_cdi <- get_cdi_rate(2020, 2024, language = "pt")
 #' grafico_cdi <- plot_cdi_rate(dados_cdi, language = "pt")
 #' print(grafico_cdi)
-#' }
-
+#'
+#' @export
 plot_cdi_rate <- function(data,
                           language = "eng") {
 

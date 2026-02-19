@@ -42,8 +42,7 @@
 #' **Date Calculation**: The `date` column represents the first day of the month
 #' that ends the moving quarter (e.g., "jan-mar 2023" becomes "2023-03-01").
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #'   # Default: from 2020 to current date (aligned with other functions)
 #'   df <- get_unemployment()
 #'
@@ -59,7 +58,6 @@
 #'   # Compare unemployment with inflation (same period)
 #'   unemployment_data <- get_unemployment("2020", "2023")
 #'   inflation_data <- get_inflation_rate("2020", "2023")
-#' }
 #'
 #' @export
 get_unemployment <- function(start_date = "2020-01-01",

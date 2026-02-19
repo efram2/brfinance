@@ -9,10 +9,8 @@
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
 #' @return A `ggplot2` object showing the SELIC rate over time.
-#' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Example 1: English version
 #' selic_data <- get_selic_rate(2020, 2024)
 #' selic_plot <- plot_selic_rate(selic_data)
@@ -22,8 +20,8 @@
 #' dados_selic <- get_selic_rate(2020, 2024, language = "pt")
 #' grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
 #' print(grafico_selic)
-#' }
-
+#'
+#' @export
 plot_selic_rate <- function(data,
                             language = "eng") {
 

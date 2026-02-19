@@ -53,7 +53,7 @@ commercial US dollar selling rate (taxa de câmbio livre - dólar americano - ve
 Data is available from 1984 onward with daily frequency.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   # Default: last 30 days of exchange rate
   df <- get_exchange_rate()
 
@@ -68,6 +68,5 @@ Data is available from 1984 onward with daily frequency.
 
   # Complete example with all parameters
   df5 <- get_exchange_rate("2023-01-01", "2023-12-31", language = "pt", labels = TRUE)
-}
-
+\dontshow{\}) # examplesIf}
 }

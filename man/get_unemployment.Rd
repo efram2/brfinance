@@ -72,7 +72,7 @@ with quarterly frequency (moving quarters).
 that ends the moving quarter (e.g., "jan-mar 2023" becomes "2023-03-01").
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
   # Default: from 2020 to current date (aligned with other functions)
   df <- get_unemployment()
 
@@ -88,6 +88,5 @@ that ends the moving quarter (e.g., "jan-mar 2023" becomes "2023-03-01").
   # Compare unemployment with inflation (same period)
   unemployment_data <- get_unemployment("2020", "2023")
   inflation_data <- get_inflation_rate("2020", "2023")
-}
-
+\dontshow{\}) # examplesIf}
 }

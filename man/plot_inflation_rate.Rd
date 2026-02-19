@@ -22,7 +22,7 @@ The IPCA is Brazil's official inflation index and is widely used for
 monetary policy decisions, contract indexation, and economic analysis.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: English version
 inflation_data <- get_inflation_rate(2020, 2024)
 inflation_plot <- plot_inflation_rate(inflation_data)
@@ -32,5 +32,5 @@ print(inflation_plot)
 dados_inflacao <- get_inflation_rate(2020, 2024, language = "pt")
 grafico_inflacao <- plot_inflation_rate(dados_inflacao, language = "pt")
 print(grafico_inflacao)
-}
+\dontshow{\}) # examplesIf}
 }

@@ -27,8 +27,7 @@
 #' commercial US dollar selling rate (taxa de câmbio livre - dólar americano - venda).
 #' Data is available from 1984 onward with daily frequency.
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #'   # Default: last 30 days of exchange rate
 #'   df <- get_exchange_rate()
 #'
@@ -43,7 +42,6 @@
 #'
 #'   # Complete example with all parameters
 #'   df5 <- get_exchange_rate("2023-01-01", "2023-12-31", language = "pt", labels = TRUE)
-#' }
 #'
 #' @export
 get_exchange_rate <- function(start_date = NULL,

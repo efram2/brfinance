@@ -22,7 +22,7 @@ Uses httr2 for robust HTTP requests with automatic fallback strategy.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-# Exemplo: baixar série da SELIC (ID 432)
+# Example: download SELIC series (ID 432)
 df <- brfinance:::.get_sgs_series(432, "2020", "2021")
 
 head(df)

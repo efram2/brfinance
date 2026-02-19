@@ -21,7 +21,7 @@ effective annualized rate (252-business-day basis) for overnight interbank loans
 and is the main instrument of Brazil’s monetary policy.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: English version
 selic_data <- get_selic_rate(2020, 2024)
 selic_plot <- plot_selic_rate(selic_data)
@@ -31,5 +31,5 @@ print(selic_plot)
 dados_selic <- get_selic_rate(2020, 2024, language = "pt")
 grafico_selic <- plot_selic_rate(dados_selic, language = "pt")
 print(grafico_selic)
-}
+\dontshow{\}) # examplesIf}
 }

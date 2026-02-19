@@ -6,10 +6,8 @@
 #' @param language Language for column names: "pt" for Portuguese or "eng" (default) for English
 #'
 #' @return A ggplot2 object
-#' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Example 1: English version
 #' unemployment_data <- get_unemployment(2020, 2024)
 #' unemployment_plot <- plot_unemployment(unemployment_data)
@@ -19,8 +17,8 @@
 #' dados_desemprego <- get_unemployment(2020, 2024, language = "pt")
 #' grafico_desemprego <- plot_unemployment(dados_desemprego, language = "pt")
 #' print(grafico_desemprego)
-#' }
-
+#'
+#' @export
 plot_unemployment <- function(data,
                               language = "eng") {
 

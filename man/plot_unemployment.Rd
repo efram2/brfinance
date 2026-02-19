@@ -18,7 +18,7 @@ A ggplot2 object
 Generates a ggplot2 line chart of unemployment rate in Brazil.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: English version
 unemployment_data <- get_unemployment(2020, 2024)
 unemployment_plot <- plot_unemployment(unemployment_data)
@@ -28,5 +28,5 @@ print(unemployment_plot)
 dados_desemprego <- get_unemployment(2020, 2024, language = "pt")
 grafico_desemprego <- plot_unemployment(dados_desemprego, language = "pt")
 print(grafico_desemprego)
-}
+\dontshow{\}) # examplesIf}
 }

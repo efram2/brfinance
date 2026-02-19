@@ -29,4 +29,3 @@ Suggests:
     knitr,
     tidyr
 VignetteBuilder: knitr
-Config/testthat/edition: 3

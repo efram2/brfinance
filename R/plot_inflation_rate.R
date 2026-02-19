@@ -10,10 +10,8 @@
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
 #' @return A `ggplot2` object showing the monthly inflation rate over time.
-#' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
 #' # Example 1: English version
 #' inflation_data <- get_inflation_rate(2020, 2024)
 #' inflation_plot <- plot_inflation_rate(inflation_data)
@@ -23,8 +21,8 @@
 #' dados_inflacao <- get_inflation_rate(2020, 2024, language = "pt")
 #' grafico_inflacao <- plot_inflation_rate(dados_inflacao, language = "pt")
 #' print(grafico_inflacao)
-#' }
-
+#'
+#' @export
 plot_inflation_rate <- function(data, language = "eng") {
 
   # === PARAMETER VALIDATION ===

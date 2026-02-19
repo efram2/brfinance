@@ -2,30 +2,36 @@
 % Please edit documentation in R/plot_unemployment.R
 \name{plot_unemployment}
 \alias{plot_unemployment}
-\title{Plot Brazil's quarterly unemployment rate}
+\title{Plot Brazil's monthly unemployment rate}
 \usage{
 plot_unemployment(data, language = "eng")
 }
 \arguments{
-\item{data}{Tibble returned by \code{get_unemployment()}}
+\item{data}{Tibble or data.frame returned by \code{get_unemployment()}.
+Must contain columns \code{date} (Date) and \code{value} (numeric).}
 
-\item{language}{Language for column names: "pt" for Portuguese or "eng" (default) for English}
+\item{language}{Language of plot labels:
+\itemize{
+\item "eng" (default)
+\item "pt"
+}}
 }
 \value{
-A ggplot2 object
+A ggplot2 object.
 }
 \description{
-Generates a ggplot2 line chart of unemployment rate in Brazil.
+Generates a ggplot2 line chart of Brazil's unemployment rate
+(PNAD Contínua) using data returned by \code{get_unemployment()}.
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 # Example 1: English version
-unemployment_data <- get_unemployment(2020, 2024)
+unemployment_data <- get_unemployment("2020", "2024")
 unemployment_plot <- plot_unemployment(unemployment_data)
 print(unemployment_plot)
 
 # Example 2: Portuguese version
-dados_desemprego <- get_unemployment(2020, 2024, language = "pt")
+dados_desemprego <- get_unemployment("2020", "2024")
 grafico_desemprego <- plot_unemployment(dados_desemprego, language = "pt")
 print(grafico_desemprego)
 \dontshow{\}) # examplesIf}

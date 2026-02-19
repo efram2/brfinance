@@ -19,9 +19,6 @@ Imports:
     scales,
     httr2,
     lubridate,
-    sidrar,
-    stringr,
-    janitor,
     labelled,
 Suggests: 
     testthat (>= 3.0.0),

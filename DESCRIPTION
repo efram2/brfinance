@@ -1,6 +1,6 @@
 Package: brfinance
 Title: Access to Brazilian Macroeconomic and Financial Time Series
-Version: 0.8.0.900
+Version: 0.8.0
 Authors@R: 
     person(given = "João Paulo", family = "dos Santos Pereira Barbosa", email = "joao.31582129@gmail.com",role = c("aut", "cre"))
 Description: Provides simplified access to selected Brazilian macroeconomic and financial time series from official sources, primarily the Central Bank of Brazil through the SGS (Sistema Gerenciador de Séries Temporais) API. The package enables users to quickly retrieve and visualize indicators such as the unemployment rate and the Selic interest rate using a standardized data structure. It is designed for data access and visualization purposes, without performing forecasts or statistical modeling. For more information, see the official API: <https://dadosabertos.bcb.gov.br/dataset/>.

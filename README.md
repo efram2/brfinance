@@ -310,7 +310,8 @@ data (visible via `labelled::var_label()`).
 All data comes from **official Brazilian institutions**:
 
 - Central Bank of Brazil (BCB / SGS)
-- IBGE (SIDRA / PNAD Contínua)
+- IBGE (PNAD Contínua unemployment data, replicated by the Central Bank
+  via SGS – not fetched directly from IBGE’s SIDRA API)
 - Yahoo Finance, for the Ibovespa index (`get_ibovespa()`)
 
 # Related package

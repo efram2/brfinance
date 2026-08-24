@@ -1,8 +1,8 @@
 #' Get GDP Growth Rate
 #'
-#' Downloads quarterly GDP growth data (% change) from BCB/SGS (Brazilian Central Bank).
-#' This function retrieves nominal GDP values (SGS series 2010) and calculates the
-#' quarter-over-quarter growth rate.
+#' Downloads monthly nominal GDP growth data (% change) from BCB/SGS (Brazilian
+#' Central Bank). This function retrieves nominal GDP values (SGS series 2010)
+#' and calculates the month-over-month growth rate.
 #'
 #' @param start_date Start date for the data period. Accepts multiple formats:
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
@@ -21,13 +21,18 @@
 #'   package. Labels provide descriptive text for each column when available.
 #'
 #' @return A data.frame with GDP growth rate. Columns depend on the `language` parameter:
-#'   - English (`language = "eng"`): `date` (Date), `gdp_growth` (numeric, %)
-#'   - Portuguese (`language = "pt"`): `data_referencia` (Date), `crescimento_pib` (numeric, %)
+#'   - English (`language = "eng"`): `date` (Date), `gdp_growth` (numeric, % month-over-month)
+#'   - Portuguese (`language = "pt"`): `data_referencia` (Date), `crescimento_pib` (numeric, % mes a mes)
 #'
 #' @note
-#' **Important limitation**: The nominal GDP series (SGS 2010) is currently
-#' available only until 2014. Requests for periods after 2014 will return
-#' empty results or a warning.
+#' **Frequency**: SGS series 2010 (nominal GDP) has **monthly** frequency, so
+#' the growth rate this function computes is month-over-month, not
+#' quarter-over-quarter -- this note previously (incorrectly) described it as
+#' quarterly.
+#'
+#' **Coverage limitation**: The series is only available up to 2014. Requests
+#' for periods after 2014 will return empty results for that portion of the
+#' window (no error -- just no rows past the series' last available date).
 #'
 #' @examplesIf interactive()
 #'   # Default: data from 2000 to current date (but limited to 2014)
@@ -68,23 +73,23 @@ get_gdp_growth <- function(start_date = NULL,
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  if(is.null(start_date)){
+  if (is.null(start_date)) {
     start_date <- "2000-01-01"
   }
 
-  end_date   <- end_date
+  end_date <- end_date
 
   # === FUNCTION BODY ===
   value <- NULL
 
-  # Download nominal GDP series (SGS 2010)
+  # Download nominal GDP series (SGS 2010, monthly frequency)
   data <- .get_sgs_series(
     series_id = 2010,
     start_date = start_date,
     end_date = end_date
   )
 
-  # Compute quarterly growth rate
+  # Compute month-over-month growth rate
   data <- data |>
     dplyr::arrange(date) |>
     dplyr::mutate(
@@ -98,14 +103,14 @@ get_gdp_growth <- function(start_date = NULL,
     if (language == "pt") {
       data <- labelled::set_variable_labels(
         data,
-        date  = "Trimestre de referencia",
-        value = "Crescimento do PIB (%)"
+        date  = "Mes de referencia",
+        value = "Crescimento do PIB nominal, mes a mes (%)"
       )
     } else {
       data <- labelled::set_variable_labels(
         data,
-        date  = "Reference quarter",
-        value = "GDP growth rate (%)"
+        date  = "Reference month",
+        value = "Nominal GDP growth rate, month-over-month (%)"
       )
     }
   }

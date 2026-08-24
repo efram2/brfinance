@@ -4,13 +4,15 @@
 # Instead of five near-identical files (one per series) duplicating
 # validation + title/label logic, every series' metadata lives here and
 # a single internal engine (.plot_named_series) does the rendering.
-# Colors follow a "financial market" palette: a deep market blue for
-# benchmark rates (SELIC, CDI, exchange rate) and a market red for
-# cost/risk indicators (inflation, unemployment) — with the opposite
-# tone used for the point markers, so each series pops against its line.
+# Colors follow a muted, "elegant financial" palette rather than
+# saturated terminal-style hues: a deep navy blue for benchmark rates
+# (SELIC, CDI, exchange rate, Ibovespa) and a muted brick red for
+# cost/risk indicators (inflation, unemployment) -- with the opposite
+# tone used for point markers, which only render at all on sparse
+# (<=60 row) series; see .plot_time_series()'s "auto" density rule.
 
-.BRFINANCE_MARKET_BLUE <- "#0B5CAB"
-.BRFINANCE_MARKET_RED  <- "#C4192E"
+.BRFINANCE_MARKET_BLUE <- "#1B4F72"
+.BRFINANCE_MARKET_RED  <- "#A6303C"
 
 .brfinance_plot_config <- list(
   cdi = list(
@@ -150,7 +152,8 @@
     caption = caption,
     y_suffix = cfg$y_suffix,
     color = cfg$color,
-    show_points = TRUE,
+    point_color = cfg$point_color,
+    show_points = "auto",
     date_breaks = cfg$date_breaks
   )
 }

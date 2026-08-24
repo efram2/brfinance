@@ -136,6 +136,16 @@
 
     status <- httr2::resp_status(resposta)
 
+    if (status == 404) {
+      # BCB uses 404 to mean "no data points exist in this specific date
+      # range" -- not a real failure. This is expected/routine whenever a
+      # requested window falls outside a series' actual coverage (e.g. GDP
+      # series 2010, which only has data up to 2014) or is too narrow to
+      # catch a low-frequency series' next release. Treat it as "no data"
+      # rather than raising the generic failure path below.
+      return(list(status_404 = TRUE))
+    }
+
     if (status != 200) {
       stop(sprintf(
         "HTTP %s. Body: %s",
@@ -159,6 +169,14 @@
 
     return(NULL)
   })
+
+  if (is.list(dados_baixados) && isTRUE(dados_baixados$status_404)) {
+    message(sprintf(
+      "Series %s: no data in %s to %s (normal if this window falls outside the series' coverage).",
+      series_id, format(start_date, "%Y-%m-%d"), format(end_date, "%Y-%m-%d")
+    ))
+    return(data.frame(date = as.Date(character()), value = numeric()))
+  }
 
   if (is.null(dados_baixados) || length(dados_baixados) == 0) {
     return(data.frame(

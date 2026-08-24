@@ -182,7 +182,7 @@ plot_series_comparison <- function(data_list,
     }
 
     p <- ggplot2::ggplot(dual_data, ggplot2::aes(x = date, y = value, color = series)) +
-      ggplot2::geom_line(linewidth = 1) +
+      ggplot2::geom_line(linewidth = 0.7, lineend = "round") +
       ggplot2::scale_color_manual(values = dual_colors) +
       ggplot2::scale_y_continuous(
         name = series_names[1],
@@ -193,12 +193,16 @@ plot_series_comparison <- function(data_list,
       ) +
       ggplot2::theme_minimal(base_size = 14) +
       ggplot2::theme(
-        plot.title = ggplot2::element_text(face = "bold", hjust = 0.5),
-        plot.subtitle = ggplot2::element_text(hjust = 0.5),
+        plot.title = ggplot2::element_text(face = "bold", hjust = 0.5, size = ggplot2::rel(1.05)),
+        plot.subtitle = ggplot2::element_text(hjust = 0.5, color = "grey35", size = ggplot2::rel(0.85)),
+        plot.caption = ggplot2::element_text(color = "grey45", size = ggplot2::rel(0.65), face = "italic"),
         legend.position = if (show_legend) legend_position else "none",
         axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
         axis.title.y.left = ggplot2::element_text(color = dual_colors[1]),
-        axis.title.y.right = ggplot2::element_text(color = dual_colors[2])
+        axis.title.y.right = ggplot2::element_text(color = dual_colors[2]),
+        panel.grid.major = ggplot2::element_line(color = "grey92", linewidth = 0.35),
+        panel.grid.minor = ggplot2::element_blank(),
+        axis.ticks = ggplot2::element_blank()
       ) +
       ggplot2::labs(
         title = title,
@@ -215,13 +219,13 @@ plot_series_comparison <- function(data_list,
     return(p)
   }
 
-  # Set default colors if not provided -- leads with the same financial
-  # market blue/red used across plot_cdi_rate()/plot_selic_rate()/etc.,
+  # Set default colors if not provided -- leads with the same muted
+  # financial blue/red used across plot_cdi_rate()/plot_selic_rate()/etc.,
   # then falls back to complementary tones for additional series.
   if (is.null(colors)) {
-    colors <- c(.BRFINANCE_MARKET_BLUE, .BRFINANCE_MARKET_RED, "#2c8f5e",
-                "#ff7f00", "#6a3d9a", "#b15928", "#a6cee3",
-                "#fb9a99")[seq_len(n_series)]
+    colors <- c(.BRFINANCE_MARKET_BLUE, .BRFINANCE_MARKET_RED, "#2C7A5B",
+                "#C17817", "#5B4B8A", "#8C5A3C", "#5C8FA6",
+                "#B0708A")[seq_len(n_series)]
   }
 
   if (is.null(line_types)) {
@@ -232,15 +236,19 @@ plot_series_comparison <- function(data_list,
   p <- ggplot2::ggplot(combined_data,
                        ggplot2::aes(x = date, y = value,
                                     color = series, linetype = series)) +
-    ggplot2::geom_line(linewidth = 1) +
+    ggplot2::geom_line(linewidth = 0.7, lineend = "round") +
     ggplot2::scale_color_manual(values = colors) +
     ggplot2::scale_linetype_manual(values = line_types) +
     ggplot2::theme_minimal(base_size = 14) +
     ggplot2::theme(
-      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5),
-      plot.subtitle = ggplot2::element_text(hjust = 0.5),
+      plot.title = ggplot2::element_text(face = "bold", hjust = 0.5, size = ggplot2::rel(1.05)),
+      plot.subtitle = ggplot2::element_text(hjust = 0.5, color = "grey35", size = ggplot2::rel(0.85)),
+      plot.caption = ggplot2::element_text(color = "grey45", size = ggplot2::rel(0.65), face = "italic"),
       legend.position = if (show_legend) legend_position else "none",
-      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+      panel.grid.major = ggplot2::element_line(color = "grey92", linewidth = 0.35),
+      panel.grid.minor = ggplot2::element_blank(),
+      axis.ticks = ggplot2::element_blank()
     )
 
   # Format x-axis if it's a date

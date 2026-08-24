@@ -91,12 +91,23 @@ get_inflation_rate <- function(start_date = NULL,
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  # If `NULL` defaults to `"2020-01-01"`
+  # If `NULL` defaults to `"2020-01-01"`. Also parses "YYYY"/"YYYY-MM"/
+  # "YYYY-MM-DD" strings into real Dates right here (not just inside
+  # .get_sgs_series()), because this function needs actual Date objects
+  # *before* calling .get_sgs_series() -- to expand the window by 12
+  # months below -- and again afterwards, to filter back down to what
+  # was requested.
   if (is.null(start_date)) {
     start_date <- as.Date("2020-01-01")
+  } else {
+    start_date <- .normalize_date(start_date, is_start = TRUE)
   }
 
-  end_date <- end_date
+  if (is.null(end_date)) {
+    end_date <- Sys.Date()
+  } else {
+    end_date <- .normalize_date(end_date, is_start = FALSE)
+  }
 
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations

@@ -40,19 +40,24 @@ package. Labels provide descriptive text for each column when available.}
 \value{
 A data.frame with GDP growth rate. Columns depend on the \code{language} parameter:
 \itemize{
-\item English (\code{language = "eng"}): \code{date} (Date), \code{gdp_growth} (numeric, \%)
-\item Portuguese (\code{language = "pt"}): \code{data_referencia} (Date), \code{crescimento_pib} (numeric, \%)
+\item English (\code{language = "eng"}): \code{date} (Date), \code{gdp_growth} (numeric, \% month-over-month)
+\item Portuguese (\code{language = "pt"}): \code{data_referencia} (Date), \code{crescimento_pib} (numeric, \% mes a mes)
 }
 }
 \description{
-Downloads quarterly GDP growth data (\% change) from BCB/SGS (Brazilian Central Bank).
-This function retrieves nominal GDP values (SGS series 2010) and calculates the
-quarter-over-quarter growth rate.
+Downloads monthly nominal GDP growth data (\% change) from BCB/SGS (Brazilian
+Central Bank). This function retrieves nominal GDP values (SGS series 2010)
+and calculates the month-over-month growth rate.
 }
 \note{
-\strong{Important limitation}: The nominal GDP series (SGS 2010) is currently
-available only until 2014. Requests for periods after 2014 will return
-empty results or a warning.
+\strong{Frequency}: SGS series 2010 (nominal GDP) has \strong{monthly} frequency, so
+the growth rate this function computes is month-over-month, not
+quarter-over-quarter -- this note previously (incorrectly) described it as
+quarterly.
+
+\strong{Coverage limitation}: The series is only available up to 2014. Requests
+for periods after 2014 will return empty results for that portion of the
+window (no error -- just no rows past the series' last available date).
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

@@ -67,7 +67,14 @@ get_unemployment <- function(start_date = NULL,
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  start_date <- start_date
+  # NULL defaults to "2020-01-01" (documented above). Without this, NULL
+  # would fall through to .get_sgs_series()'s generic default of
+  # Sys.Date() - 30 -- far too narrow a window for a *monthly* series like
+  # this one, which is frequently missing a new data point within any
+  # given 30-day stretch and causes the BCB API to 404 ("no data found").
+  if (is.null(start_date)) {
+    start_date <- as.Date("2020-01-01")
+  }
   end_date <- end_date
 
   # === DOWNLOAD DATA FROM SGS (SERIES 24369) ===

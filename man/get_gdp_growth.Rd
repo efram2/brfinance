@@ -5,7 +5,7 @@
 \title{Get GDP Growth Rate}
 \usage{
 get_gdp_growth(
-  start_date = "2000-01-01",
+  start_date = NULL,
   end_date = NULL,
   language = "eng",
   labels = TRUE
@@ -17,6 +17,7 @@ get_gdp_growth(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
+\item \code{NULL} defaults to \code{"2000-01-01"}
 }}
 
 \item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:

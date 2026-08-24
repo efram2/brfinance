@@ -8,6 +8,7 @@
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
+#'   - `NULL` defaults to `"2000-01-01"`
 #' @param end_date End date for the data period. Accepts the same formats as `start_date`:
 #'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
@@ -48,7 +49,7 @@
 #'   df6 <- get_gdp_growth("2011-01-01", "2014-12-31", language = "pt", labels = TRUE)
 #'
 #' @export
-get_gdp_growth <- function(start_date = "2000-01-01",
+get_gdp_growth <- function(start_date = NULL,
                            end_date = NULL,
                            language = "eng",
                            labels = TRUE) {
@@ -66,6 +67,12 @@ get_gdp_growth <- function(start_date = "2000-01-01",
   if (!is.logical(labels) || length(labels) != 1) {
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
+
+  if(is.null(start_date)){
+    start_date <- "2000-01-01"
+  }
+
+  end_date   <- end_date
 
   # === FUNCTION BODY ===
   value <- NULL

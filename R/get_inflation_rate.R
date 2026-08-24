@@ -8,7 +8,7 @@
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
-#'   - `NULL` defaults to `"2020-01-01"` (aligned with other functions in the package)
+#'   - `NULL` defaults to `"2020-01-01"`
 #' @param end_date End date for the data period. Accepts the same formats as `start_date`:
 #'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
@@ -70,7 +70,7 @@
 #'   inflation_data <- get_inflation_rate()  # Same start date
 #'
 #' @export
-get_inflation_rate <- function(start_date = "2012-01-01",
+get_inflation_rate <- function(start_date = NULL,
                                end_date = NULL,
                                language = "eng",
                                labels = TRUE) {
@@ -91,20 +91,25 @@ get_inflation_rate <- function(start_date = "2012-01-01",
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
+  # If `NULL` defaults to `"2020-01-01"`
+  if (is.null(start_date)) {
+    start_date <- as.Date("2020-01-01")
+  }
+
+  end_date <- end_date
+
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
   value <- monthly_inflation <- ytd_inflation <- twelve_month_inflation <- year <- NULL
 
   # === DATE NORMALIZATION ===
-  start_date_norm <- .normalize_date(start_date, is_start = TRUE)
-  end_date_norm   <- .normalize_date(end_date, is_start = FALSE)
 
-  download_start <- start_date_norm - lubridate::period(months = 12)
+  download_start <- start_date - lubridate::period(months = 12)
 
   # === DOWNLOAD DATA (IPCA mensal SGS 433) ===
   data <- .get_sgs_series(
     series_id = 433,
-    start_date = format(download_start, "%Y-%m-%d"),
+    start_date = download_start,
     end_date   = end_date
   )
 
@@ -129,7 +134,7 @@ get_inflation_rate <- function(start_date = "2012-01-01",
         }
       )
     ) |>
-    dplyr::filter(date >= start_date_norm & date <= end_date_norm) |>
+    dplyr::filter(date >= start_date & date <= end_date) |>
     dplyr::select(date, value, ytd_inflation, twelve_month_inflation)
 
   # === LABELS ===

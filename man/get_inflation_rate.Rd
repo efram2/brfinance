@@ -5,7 +5,7 @@
 \title{Get IPCA Inflation Data}
 \usage{
 get_inflation_rate(
-  start_date = "2012-01-01",
+  start_date = NULL,
   end_date = NULL,
   language = "eng",
   labels = TRUE
@@ -17,7 +17,7 @@ get_inflation_rate(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
-\item \code{NULL} defaults to \code{"2020-01-01"} (aligned with other functions in the package)
+\item \code{NULL} defaults to \code{"2020-01-01"}
 }}
 
 \item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:

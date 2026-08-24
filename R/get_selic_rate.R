@@ -26,7 +26,7 @@
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
-#'   - `NULL` defaults to `"2020-01-01"` (sensible default for analysis)
+#'   - `NULL` defaults to the last 30 days, using today as the end date
 #' @param end_date End date for the data period. Accepts the same formats as `start_date`:
 #'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
@@ -65,7 +65,7 @@
 #'   df5 <- get_selic_rate("2018", "2023")
 #'
 #' @export
-get_selic_rate <- function(start_date = "2020-01-01",
+get_selic_rate <- function(start_date = NULL,
                            end_date = NULL,
                            language = "eng",
                            labels = TRUE) {
@@ -85,6 +85,9 @@ get_selic_rate <- function(start_date = "2020-01-01",
   if (!is.logical(labels) || length(labels) != 1) {
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
+
+  start_date <- start_date
+  end_date   <- end_date
 
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations

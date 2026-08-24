@@ -17,11 +17,16 @@ get_ipca_from_target(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
-\item \code{NULL} defaults to \code{"2015-01-01"}
+\item \code{NULL} defaults to \code{"2020-01-01"}
 }}
 
-\item{end_date}{End date for the data period. Same formats as \code{start_date}.
-\code{NULL} defaults to the current date (today).}
+\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
+\itemize{
+\item \code{"YYYY"} (e.g., \code{"2023"} becomes \code{"2023-12-31"})
+\item \code{"YYYY-MM"} (e.g., \code{"2023-12"} becomes the last day of December 2023)
+\item \code{"YYYY-MM-DD"} for a specific date
+\item \code{NULL} defaults to the current date (today)
+}}
 
 \item{language}{Language for the \code{labelled} variable descriptions attached
 to the returned data.frame ("eng" or "pt").}

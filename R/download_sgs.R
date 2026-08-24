@@ -28,8 +28,8 @@
   value <- data <- valor <- NULL
 
   # Normalize dates
-  data_inicio <- .normalize_date(start_date, is_start = TRUE)
-  data_fim   <- .normalize_date(end_date, is_start = FALSE)
+  start_date <- .normalize_date(start_date, is_start = TRUE)
+  end_date   <- .normalize_date(end_date, is_start = FALSE)
 
   # === CHUNKING: BCB API rejects windows longer than 10 years ===
   # Using 9 years (not 10) as the chunk size deliberately: a window of
@@ -37,13 +37,13 @@
   # on how many leap years fall inside it, the actual day count can creep
   # past what the API accepts. 9 years leaves enough margin to never
   # brush that edge, at the cost of a couple of extra requests.
-  janelas <- .split_date_windows(data_inicio, data_fim, max_years = 9)
+  janelas <- .split_date_windows(start_date, end_date, max_years = 9)
 
   partes <- lapply(seq_len(nrow(janelas)), function(i) {
     .download_sgs_window(
       series_id = series_id,
-      data_inicio = janelas$start[i],
-      data_fim = janelas$end[i]
+      start_date = janelas$start[i],
+      end_date = janelas$end[i]
     )
   })
 
@@ -61,8 +61,8 @@
     message(sprintf(
       "Series %s has no data for requested period (%s to %s).",
       series_id,
-      format(data_inicio, "%Y-%m"),
-      format(data_fim, "%Y-%m")
+      format(start_date, "%Y-%m"),
+      format(end_date, "%Y-%m")
     ))
 
     return(data.frame(date = as.Date(character()), value = numeric()))
@@ -115,7 +115,7 @@
 
 #' @keywords internal
 #' @noRd
-.download_sgs_window <- function(series_id, data_inicio, data_fim) {
+.download_sgs_window <- function(series_id, start_date, end_date) {
 
   value <- data <- valor <- NULL
 
@@ -124,8 +124,8 @@
     url_filtrado <- sprintf(
       'https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json&dataInicial=%s&dataFinal=%s',
       series_id,
-      format(data_inicio, '%d/%m/%Y'),
-      format(data_fim, '%d/%m/%Y')
+      format(start_date, '%d/%m/%Y'),
+      format(end_date, '%d/%m/%Y')
     )
 
     resposta <- httr2::request(url_filtrado) |>
@@ -153,7 +153,7 @@
     # went wrong and makes debugging impossible.
     message(sprintf(
       "Series %s (%s a %s): request failed - %s",
-      series_id, format(data_inicio, "%Y-%m-%d"), format(data_fim, "%Y-%m-%d"),
+      series_id, format(start_date, "%Y-%m-%d"), format(end_date, "%Y-%m-%d"),
       conditionMessage(e)
     ))
 
@@ -184,16 +184,16 @@
     dplyr::select(date, value)
 
   # Apply date filters locally (ensures precision)
-  dplyr::filter(df, date >= data_inicio & date <= data_fim)
+  dplyr::filter(df, date >= start_date & date <= end_date)
 }
 
 # NORMALIZAÇÃO DE DATAS
 
 .normalize_date <- function(x, is_start = TRUE) {
 
-  # Handle NULL: start = distant past, end = today
+  # Handle NULL: start = 30 days ago, end = today
   if (is.null(x)) {
-    return(if (is_start) as.Date("1900-01-01") else Sys.Date())
+    return(if (is_start) Sys.Date() - 30 else Sys.Date())
   }
 
   # Ensure character
@@ -209,20 +209,21 @@
     if (is_start) {
       return(as.Date(paste0(x, "-01")))
     } else {
-      # Last calendar day of the month, correct for every month
-      # (including leap-year Februaries) instead of a hardcoded day 28.
       primeiro_dia <- as.Date(paste0(x, "-01"))
       proximo_mes <- seq(primeiro_dia, by = "1 month", length.out = 2)[2]
       return(proximo_mes - 1)
     }
   }
 
-  # Full date: "2020-06-15" (or any other valid format)
+  # Full date: "2020-06-15"
   tryCatch(
     as.Date(x),
     error = function(e) {
       stop(
-        sprintf("Invalid date format: '%s'. Use: NULL, YYYY, YYYY-MM, or YYYY-MM-DD", x),
+        sprintf(
+          "Invalid date format: '%s'. Use: NULL, YYYY, YYYY-MM, or YYYY-MM-DD",
+          x
+        ),
         call. = FALSE
       )
     }

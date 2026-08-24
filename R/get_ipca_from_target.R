@@ -9,9 +9,12 @@
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
-#'   - `NULL` defaults to `"2015-01-01"`
-#' @param end_date End date for the data period. Same formats as `start_date`.
-#'   `NULL` defaults to the current date (today).
+#'   - `NULL` defaults to `"2020-01-01"`
+#' @param end_date End date for the data period. Accepts the same formats as `start_date`:
+#'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
+#'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
+#'   - `"YYYY-MM-DD"` for a specific date
+#'   - `NULL` defaults to the current date (today)
 #' @param language Language for the `labelled` variable descriptions attached
 #'   to the returned data.frame ("eng" or "pt").
 #' @param labels Logical indicating whether to add variable labels using the
@@ -59,8 +62,10 @@ get_ipca_from_target <- function(start_date = NULL,
   }
 
   if (is.null(start_date)) {
-    start_date <- "2015-01-01"
+    start_date <- "2020-01-01"
   }
+
+  end_date <- end_date
 
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations

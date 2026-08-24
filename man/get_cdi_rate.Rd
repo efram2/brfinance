@@ -17,6 +17,7 @@ get_cdi_rate(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
+\item \code{NULL} defaults to the last 30 days, using today as the end date
 }}
 
 \item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:

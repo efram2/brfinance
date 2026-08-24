@@ -10,8 +10,11 @@
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date
 #'   - `NULL` defaults to `"2020-01-01"`
-#' @param end_date End date for the data period. Accepts the same formats as `start_date`.
-#'   - `NULL` defaults to the current date
+#' @param end_date End date for the data period. Accepts the same formats as `start_date`:
+#'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
+#'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
+#'   - `"YYYY-MM-DD"` for a specific date
+#'   - `NULL` defaults to the current date (today)
 #' @param language Language for column names in the returned data.frame:
 #'   - `"eng"` (default): Returns columns `date`, `unemployment_rate`
 #'   - `"pt"`: Returns columns `data`, `taxa_desemprego`
@@ -44,7 +47,7 @@
 #'   df4 <- get_unemployment("2020-01-01", "2022-12-31", labels = FALSE)
 #'
 #' @export
-get_unemployment <- function(start_date = "2020-01-01",
+get_unemployment <- function(start_date = NULL,
                              end_date = NULL,
                              language = "eng",
                              labels = TRUE) {
@@ -64,15 +67,14 @@ get_unemployment <- function(start_date = "2020-01-01",
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  # === DATE NORMALIZATION ===
-  start_date_norm <- .normalize_date(start_date, is_start = TRUE)
-  end_date_norm   <- .normalize_date(end_date, is_start = FALSE)
+  start_date <- start_date
+  end_date <- end_date
 
   # === DOWNLOAD DATA FROM SGS (SERIES 24369) ===
   dados <- .get_sgs_series(
     series_id = 24369,
-    start_date = format(start_date_norm, "%Y-%m-%d"),
-    end_date   = format(end_date_norm, "%Y-%m-%d")
+    start_date = start_date,
+    end_date   = end_date
   )
 
   # === FILTER EXACT DATE RANGE ===

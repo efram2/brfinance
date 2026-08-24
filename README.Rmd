@@ -22,9 +22,11 @@ library(brfinance)
 [![GitHub stars](https://img.shields.io/github/stars/efram2/brfinance.svg)](https://github.com/efram2/brfinance/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/efram2/brfinance.svg)](https://github.com/efram2/brfinance/network)
 
-**brfinance** is an R package that brings together **official Brazilian macroeconomic data** and **practical financial calculators** in a simple, ready-to-use interface.
+**brfinance** puts Brazil's official macroeconomic data — interest rates, inflation, exchange rates, unemployment, GDP — and a set of financial-math calculators behind a single, consistent R interface. One function call gets you a clean `data.frame`; one more gets you a ready-to-share `ggplot2` chart.
 
-If you work with **Brazilian data**, **interest rates**, **inflation**, or **financial math**, this package is for you.
+If your work touches **Brazilian interest rates**, **inflation**, **exchange rates**, or plain **financial math** (present/future value, NPV, IRR, amortization...), this package saves you from hand-rolling BCB API calls every time.
+
+> **Looking for stock/equity data instead?** brfinance focuses on macro series (rates, inflation, GDP) from the Central Bank and IBGE. For individual B3 stocks, portfolios, and Markowitz-style analysis, see the companion package **[{brstocks}](https://github.com/efram2/brstocks)**.
 
 ---
 
@@ -32,12 +34,13 @@ If you work with **Brazilian data**, **interest rates**, **inflation**, or **fin
 
 With **brfinance**, you can:
 
-- Access **official Brazilian macroeconomic indicators** (BCB & IBGE)
-- Run **financial calculations** (NPV, IRR, PV, FV, PMT, rates)
-- Plot key indicators with **one line of code**
-- Use **Portuguese or English** outputs seamlessly
+- Pull **official Brazilian macro indicators** (BCB & IBGE) with one function call
+- Get the **Ibovespa index** and compare it against rates/inflation on the same chart
+- Run standard **financial calculations** (NPV, IRR, PV, FV, PMT, amortization schedules, and more)
+- Plot any indicator with **one line of code** — consistent styling across the whole package
+- Get output in **Portuguese or English**, your choice, without changing how you call the function
 
-No APIs. No scraping. No manual cleaning.
+No manual API requests. No scraping. No reshaping raw JSON by hand — brfinance does that once, so you don't have to do it every time.
 
 ---
 
@@ -46,14 +49,16 @@ No APIs. No scraping. No manual cleaning.
 ```r
 install.packages("brfinance")
 
-# Or development version from GitHub
+# Or the development version, straight from GitHub
 install.packages("devtools")
 devtools::install_github("efram2/brfinance")
 
 library(brfinance)
-
 ```
+
 # 🚀 Quick Start
+
+Every `get_*()` function returns a plain `data.frame` with `date` and `value` columns (plus a couple of extras where it makes sense, like `get_ipca_from_target()` below) — so once you've learned one, you've learned the pattern for all of them.
 
 **Inflation (IPCA)**
 
@@ -67,7 +72,7 @@ plot_inflation_rate(
 
 ```{r fig.selic, fig.width=7, fig.height=4}
 plot_selic_rate(
-  get_selic_rate(2020, 2024)
+  get_selic_rate("2020", "2024")
 )
 ```
 
@@ -79,20 +84,39 @@ plot_unemployment(
 )
 ```
 
+**Ibovespa index**
+
+Want equity-market context alongside your macro series? `get_ibovespa()` pulls the daily Ibovespa close (via Yahoo Finance) in the same `date`/`value` shape as everything else, so it drops straight into `plot_ibovespa()` or into a comparison chart with any other indicator below.
+
+```{r fig.ibov, fig.width=7, fig.height=4}
+plot_ibovespa(
+  get_ibovespa("2020-01-01", "2024-12-31")
+)
+```
+
+*(Remember: this is the benchmark index only. For individual stocks, portfolio construction, or an efficient-frontier simulator, that's what [{brstocks}](https://github.com/efram2/brstocks) is for.)*
+
+**IPCA vs. the inflation target**
+
+A common question in Brazilian macro analysis: is inflation running above or below the Central Bank's target? `get_ipca_from_target()` answers it directly — it returns the 12-month accumulated IPCA, the CMN's official target for that year, and the gap between them, all in one `data.frame`.
+
+```{r fig.ipca-target}
+ipca_gap <- get_ipca_from_target("2015", "2024")
+head(ipca_gap)
+```
+
 **Compare multiple indicators in one chart**
 
-You can compare different economic indicators using: 
-1. raw values
-2. indexed series (base = first observation)
-3. percentage change from the first observation
+You can compare different economic indicators three ways:
 
-* Want to analyze how different economic indicators evolve together?
-* Use *plot_series_comparison()* to compare multiple time series in a single, clean visualization.
+1. Raw values, on their original scale
+2. Indexed series (base = first observation = 100)
+3. Percentage change from the first observation
 
 ```{r fig.compare, fig.width=8, fig.height=5}
 plot_series_comparison(
   data_list = list(
-    "SELIC" = get_selic_rate(2020, 2024),
+    "SELIC" = get_selic_rate("2020", "2024"),
     "IPCA"  = get_inflation_rate("2020", "2024"),
     "Unemployment" = get_unemployment("2020", "2024")
   ),
@@ -104,74 +128,108 @@ plot_series_comparison(
 )
 ```
 
-**Financial Calculators (minimalista)**
+**...or on two separate axes, keeping each series' native scale**
 
-```r
+When the series you're comparing have very different units — a rate in % vs. an exchange rate in R\$ — indexing them can hide what actually matters. Set `dual_axis = TRUE` (only for exactly two series) to plot each on its own y-axis instead:
+
+```{r fig.dual, fig.width=8, fig.height=5}
+plot_series_comparison(
+  data_list = list(
+    "SELIC" = get_selic_rate("2020", "2024"),
+    "Exchange Rate" = get_exchange_rate("2020-01-01", "2024-12-31")
+  ),
+  y_vars = c("value", "value"),
+  date_vars = c("date", "date"),
+  dual_axis = TRUE,
+  title = "SELIC vs. USD/BRL Exchange Rate"
+)
+```
+
+**Financial calculators**
+
+```{r calculators}
 # Net Present Value
-calc_npv(0.1, c(-1000, 300, 400, 500))
+calc_npv(rate = 0.1, cashflows = c(-1000, 300, 400, 500))
 
 # Internal Rate of Return
-calc_irr(c(-1000, 300, 400, 500))
+calc_irr(cashflows = c(-1000, 300, 400, 500))
 
 # Loan payment
-calc_pmt(rate = 0.02, n = 24, pv = 10000)
+calc_pmt(pv = 10000, rate = 0.02, n = 24)
+
+# Full amortization schedule for a loan
+head(calc_amortization_schedule(pv = 10000, rate = 0.01, n = 12))
 ```
+
 # Function Reference
 
 ## Data retrieval functions (`get_*`)
 
-* `get_inflation_rate()` → Retrieves Brazil’s official inflation rate (IPCA)
-* `get_selic_rate()` → Retrieves the SELIC interest rate
-* `get_cdi_rate()` → Retrieves the CDI interest rate
-* `get_exchange_rate()` → Retrieves official exchange rates
-* `get_gdp_growth()` → Retrieves GDP growth rates
-* `get_unemployment()` → Retrieves unemployment rate from PNAD Contínua
-* `brfinance:::.get_sgs_series()` → Retrieves any Central Bank (SGS) time series by code
+* `get_inflation_rate()` — Brazil's official inflation rate (IPCA), monthly
+* `get_ipca_from_target()` — 12-month accumulated IPCA vs. the CMN's official inflation target, plus the gap between them
+* `get_selic_rate()` — Daily SELIC interest rate, annualized (base 252)
+* `get_cdi_rate()` — Daily CDI interbank rate, annualized
+* `get_exchange_rate()` — USD/BRL exchange rate
+* `get_gdp_growth()` — GDP growth rates
+* `get_unemployment()` — Unemployment rate (PNAD Contínua)
+* `get_ibovespa()` — Ibovespa index closing level (via Yahoo Finance)
+* `browse_series()` / `get_series_info()` — Explore the full catalog of Central Bank (SGS) series available, beyond the ones wrapped above
 
-All `get_*` functions support flexible date inputs:
-`"YYYY"`, `"YYYY-MM"`, or `"YYYY-MM-DD"`.
+All `get_*` functions accept flexible date inputs: `"YYYY"`, `"YYYY-MM"`, or `"YYYY-MM-DD"`. Requests spanning more than 10 years are chunked and stitched together automatically, since that's the Central Bank API's own limit per request — not something you need to work around yourself.
 
 ---
 
 ## Plotting functions (`plot_*`)
 
-* `plot_inflation_rate()` → Plots IPCA inflation over time
-* `plot_selic_rate()` → Plots the SELIC interest rate
-* `plot_cdi_rate()` → Plots the CDI interest rate
-* `plot_exchange_rate()` → Plots exchange rate time series
-* `plot_gdp_growth()` → Plots GDP growth over time
-* `plot_unemployment()` → Plots unemployment rate time series
-* `plot_series_comparison()` → Compares multiple economic indicators in one chart
+* `plot_inflation_rate()` — Plots IPCA inflation over time
+* `plot_selic_rate()` — Plots the SELIC interest rate
+* `plot_cdi_rate()` — Plots the CDI interest rate
+* `plot_exchange_rate()` — Plots exchange rate time series
+* `plot_unemployment()` — Plots unemployment rate time series
+* `plot_ibovespa()` — Plots the Ibovespa index
+* `plot_series_comparison()` — Compares multiple economic indicators in one chart, indexed/raw/percent-change, or on a dual axis (`dual_axis = TRUE`)
+
+Every `plot_*()` function shares the same visual language: a financial-market blue for benchmark rates (SELIC, CDI, exchange rate, Ibovespa) and a market red for cost/risk indicators (inflation, unemployment), so charts from different functions read consistently side by side.
 
 ---
 
 ## Financial calculators (`calc_*`)
 
-* `calc_pv()` → Present Value
-* `calc_fv()` → Future Value
-* `calc_npv()` → Net Present Value
-* `calc_irr()` → Internal Rate of Return
-* `calc_pmt()` → Loan payment calculation
-* `calc_rate()` → Interest rate calculation
-* `calc_nper()` → Number of periods
-* `calc_compound_interest()` → Compound interest calculation
-* `calc_continuous_interest()` → Continuous compounding
-* `calc_rule72()` → Rule of 72 approximation
-* `calc_rule114()` → Rule of 114 approximation
+* `calc_present_value()` — Present Value
+* `calc_future_value()` / `calc_compound_interest()` — Future Value / Compound Interest (same formula, two names for two common ways people search for it)
+* `calc_future_value_ext()` — Future Value with periodic payments
+* `calc_simple_interest()` — Simple interest
+* `calc_effective_rate()` / `calc_nominal_rate()` — Convert between nominal and effective rates
+* `calc_pv_annuity()` / `calc_fv_annuity()` — Present/future value of an annuity
+* `calc_pmt()` — Loan payment amount
+* `calc_rate()` — Solve for the interest rate per period
+* `calc_nper()` — Solve for the number of periods
+* `calc_npv()` — Net Present Value
+* `calc_irr()` — Internal Rate of Return
+* `calc_amortization_schedule()` — Full loan amortization schedule
+* `calc_continuous_compounding()` / `calc_pv_continuous()` — Continuous compounding, future and present value
+* `rule_of_72()` / `rule_of_114()` — Quick estimate of years to double / triple an investment
 
 # Language Support
 
-All main functions support bilingual output:
+Every `get_*()` function accepts a `language` argument:
 
-* language = "eng" (default): Returns English column names and labels
-* language = "pt": Returns Portuguese column names and labels
+* `language = "eng"` (default) — English variable labels
+* `language = "pt"` — Portuguese variable labels
+
+Column names themselves (`date`, `value`, ...) stay the same either way, so switching `language` never breaks a pipeline built on top of a `get_*()` call — it only changes the descriptive labels attached to the data (visible via `labelled::var_label()`).
 
 # Data sources
 
-All data come from *official Brazilian institutions:*
+All data comes from **official Brazilian institutions**:
 
 * Central Bank of Brazil (BCB / SGS)
 * IBGE (SIDRA / PNAD Contínua)
+* Yahoo Finance, for the Ibovespa index (`get_ibovespa()`)
+
+# Related package
+
+For individual B3 stocks, portfolio simulation, and an interactive Markowitz efficient-frontier dashboard, check out **[{brstocks}](https://github.com/efram2/brstocks)** — brfinance's sister package, focused on the equity side of Brazilian markets.
 
 # Contribution
 

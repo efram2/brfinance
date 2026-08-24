@@ -13,9 +13,11 @@
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
 #'   - `"YYYY-MM-DD"` for a specific date
 #'   - `NULL` defaults to the current date (today)
-#' @param language Language for column names in the returned data.frame:
-#'   - `"eng"` (default): Returns columns `date` and `cdi_rate`
-#'   - `"pt"`: Returns columns `data_referencia` and `taxa_cdi`
+#' @param language Language for the `labelled` variable descriptions attached
+#'   to the returned data.frame ("eng" or "pt"). The column names themselves
+#'   are always `date`, `value` and `value_annualized`, so output plugs
+#'   directly into `plot_cdi_rate()` and the rest of the package pipeline
+#'   regardless of `language`.
 #' @param labels Logical indicating whether to add variable labels using the `labelled`
 #'   package. Labels provide descriptive text for each column when available.
 #'

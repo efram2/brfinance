@@ -131,7 +131,11 @@ calc_simple_interest <- function(pv, rate, n) {
 
 #' Compound Interest
 #'
-#' Calculates the final value under compound interest.
+#' Calculates the final value under compound interest. This is an alias for
+#' `calc_future_value()` — both compute `pv * (1 + rate)^n` — kept as a
+#' separate exported name since "compound interest" and "future value" are
+#' the terms people search for depending on context (previously this was a
+#' fully duplicated implementation).
 #'
 #' @param pv Present value.
 #' @param rate Interest rate per period (decimal).
@@ -143,16 +147,7 @@ calc_simple_interest <- function(pv, rate, n) {
 #' calc_compound_interest(pv = 1000, rate = 0.10, n = 2)
 #'
 #' @export
-calc_compound_interest <- function(pv, rate, n) {
-  stopifnot(
-    is.numeric(pv), length(pv) == 1,
-    is.numeric(rate), length(rate) == 1,
-    is.numeric(n), length(n) == 1,
-    n >= 0
-  )
-
-  pv * (1 + rate)^n
-}
+calc_compound_interest <- calc_future_value
 
 #' Effective Interest Rate
 #'
@@ -643,7 +638,7 @@ calc_nper <- function(pv, fv = 0, rate, pmt = 0, type = 0) {
     rate != -1
   )
 
-#  Case 1: Only PV and FV (no payments)
+  #  Case 1: Only PV and FV (no payments)
   if (pmt == 0) {
     if (pv == 0) {
       stop("PV cannot be zero when PMT is zero")
@@ -654,7 +649,7 @@ calc_nper <- function(pv, fv = 0, rate, pmt = 0, type = 0) {
     return(log(fv / pv) / log(1 + rate))
   }
 
-# Case 2: With payments
+  # Case 2: With payments
   if (rate == 0) {
     return(-(fv + pv) / pmt)
   }

@@ -17,7 +17,11 @@ calc_compound_interest(pv, rate, n)
 Final value with compound interest.
 }
 \description{
-Calculates the final value under compound interest.
+Calculates the final value under compound interest. This is an alias for
+\code{calc_future_value()} — both compute \code{pv * (1 + rate)^n} — kept as a
+separate exported name since "compound interest" and "future value" are
+the terms people search for depending on context (previously this was a
+fully duplicated implementation).
 }
 \examples{
 calc_compound_interest(pv = 1000, rate = 0.10, n = 2)

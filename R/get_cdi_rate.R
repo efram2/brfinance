@@ -8,14 +8,17 @@
 #'   - `"YYYY"` for year only (e.g., `"2020"` becomes `"2020-01-01"`)
 #'   - `"YYYY-MM"` for year and month (e.g., `"2020-06"` becomes `"2020-06-01"`)
 #'   - `"YYYY-MM-DD"` for a specific date (e.g., `"2020-06-15"`)
+#'   - `NULL` defaults to the last 30 days, using today as the end date
 #' @param end_date End date for the data period. Accepts the same formats as `start_date`:
 #'   - `"YYYY"` (e.g., `"2023"` becomes `"2023-12-31"`)
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
 #'   - `"YYYY-MM-DD"` for a specific date
 #'   - `NULL` defaults to the current date (today)
-#' @param language Language for column names in the returned data.frame:
-#'   - `"eng"` (default): Returns columns `date` and `cdi_rate`
-#'   - `"pt"`: Returns columns `data_referencia` and `taxa_cdi`
+#' @param language Language for the `labelled` variable descriptions attached
+#'   to the returned data.frame ("eng" or "pt"). The column names themselves
+#'   are always `date`, `value` and `value_annualized`, so output plugs
+#'   directly into `plot_cdi_rate()` and the rest of the package pipeline
+#'   regardless of `language`.
 #' @param labels Logical indicating whether to add variable labels using the `labelled`
 #'   package. Labels provide descriptive text for each column when available.
 #'
@@ -32,7 +35,8 @@
 #' investments and interbank lending in Brazil. Data is available from 1986 onward
 #' with daily frequency (business days only).
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   # Default: last 30 days of CDI rate
 #'   df <- get_cdi_rate()
 #'
@@ -50,6 +54,7 @@
 #'
 #'   # Historical analysis
 #'   df6 <- get_cdi_rate("2020-03-01", "2020-04-30")  # COVID period
+#'   }
 #'
 #' @export
 get_cdi_rate <- function(start_date = NULL,
@@ -73,10 +78,8 @@ get_cdi_rate <- function(start_date = NULL,
     stop("'labels' must be a single logical value (TRUE or FALSE)", call. = FALSE)
   }
 
-  # Set default start_date if NULL (last 30 days by default for CDI)
-  if (is.null(start_date)) {
-    start_date <- Sys.Date() - 30  # Last 30 days
-  }
+  start_date <- start_date
+  end_date   <- end_date
 
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations

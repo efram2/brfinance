@@ -2,10 +2,10 @@
 % Please edit documentation in R/get_selic_rate.R
 \name{get_selic_rate}
 \alias{get_selic_rate}
-\title{Get Annual Brazilian SELIC Rate (Annualized, Base 252)}
+\title{Get Daily Brazilian SELIC Rate (Daily and Annualized)}
 \usage{
 get_selic_rate(
-  start_date = "2020-01-01",
+  start_date = NULL,
   end_date = NULL,
   language = "eng",
   labels = TRUE
@@ -17,7 +17,7 @@ get_selic_rate(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
-\item \code{NULL} defaults to \code{"2020-01-01"} (sensible default for analysis)
+\item \code{NULL} defaults to the last 30 days, using today as the end date
 }}
 
 \item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
@@ -28,50 +28,63 @@ get_selic_rate(
 \item \code{NULL} defaults to the current date (today)
 }}
 
-\item{language}{Language for column names in the returned data.frame:
-\itemize{
-\item \code{"eng"} (default): Returns columns \code{date} and \code{selic_rate}
-\item \code{"pt"}: Returns columns \code{data_referencia} and \code{taxa_selic}
-}}
+\item{language}{Language for the \code{labelled} variable descriptions attached
+to the returned data.frame ("eng" or "pt"). The column names themselves
+are always \code{date}, \code{value} and \code{value_annualized}, so output plugs
+directly into \code{plot_selic_rate()} and the rest of the package pipeline
+regardless of \code{language}.}
 
 \item{labels}{Logical indicating whether to add variable labels using the \code{labelled}
 package. Labels provide descriptive text for each column when available.}
 }
 \value{
-A data.frame with SELIC rate. Columns depend on the \code{language} parameter:
-\itemize{
-\item English (\code{language = "eng"}): \code{date} (Date), \code{selic_rate} (numeric, \% per year)
-\item Portuguese (\code{language = "pt"}): \code{data_referencia} (Date), \code{taxa_selic} (numeric, \% ao ano)
+A data.frame with columns:
+\describe{
+\item{date}{Reference date}
+\item{value}{Daily SELIC rate (\% per day)}
+\item{value_annualized}{Annualized SELIC rate (\% per year, 252 business days)}
 }
 }
 \description{
-Downloads the annual SELIC rate series from the Central Bank of Brazil's SGS API.
+Downloads the daily SELIC rate series from the Central Bank of Brazil's SGS API.
 The SELIC rate (Special System for Settlement and Custody) is Brazil's benchmark
-overnight interest rate, used as the primary monetary policy instrument.
+overnight interest rate, used as the primary monetary policy instrument. Returns
+both the raw daily rate and its annualized (base-252) equivalent, mirroring the
+pattern already used by \code{get_cdi_rate()}.
 }
 \note{
-\strong{IMPORTANT API LIMITATION}: The BCB API imposes a \strong{10-year maximum window}
-for daily frequency series like SELIC. Requests spanning more than 10 years will fail.
-For longer historical analyses, split your request into multiple 10-year periods.
-
-\strong{DEFAULT PERIOD}: When \code{start_date = NULL}, defaults to \code{"2020-01-01"} (start of 2020),
-providing recent data while avoiding the 10-year API limit with current dates.
+\strong{Series information}: This function uses SGS series \strong{11} ("Taxa de
+juros - Selic"), the daily-quoted average rate of overnight repo
+operations backed by federal government securities held in the Selic
+system, published in \% per day (\% a.d.). The annualized column
+(\code{value_annualized}) is computed locally from that daily rate using the
+standard 252-business-day compounding formula:
+\code{((1 + value/100)^252 - 1) * 100} — the same formula \code{get_cdi_rate()}
+already uses for its own \code{value_annualized} column. This is offered as an
+alternative to fetching SGS series 1178 ("Selic anualizada base 252")
+directly, which is BCB's own officially published annualized series and
+may differ from the locally-computed value by rounding. Data is available
+from June 4, 1986 onward. Requests spanning more than 10 years are split
+and stitched together automatically (see \code{.get_sgs_series()}), so the
+BCB's 10-year window limit no longer needs to be handled manually.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: from 2020 to current date
   df <- get_selic_rate()
+  head(df)  # date, value (daily), value_annualized
 
-  # Specific period within 10-year limit
+  # Specific period
   df2 <- get_selic_rate("2020-01-01", "2023-12-31")
 
-  # Last 5 years (respecting 10-year limit)
-  df3 <- get_selic_rate(start_date = "2019")
+  # Long historical window (>10 years) — chunked automatically
+  df3 <- get_selic_rate(start_date = "2005")
 
-  # Portuguese column names and labels
+  # Portuguese labels
   df4 <- get_selic_rate(language = "pt")
 
   # Complete year analysis
   df5 <- get_selic_rate("2018", "2023")
-\dontshow{\}) # examplesIf}
+  }
+
 }

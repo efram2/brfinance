@@ -5,7 +5,7 @@
 \title{Get Brazilian Unemployment Rate (PNAD Continua)}
 \usage{
 get_unemployment(
-  start_date = "2020-01-01",
+  start_date = NULL,
   end_date = NULL,
   language = "eng",
   labels = TRUE
@@ -20,9 +20,12 @@ get_unemployment(
 \item \code{NULL} defaults to \code{"2020-01-01"}
 }}
 
-\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}.
+\item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
 \itemize{
-\item \code{NULL} defaults to the current date
+\item \code{"YYYY"} (e.g., \code{"2023"} becomes \code{"2023-12-31"})
+\item \code{"YYYY-MM"} (e.g., \code{"2023-12"} becomes the last day of December 2023)
+\item \code{"YYYY-MM-DD"} for a specific date
+\item \code{NULL} defaults to the current date (today)
 }}
 
 \item{language}{Language for column names in the returned data.frame:
@@ -56,7 +59,7 @@ Although published monthly, the unemployment rate follows IBGE's
 moving-quarter methodology.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: from 2020 to current date (aligned with other functions)
   df <- get_unemployment()
 
@@ -68,5 +71,6 @@ moving-quarter methodology.
 
   # Without variable labels
   df4 <- get_unemployment("2020-01-01", "2022-12-31", labels = FALSE)
-\dontshow{\}) # examplesIf}
+}
+
 }

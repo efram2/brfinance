@@ -19,14 +19,18 @@ A data.frame with columns 'date' (Date) and 'value' (numeric).
 \description{
 Internal helper function to download time series data from BCB SGS API.
 Uses httr2 for robust HTTP requests with automatic fallback strategy.
+Requests spanning more than 10 years are automatically split into
+consecutive 9-year windows and stitched back together, since the BCB
+API rejects date ranges longer than 10 years in a single call (9 years
+is used instead of 10 to stay safely clear of that boundary).
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
-# Example: download SELIC series (ID 432)
-df <- brfinance:::.get_sgs_series(432, "2020", "2021")
+\donttest{
+# Example: download SELIC series (ID 11)
+df <- brfinance:::.get_sgs_series(11, "2020", "2021")
 
 head(df)
 tail(df)
-\dontshow{\}) # examplesIf}
+}
 }
 \keyword{internal}

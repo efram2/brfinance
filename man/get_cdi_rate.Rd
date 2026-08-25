@@ -17,6 +17,7 @@ get_cdi_rate(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
+\item \code{NULL} defaults to the last 30 days, using today as the end date
 }}
 
 \item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
@@ -27,11 +28,11 @@ get_cdi_rate(
 \item \code{NULL} defaults to the current date (today)
 }}
 
-\item{language}{Language for column names in the returned data.frame:
-\itemize{
-\item \code{"eng"} (default): Returns columns \code{date} and \code{cdi_rate}
-\item \code{"pt"}: Returns columns \code{data_referencia} and \code{taxa_cdi}
-}}
+\item{language}{Language for the \code{labelled} variable descriptions attached
+to the returned data.frame ("eng" or "pt"). The column names themselves
+are always \code{date}, \code{value} and \code{value_annualized}, so output plugs
+directly into \code{plot_cdi_rate()} and the rest of the package pipeline
+regardless of \code{language}.}
 
 \item{labels}{Logical indicating whether to add variable labels using the \code{labelled}
 package. Labels provide descriptive text for each column when available.}
@@ -56,7 +57,7 @@ investments and interbank lending in Brazil. Data is available from 1986 onward
 with daily frequency (business days only).
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: last 30 days of CDI rate
   df <- get_cdi_rate()
 
@@ -74,5 +75,6 @@ with daily frequency (business days only).
 
   # Historical analysis
   df6 <- get_cdi_rate("2020-03-01", "2020-04-30")  # COVID period
-\dontshow{\}) # examplesIf}
+  }
+
 }

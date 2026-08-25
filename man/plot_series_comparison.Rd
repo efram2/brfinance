@@ -17,7 +17,8 @@ plot_series_comparison(
   colors = NULL,
   line_types = NULL,
   show_legend = TRUE,
-  legend_position = "bottom"
+  legend_position = "bottom",
+  dual_axis = FALSE
 )
 }
 \arguments{
@@ -51,6 +52,14 @@ plot_series_comparison(
 \item{show_legend}{Whether to show the legend (default: TRUE)}
 
 \item{legend_position}{Position of legend ("bottom", "top", "left", "right", or "none")}
+
+\item{dual_axis}{Logical. If \code{TRUE}, plots exactly 2 series on separate
+y-axes (a primary axis on the left for the first series, a secondary
+axis on the right for the second) instead of overlaying them on one
+scale. Useful for comparing series with very different units, e.g.
+SELIC (\%) vs. the exchange rate (R$/US$). Requires \code{length(data_list) == 2}
+and is incompatible with \code{scale_type != "none"}, since the whole point of
+a dual axis is to preserve each series' native scale.}
 }
 \value{
 A ggplot2 object
@@ -59,21 +68,30 @@ A ggplot2 object
 Plots multiple time series on the same chart for comparison.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 # Example comparing multiple series
 selic <- get_selic_rate(2020, 2024)
-ipca <- get_ipca(2020, 2024)
-igpm <- get_igpm(2020, 2024)
+ipca <- get_ipca_from_target(2020, 2024)
 
 comparison_plot <- plot_series_comparison(
-  data_list = list(SELIC = selic, IPCA = ipca, IGPM = igpm),
-  y_vars = c("value", "value", "value"),
-  date_vars = c("date", "date", "date"),
+  data_list = list(SELIC = selic, IPCA = ipca),
+  y_vars = c("value", "ipca_12m"),
+  date_vars = c("date", "date"),
   scale_type = "index",
   title = "Comparison of Brazilian Economic Indicators",
   y_label = "Index (2020-01 = 100)",
   language = "eng"
 )
 print(comparison_plot)
-\dontshow{\}) # examplesIf}
+
+# Same two series, but on their native scales via a dual axis
+dual_plot <- plot_series_comparison(
+  data_list = list(SELIC = selic, `Exchange Rate` = get_exchange_rate(2020, 2024)),
+  y_vars = c("value", "value"),
+  date_vars = c("date", "date"),
+  dual_axis = TRUE
+)
+print(dual_plot)
+}
+
 }

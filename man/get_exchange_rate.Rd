@@ -17,6 +17,7 @@ get_exchange_rate(
 \item \code{"YYYY"} for year only (e.g., \code{"2020"} becomes \code{"2020-01-01"})
 \item \code{"YYYY-MM"} for year and month (e.g., \code{"2020-06"} becomes \code{"2020-06-01"})
 \item \code{"YYYY-MM-DD"} for a specific date (e.g., \code{"2020-06-15"})
+\item \code{NULL} defaults to the last 30 days, using today as the end date
 }}
 
 \item{end_date}{End date for the data period. Accepts the same formats as \code{start_date}:
@@ -53,7 +54,7 @@ commercial US dollar selling rate (taxa de câmbio livre - dólar americano - ve
 Data is available from 1984 onward with daily frequency.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: last 30 days of exchange rate
   df <- get_exchange_rate()
 
@@ -68,5 +69,6 @@ Data is available from 1984 onward with daily frequency.
 
   # Complete example with all parameters
   df5 <- get_exchange_rate("2023-01-01", "2023-12-31", language = "pt", labels = TRUE)
-\dontshow{\}) # examplesIf}
+  }
+
 }

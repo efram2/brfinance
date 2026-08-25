@@ -56,7 +56,7 @@ this one is not subject to the 10-year window limit — \code{yfR} handles the
 full request in one call.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: last 12 months
   df <- get_ibovespa()
 
@@ -65,5 +65,6 @@ full request in one call.
 
   # Portuguese labels
   df3 <- get_ibovespa(language = "pt")
-\dontshow{\}) # examplesIf}
+  }
+
 }

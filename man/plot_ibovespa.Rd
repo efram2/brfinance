@@ -18,8 +18,9 @@ A \code{ggplot2} object showing the Ibovespa level over time.
 Generates a time series plot of the Ibovespa index using data from \code{get_ibovespa()}.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 ibov_data <- get_ibovespa("2023-01-01", "2023-12-31")
 print(plot_ibovespa(ibov_data))
-\dontshow{\}) # examplesIf}
+}
+
 }

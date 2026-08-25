@@ -68,7 +68,7 @@ A ggplot2 object
 Plots multiple time series on the same chart for comparison.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 # Example comparing multiple series
 selic <- get_selic_rate(2020, 2024)
 ipca <- get_ipca_from_target(2020, 2024)
@@ -92,5 +92,6 @@ dual_plot <- plot_series_comparison(
   dual_axis = TRUE
 )
 print(dual_plot)
-\dontshow{\}) # examplesIf}
+}
+
 }

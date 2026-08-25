@@ -20,9 +20,10 @@ Generates a time series plot of the SELIC interest rate using data from
 raw daily \code{value} column.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 selic_data <- get_selic_rate("2020", "2024")
 print(plot_selic_rate(selic_data))
 print(plot_selic_rate(get_selic_rate(language = "pt"), language = "pt"))
-\dontshow{\}) # examplesIf}
+}
+
 }

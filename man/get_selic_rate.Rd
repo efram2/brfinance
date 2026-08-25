@@ -69,7 +69,7 @@ and stitched together automatically (see \code{.get_sgs_series()}), so the
 BCB's 10-year window limit no longer needs to be handled manually.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: from 2020 to current date
   df <- get_selic_rate()
   head(df)  # date, value (daily), value_annualized
@@ -85,5 +85,6 @@ BCB's 10-year window limit no longer needs to be handled manually.
 
   # Complete year analysis
   df5 <- get_selic_rate("2018", "2023")
-\dontshow{\}) # examplesIf}
+  }
+
 }

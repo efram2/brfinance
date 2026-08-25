@@ -59,7 +59,7 @@ Although published monthly, the unemployment rate follows IBGE's
 moving-quarter methodology.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   # Default: from 2020 to current date (aligned with other functions)
   df <- get_unemployment()
 
@@ -71,5 +71,6 @@ moving-quarter methodology.
 
   # Without variable labels
   df4 <- get_unemployment("2020-01-01", "2022-12-31", labels = FALSE)
-\dontshow{\}) # examplesIf}
+}
+
 }

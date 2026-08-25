@@ -59,8 +59,9 @@ target for the most recent year in the requested window, \code{target}/\code{gap
 will be \code{NA} for those months rather than silently reusing an old value.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
   df <- get_ipca_from_target()
   df2 <- get_ipca_from_target("2015", "2024", language = "pt")
-\dontshow{\}) # examplesIf}
+  }
+
 }

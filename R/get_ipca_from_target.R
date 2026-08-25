@@ -37,9 +37,11 @@
 #' target for the most recent year in the requested window, `target`/`gap`
 #' will be `NA` for those months rather than silently reusing an old value.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   df <- get_ipca_from_target()
 #'   df2 <- get_ipca_from_target("2015", "2024", language = "pt")
+#'   }
 #'
 #' @export
 get_ipca_from_target <- function(start_date = NULL,

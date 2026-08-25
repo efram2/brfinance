@@ -34,7 +34,8 @@
 #' for periods after 2014 will return empty results for that portion of the
 #' window (no error -- just no rows past the series' last available date).
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   # Default: data from 2000 to current date (but limited to 2014)
 #'   df <- get_gdp_growth()
 #'
@@ -52,6 +53,7 @@
 #'
 #'   # Complete example with all parameters
 #'   df6 <- get_gdp_growth("2011-01-01", "2014-12-31", language = "pt", labels = TRUE)
+#'   }
 #'
 #' @export
 get_gdp_growth <- function(start_date = NULL,

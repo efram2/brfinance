@@ -14,12 +14,14 @@
 #' @return A data.frame with columns 'date' (Date) and 'value' (numeric).
 #' @keywords internal
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' # Example: download SELIC series (ID 11)
 #' df <- brfinance:::.get_sgs_series(11, "2020", "2021")
 #'
 #' head(df)
 #' tail(df)
+#' }
 .get_sgs_series <- function(series_id,
                             start_date = NULL,
                             end_date = NULL) {

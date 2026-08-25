@@ -172,10 +172,12 @@
 #'
 #' @return A `ggplot2` object showing the CDI rate over time.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' cdi_data <- get_cdi_rate("2020", "2024")
 #' print(plot_cdi_rate(cdi_data))
 #' print(plot_cdi_rate(get_cdi_rate(language = "pt"), language = "pt"))
+#' }
 #'
 #' @export
 plot_cdi_rate <- function(data, language = "eng") {
@@ -193,10 +195,12 @@ plot_cdi_rate <- function(data, language = "eng") {
 #'
 #' @return A `ggplot2` object showing the SELIC rate over time.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' selic_data <- get_selic_rate("2020", "2024")
 #' print(plot_selic_rate(selic_data))
 #' print(plot_selic_rate(get_selic_rate(language = "pt"), language = "pt"))
+#' }
 #'
 #' @export
 plot_selic_rate <- function(data, language = "eng") {
@@ -212,9 +216,11 @@ plot_selic_rate <- function(data, language = "eng") {
 #'
 #' @return A `ggplot2` object showing the exchange rate over time.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' exchange_data <- get_exchange_rate("2023-01-01", "2023-12-31")
 #' print(plot_exchange_rate(exchange_data))
+#'}
 #'
 #' @export
 plot_exchange_rate <- function(data, language = "eng") {
@@ -231,9 +237,11 @@ plot_exchange_rate <- function(data, language = "eng") {
 #'
 #' @return A `ggplot2` object showing the monthly inflation rate over time.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' inflation_data <- get_inflation_rate("2020", "2024")
 #' print(plot_inflation_rate(inflation_data))
+#'}
 #'
 #' @export
 plot_inflation_rate <- function(data, language = "eng") {
@@ -251,9 +259,11 @@ plot_inflation_rate <- function(data, language = "eng") {
 #'
 #' @return A ggplot2 object.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' unemployment_data <- get_unemployment("2020", "2024")
 #' print(plot_unemployment(unemployment_data))
+#'}
 #'
 #' @export
 plot_unemployment <- function(data, language = "eng") {
@@ -269,9 +279,11 @@ plot_unemployment <- function(data, language = "eng") {
 #'
 #' @return A `ggplot2` object showing the Ibovespa level over time.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' ibov_data <- get_ibovespa("2023-01-01", "2023-12-31")
 #' print(plot_ibovespa(ibov_data))
+#' }
 #'
 #' @export
 plot_ibovespa <- function(data, language = "eng") {

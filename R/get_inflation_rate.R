@@ -45,7 +45,8 @@
 #' - Year-to-date inflation: Cumulative product of monthly rates within each calendar year
 #' - 12-month inflation: Rolling 12-month cumulative product of monthly rates
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   # Default: from 2020 to current date (aligned with SELIC function)
 #'   df <- get_inflation_rate()
 #'
@@ -68,6 +69,7 @@
 #'   # Compare with SELIC rate (same default period)
 #'   selic_data <- get_selic_rate()  # Also starts at 2020-01-01
 #'   inflation_data <- get_inflation_rate()  # Same start date
+#'   }
 #'
 #' @export
 get_inflation_rate <- function(start_date = NULL,

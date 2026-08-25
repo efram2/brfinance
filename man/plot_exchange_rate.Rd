@@ -18,8 +18,9 @@ A \code{ggplot2} object showing the exchange rate over time.
 Generates a time series plot of the USD/BRL exchange rate using data from \code{get_exchange_rate()}.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 exchange_data <- get_exchange_rate("2023-01-01", "2023-12-31")
 print(plot_exchange_rate(exchange_data))
-\dontshow{\}) # examplesIf}
+}
+
 }

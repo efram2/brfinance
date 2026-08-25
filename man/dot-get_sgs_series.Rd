@@ -25,12 +25,12 @@ API rejects date ranges longer than 10 years in a single call (9 years
 is used instead of 10 to stay safely clear of that boundary).
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 # Example: download SELIC series (ID 11)
 df <- brfinance:::.get_sgs_series(11, "2020", "2021")
 
 head(df)
 tail(df)
-\dontshow{\}) # examplesIf}
+}
 }
 \keyword{internal}

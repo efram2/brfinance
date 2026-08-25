@@ -34,7 +34,8 @@
 #' this one is not subject to the 10-year window limit — `yfR` handles the
 #' full request in one call.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   # Default: last 12 months
 #'   df <- get_ibovespa()
 #'
@@ -43,6 +44,7 @@
 #'
 #'   # Portuguese labels
 #'   df3 <- get_ibovespa(language = "pt")
+#'   }
 #'
 #' @export
 get_ibovespa <- function(start_date = NULL,

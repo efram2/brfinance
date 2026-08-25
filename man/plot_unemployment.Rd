@@ -20,8 +20,9 @@ Generates a ggplot2 line chart of Brazil's unemployment rate
 (PNAD Contínua) using data returned by \code{get_unemployment()}.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 unemployment_data <- get_unemployment("2020", "2024")
 print(plot_unemployment(unemployment_data))
-\dontshow{\}) # examplesIf}
+}
+
 }

@@ -47,7 +47,8 @@
 #'   \item{value_annualized}{Annualized SELIC rate (% per year, 252 business days)}
 #' }
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   # Default: from 2020 to current date
 #'   df <- get_selic_rate()
 #'   head(df)  # date, value (daily), value_annualized
@@ -63,6 +64,7 @@
 #'
 #'   # Complete year analysis
 #'   df5 <- get_selic_rate("2018", "2023")
+#'   }
 #'
 #' @export
 get_selic_rate <- function(start_date = NULL,

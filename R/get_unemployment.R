@@ -33,7 +33,8 @@
 #' Although published monthly, the unemployment rate follows IBGE's
 #' moving-quarter methodology.
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #'   # Default: from 2020 to current date (aligned with other functions)
 #'   df <- get_unemployment()
 #'
@@ -45,6 +46,7 @@
 #'
 #'   # Without variable labels
 #'   df4 <- get_unemployment("2020-01-01", "2022-12-31", labels = FALSE)
+#'}
 #'
 #' @export
 get_unemployment <- function(start_date = NULL,

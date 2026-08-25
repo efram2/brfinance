@@ -41,6 +41,7 @@
 #' @noRd
 #'
 #' @examples
+#' \donttest{
 #' # Create example time series data
 #' df <- data.frame(
 #'   date = seq(as.Date("2020-01-01"), as.Date("2021-12-01"), by = "month"),
@@ -71,6 +72,7 @@
 #' )
 #'
 #' print(p2)
+#' }
 .plot_time_series <- function(data,
                               x_var,
                               y_var,

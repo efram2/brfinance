@@ -29,9 +29,9 @@
 #'   a dual axis is to preserve each series' native scale.
 #'
 #' @return A ggplot2 object
-#' @export
 #'
-#' @examplesIf interactive()
+#' @examples
+#' \donttest{
 #' # Example comparing multiple series
 #' selic <- get_selic_rate(2020, 2024)
 #' ipca <- get_ipca_from_target(2020, 2024)
@@ -55,6 +55,9 @@
 #'   dual_axis = TRUE
 #' )
 #' print(dual_plot)
+#' }
+#'
+#' @export
 plot_series_comparison <- function(data_list,
                                    y_vars,
                                    date_vars,

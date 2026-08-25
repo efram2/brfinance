@@ -19,8 +19,9 @@ Generates a time series plot of Brazil's monthly inflation rate measured
 by the IPCA (Índice Nacional de Preços ao Consumidor Amplo).
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 inflation_data <- get_inflation_rate("2020", "2024")
 print(plot_inflation_rate(inflation_data))
-\dontshow{\}) # examplesIf}
+}
+
 }

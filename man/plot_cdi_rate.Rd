@@ -18,9 +18,10 @@ A \code{ggplot2} object showing the CDI rate over time.
 Generates a time series plot of the CDI (Certificado de Depósito Interbancário) rate.
 }
 \examples{
-\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+\donttest{
 cdi_data <- get_cdi_rate("2020", "2024")
 print(plot_cdi_rate(cdi_data))
 print(plot_cdi_rate(get_cdi_rate(language = "pt"), language = "pt"))
-\dontshow{\}) # examplesIf}
+}
+
 }

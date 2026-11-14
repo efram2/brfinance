@@ -14,23 +14,21 @@
 #'   - `"YYYY-MM"` (e.g., `"2023-12"` becomes the last day of December 2023)
 #'   - `"YYYY-MM-DD"` for a specific date
 #'   - `NULL` defaults to the current date (today)
-#' @param language Language for column names in the returned data.frame:
-#'   - `"eng"` (default): Returns columns `date`, `monthly_inflation`, `ytd_inflation`, `twelve_month_inflation`
-#'   - `"pt"`: Returns columns `data_referencia`, `inflacao_mensal`, `inflacao_acumulada_ano`, `inflacao_12_meses`
+#' @param language Language for the variable labels attached to the returned
+#'   data.frame: `"eng"` (default) or `"pt"`. Column names are always `date`,
+#'   `value`, `ytd_inflation` and `twelve_month_inflation`.
 #' @param labels Logical indicating whether to add variable labels using the `labelled`
 #'   package. Labels provide descriptive text for each column when available.
 #'
-#' @return A data.frame with inflation metrics. Columns depend on the `language` parameter:
-#'   - English (`language = "eng"`):
-#'     - `date` (Date): Reference month
-#'     - `monthly_inflation` (numeric): Monthly IPCA variation (%)
-#'     - `ytd_inflation` (numeric): Year-to-date accumulated inflation (%)
-#'     - `twelve_month_inflation` (numeric): 12-month accumulated inflation (%)
-#'   - Portuguese (`language = "pt"`):
-#'     - `data_referencia` (Date): Mes de referencia
-#'     - `inflacao_mensal` (numeric): Variacao mensal do IPCA (%)
-#'     - `inflacao_acumulada_ano` (numeric): Inflacao acumulada no ano (%)
-#'     - `inflacao_12_meses` (numeric): Inflacao acumulada nos ultimos 12 meses (%)
+#' @return A data.frame with columns:
+#'   - `date` (Date): Reference month
+#'   - `value` (numeric): Monthly IPCA variation (%)
+#'   - `ytd_inflation` (numeric): Year-to-date accumulated inflation (%)
+#'   - `twelve_month_inflation` (numeric): 12-month accumulated inflation (%)
+#'
+#'   If the BCB API is unavailable or returns an unexpected response, an
+#'   informative message is printed and a zero-row data.frame with the same
+#'   columns is returned.
 #'
 #' @note
 #' **Default Period**: When `start_date = NULL`, defaults to `"2020-01-01"`, providing
@@ -126,6 +124,17 @@ get_inflation_rate <- function(start_date = NULL,
     end_date   = end_date
   )
 
+  # Download failed or no data: .get_sgs_series() already explained why.
+  # Return an empty table with the usual columns instead of failing.
+  if (nrow(data) == 0) {
+    return(data.frame(
+      date = as.Date(character()),
+      value = numeric(),
+      ytd_inflation = numeric(),
+      twelve_month_inflation = numeric()
+    ))
+  }
+
   # === PROCESS DATA ===
   data <- data |>
     dplyr::arrange(date) |>
@@ -139,12 +148,13 @@ get_inflation_rate <- function(start_date = NULL,
     ) |>
     dplyr::ungroup() |>
     dplyr::mutate(
-      twelve_month_inflation = sapply(
+      twelve_month_inflation = vapply(
         seq_along(value),
         function(i) {
           if (i < 12) return(NA_real_)
           (prod(1 + value[(i - 11):i] / 100) - 1) * 100
-        }
+        },
+        numeric(1)
       )
     ) |>
     dplyr::filter(date >= start_date & date <= end_date) |>

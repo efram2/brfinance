@@ -62,7 +62,7 @@ and is incompatible with \code{scale_type != "none"}, since the whole point of
 a dual axis is to preserve each series' native scale.}
 }
 \value{
-A ggplot2 object
+A ggplot2 object, or \code{NULL} (invisibly, with a message) if any series has no rows
 }
 \description{
 Plots multiple time series on the same chart for comparison.

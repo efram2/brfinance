@@ -13,7 +13,7 @@ Must contain columns \code{date} (Date) and \code{value} (numeric).}
 \item{language}{Language of plot labels: "eng" (default) or "pt".}
 }
 \value{
-A ggplot2 object.
+A ggplot2 object, or \code{NULL} (with a message) if \code{data} has no rows.
 }
 \description{
 Generates a ggplot2 line chart of Brazil's unemployment rate

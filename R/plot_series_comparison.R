@@ -28,7 +28,7 @@
 #'   and is incompatible with `scale_type != "none"`, since the whole point of
 #'   a dual axis is to preserve each series' native scale.
 #'
-#' @return A ggplot2 object
+#' @return A ggplot2 object, or `NULL` (invisibly, with a message) if any series has no rows
 #'
 #' @examples
 #' \donttest{
@@ -82,10 +82,6 @@ plot_series_comparison <- function(data_list,
     stop("The 'dplyr' package is required. Install it with install.packages('dplyr').")
   }
 
-  if (!requireNamespace("tidyr", quietly = TRUE)) {
-    stop("The 'tidyr' package is required. Install it with install.packages('tidyr').")
-  }
-
   # === FUNCTION BODY ===
   # Declare global variables for dplyr operations
   value <- series <- NULL
@@ -96,6 +92,18 @@ plot_series_comparison <- function(data_list,
   n_series <- length(data_list)
   if (length(y_vars) != n_series || length(date_vars) != n_series) {
     stop("Length of data_list, y_vars, and date_vars must be the same")
+  }
+
+  # Series without rows (e.g. failed downloads) cannot be plotted
+  empty_series <- vapply(data_list, function(d) !is.data.frame(d) || nrow(d) == 0, logical(1))
+  if (any(empty_series)) {
+    message(
+      "No data to plot for: ",
+      paste(if (is.null(names(data_list))) which(empty_series) else names(data_list)[empty_series],
+            collapse = ", "),
+      ". Returning NULL."
+    )
+    return(invisible(NULL))
   }
 
   if (isTRUE(dual_axis)) {

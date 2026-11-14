@@ -170,7 +170,8 @@
 #' @param data Tibble returned by `get_cdi_rate()`, with columns `date` and `value`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
-#' @return A `ggplot2` object showing the CDI rate over time.
+#' @return A `ggplot2` object showing the CDI rate over time,
+#'   or `NULL` (with a message) if `data` has no rows.
 #'
 #' @examples
 #' \donttest{
@@ -193,7 +194,8 @@ plot_cdi_rate <- function(data, language = "eng") {
 #' @param data Tibble returned by `get_selic_rate()`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
-#' @return A `ggplot2` object showing the SELIC rate over time.
+#' @return A `ggplot2` object showing the SELIC rate over time,
+#'   or `NULL` (with a message) if `data` has no rows.
 #'
 #' @examples
 #' \donttest{
@@ -214,7 +216,8 @@ plot_selic_rate <- function(data, language = "eng") {
 #' @param data Tibble returned by `get_exchange_rate()`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
-#' @return A `ggplot2` object showing the exchange rate over time.
+#' @return A `ggplot2` object showing the exchange rate over time,
+#'   or `NULL` (with a message) if `data` has no rows.
 #'
 #' @examples
 #' \donttest{
@@ -235,7 +238,8 @@ plot_exchange_rate <- function(data, language = "eng") {
 #' @param data Tibble returned by `get_inflation_rate()`, with columns `date` and `value`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
-#' @return A `ggplot2` object showing the monthly inflation rate over time.
+#' @return A `ggplot2` object showing the monthly inflation rate over time,
+#'   or `NULL` (with a message) if `data` has no rows.
 #'
 #' @examples
 #' \donttest{
@@ -257,7 +261,7 @@ plot_inflation_rate <- function(data, language = "eng") {
 #'   Must contain columns `date` (Date) and `value` (numeric).
 #' @param language Language of plot labels: "eng" (default) or "pt".
 #'
-#' @return A ggplot2 object.
+#' @return A ggplot2 object, or `NULL` (with a message) if `data` has no rows.
 #'
 #' @examples
 #' \donttest{
@@ -277,7 +281,8 @@ plot_unemployment <- function(data, language = "eng") {
 #' @param data Tibble returned by `get_ibovespa()`, with columns `date` and `value`.
 #' @param language Language for titles and labels: "pt" (Portuguese) or "eng" (English).
 #'
-#' @return A `ggplot2` object showing the Ibovespa level over time.
+#' @return A `ggplot2` object showing the Ibovespa level over time,
+#'   or `NULL` (with a message) if `data` has no rows.
 #'
 #' @examples
 #' \donttest{

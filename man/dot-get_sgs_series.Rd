@@ -18,11 +18,16 @@ A data.frame with columns 'date' (Date) and 'value' (numeric).
 }
 \description{
 Internal helper function to download time series data from BCB SGS API.
-Uses httr2 for robust HTTP requests with automatic fallback strategy.
 Requests spanning more than 10 years are automatically split into
 consecutive 9-year windows and stitched back together, since the BCB
-API rejects date ranges longer than 10 years in a single call (9 years
-is used instead of 10 to stay safely clear of that boundary).
+API rejects date ranges longer than 10 years in a single call.
+}
+\details{
+This function never signals an error because of the web resource
+(no connection, timeout, HTTP error, HTML page instead of JSON, JSON with an
+unexpected structure, ...). Instead it prints an informative message that
+names the cause and returns an empty data.frame with columns \code{date} and
+\code{value}. Invalid user input (e.g. a malformed date) is still an error.
 }
 \examples{
 \donttest{

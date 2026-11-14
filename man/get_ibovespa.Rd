@@ -57,7 +57,8 @@ full request in one call.
 }
 \examples{
 \donttest{
-  # Default: last 12 months
+if (requireNamespace("yfR", quietly = TRUE)) {
+  # Default: last 30 days
   df <- get_ibovespa()
 
   # Specific period
@@ -65,6 +66,7 @@ full request in one call.
 
   # Portuguese labels
   df3 <- get_ibovespa(language = "pt")
-  }
+}
+}
 
 }

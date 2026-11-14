@@ -12,7 +12,8 @@ plot_ibovespa(data, language = "eng")
 \item{language}{Language for titles and labels: "pt" (Portuguese) or "eng" (English).}
 }
 \value{
-A \code{ggplot2} object showing the Ibovespa level over time.
+A \code{ggplot2} object showing the Ibovespa level over time,
+or \code{NULL} (with a message) if \code{data} has no rows.
 }
 \description{
 Generates a time series plot of the Ibovespa index using data from \code{get_ibovespa()}.

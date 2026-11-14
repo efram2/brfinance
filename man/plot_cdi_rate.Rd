@@ -12,7 +12,8 @@ plot_cdi_rate(data, language = "eng")
 \item{language}{Language for titles and labels: "pt" (Portuguese) or "eng" (English).}
 }
 \value{
-A \code{ggplot2} object showing the CDI rate over time.
+A \code{ggplot2} object showing the CDI rate over time,
+or \code{NULL} (with a message) if \code{data} has no rows.
 }
 \description{
 Generates a time series plot of the CDI (Certificado de Depósito Interbancário) rate.

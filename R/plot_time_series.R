@@ -36,7 +36,7 @@
 #'   density.
 #' @param ... Additional arguments passed to ggplot2 geoms
 #'
-#' @return A ggplot2 object
+#' @return A ggplot2 object, or `NULL` (invisibly, with a message) if `data` has no rows
 #' @keywords internal
 #' @noRd
 #'
@@ -94,6 +94,13 @@
                               show_points = "auto") {
 
   plot_type <- match.arg(plot_type)
+
+  # No data (e.g. a failed download): do not try to build/print an empty
+  # date-scale plot, which errors. Tell the user and return NULL.
+  if (!is.data.frame(data) || nrow(data) == 0) {
+    message("No data to plot (0 rows). Returning NULL.")
+    return(invisible(NULL))
+  }
 
   if (is.null(color)) {
     color <- "#1B4F72"  # deep, muted "financial" blue -- default when a

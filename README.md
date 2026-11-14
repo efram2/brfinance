@@ -34,11 +34,22 @@ Install the stable version from CRAN:
 install.packages("brfinance")
 ```
 
-Or install the development version from GitHub:
+Or install with [pak](https://pak.r-lib.org/):
 
 ```r
-# install.packages("devtools")
-devtools::install_github("efram2/brfinance")
+# install.packages("pak")
+
+# Stable version from CRAN
+pak::pak("brfinance")
+
+# Development version from GitHub
+pak::pak("efram2/brfinance")
+```
+
+`get_ibovespa()` uses the optional package [yfR](https://github.com/msperlin/yfR). Install it only if you need that function:
+
+```r
+pak::pak("yfR")
 ```
 
 Load the package:
@@ -196,7 +207,7 @@ head(calc_amortization_schedule(pv = 10000, rate = 0.01, n = 12), 3)
 | `get_selic_rate()` | Daily SELIC interest rate, annualized (base 252) | BCB / SGS |
 | `get_cdi_rate()` | Daily CDI interbank rate, annualized | BCB / SGS |
 | `get_exchange_rate()` | Daily USD/BRL exchange rate | BCB / SGS |
-| `get_gdp_growth()` | Quarterly and annual GDP growth rates | BCB / SGS |
+| `get_gdp_growth()` | Month-over-month growth of nominal GDP (series available until 2014) | BCB / SGS |
 | `get_unemployment()` | Unemployment rate (PNAD Contínua) | IBGE via BCB SGS |
 | `get_ibovespa()` | Ibovespa market index closing levels | Yahoo Finance |
 | `browse_series()` / `get_series_info()` | Catalog exploration tools for additional Central Bank series | BCB / SGS |
@@ -204,6 +215,7 @@ head(calc_amortization_schedule(pv = 10000, rate = 0.01, n = 12), 3)
 **Query Handling & Features:**
 - **Date Flexibility**: Accepts `"YYYY"`, `"YYYY-MM"`, or `"YYYY-MM-DD"`.
 - **Automatic Chunking**: Queries spanning more than 10 years are automatically partitioned into sub-requests to respect Central Bank API limitations and joined seamlessly.
+- **Graceful Failures**: If a data provider is unavailable or returns an unexpected response, `get_*()` functions print a message that names the cause and return an empty `data.frame`; `plot_*()` functions return `NULL` with a message.
 
 ---
 

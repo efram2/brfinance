@@ -28,33 +28,25 @@ get_inflation_rate(
 \item \code{NULL} defaults to the current date (today)
 }}
 
-\item{language}{Language for column names in the returned data.frame:
-\itemize{
-\item \code{"eng"} (default): Returns columns \code{date}, \code{monthly_inflation}, \code{ytd_inflation}, \code{twelve_month_inflation}
-\item \code{"pt"}: Returns columns \code{data_referencia}, \code{inflacao_mensal}, \code{inflacao_acumulada_ano}, \code{inflacao_12_meses}
-}}
+\item{language}{Language for the variable labels attached to the returned
+data.frame: \code{"eng"} (default) or \code{"pt"}. Column names are always \code{date},
+\code{value}, \code{ytd_inflation} and \code{twelve_month_inflation}.}
 
 \item{labels}{Logical indicating whether to add variable labels using the \code{labelled}
 package. Labels provide descriptive text for each column when available.}
 }
 \value{
-A data.frame with inflation metrics. Columns depend on the \code{language} parameter:
-\itemize{
-\item English (\code{language = "eng"}):
+A data.frame with columns:
 \itemize{
 \item \code{date} (Date): Reference month
-\item \code{monthly_inflation} (numeric): Monthly IPCA variation (\%)
+\item \code{value} (numeric): Monthly IPCA variation (\%)
 \item \code{ytd_inflation} (numeric): Year-to-date accumulated inflation (\%)
 \item \code{twelve_month_inflation} (numeric): 12-month accumulated inflation (\%)
 }
-\item Portuguese (\code{language = "pt"}):
-\itemize{
-\item \code{data_referencia} (Date): Mes de referencia
-\item \code{inflacao_mensal} (numeric): Variacao mensal do IPCA (\%)
-\item \code{inflacao_acumulada_ano} (numeric): Inflacao acumulada no ano (\%)
-\item \code{inflacao_12_meses} (numeric): Inflacao acumulada nos ultimos 12 meses (\%)
-}
-}
+
+If the BCB API is unavailable or returns an unexpected response, an
+informative message is printed and a zero-row data.frame with the same
+columns is returned.
 }
 \description{
 Downloads monthly IPCA (Broad National Consumer Price Index) inflation data

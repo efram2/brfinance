@@ -36,7 +36,8 @@
 #'
 #' @examples
 #' \donttest{
-#'   # Default: last 12 months
+#' if (requireNamespace("yfR", quietly = TRUE)) {
+#'   # Default: last 30 days
 #'   df <- get_ibovespa()
 #'
 #'   # Specific period
@@ -44,7 +45,8 @@
 #'
 #'   # Portuguese labels
 #'   df3 <- get_ibovespa(language = "pt")
-#'   }
+#' }
+#' }
 #'
 #' @export
 get_ibovespa <- function(start_date = NULL,
@@ -81,20 +83,37 @@ get_ibovespa <- function(start_date = NULL,
   # Declare global variables for dplyr operations
   ref_date <- price_close <- ticker <- value <- NULL
 
+  empty <- data.frame(date = as.Date(character()), value = numeric())
+  label <- sprintf(
+    "Ibovespa (%s to %s)",
+    format(start_date, "%Y-%m-%d"), format(end_date, "%Y-%m-%d")
+  )
+
   raw <- tryCatch(
     yfR::yf_get(
       tickers = "^BVSP",
       first_date = start_date,
       last_date = end_date
     ),
-    error = function(e) {
-      message(sprintf("Ibovespa: Yahoo Finance unavailable (%s).", conditionMessage(e)))
-      return(NULL)
-    }
+    error = function(e) e
   )
 
-  if (is.null(raw) || nrow(raw) == 0) {
-    return(data.frame(date = as.Date(character()), value = numeric()))
+  if (inherits(raw, "error")) {
+    message(label, ": could not download data from Yahoo Finance (",
+            conditionMessage(raw), "). Returning an empty data frame.")
+    return(empty)
+  }
+
+  if (!is.data.frame(raw) || nrow(raw) == 0) {
+    message(label, ": Yahoo Finance returned no data. Returning an empty data frame.")
+    return(empty)
+  }
+
+  if (!all(c("ref_date", "price_close") %in% names(raw))) {
+    message(label, ": Yahoo Finance response has unexpected columns (",
+            paste(names(raw), collapse = ", "),
+            "; expected 'ref_date' and 'price_close'). Returning an empty data frame.")
+    return(empty)
   }
 
   data <- raw |>

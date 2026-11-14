@@ -41,3 +41,16 @@ TODO: paste the result of `devtools::check(args = "--as-cran")`.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.
+
+## Notes in the incoming check
+
+* "New submission" / "Package was archived on CRAN": this is a resubmission.
+  The previous version was archived because the vignettes and examples failed
+  when the BCB API was unavailable. All web access now fails gracefully
+  (informative message, empty result, no error or warning), and the vignettes
+  do not need internet on CRAN.
+* Possibly misspelled words: 'SGS' (Sistema Gerenciador de Séries Temporais,
+  the Central Bank of Brazil's time series system) and 'Selic' (Brazil's
+  benchmark interest rate) are proper names, now quoted in DESCRIPTION.
+* URL: the yfR link in README.md was updated to its new address
+  (https://github.com/ropensci/yfR).

@@ -46,7 +46,7 @@ pak::pak("brfinance")
 pak::pak("efram2/brfinance")
 ```
 
-`get_ibovespa()` uses the optional package [yfR](https://github.com/msperlin/yfR). Install it only if you need that function:
+`get_ibovespa()` uses the optional package [yfR](https://CRAN.R-project.org/package=yfR). Install it only if you need that function:
 
 ```r
 pak::pak("yfR")
